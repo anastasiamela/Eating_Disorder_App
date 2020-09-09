@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "163604136308",
+    "firebase_url": "https://disorder-app.firebaseio.com",
+    "project_id": "disorder-app",
+    "storage_bucket": "disorder-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:163604136308:android:9e2140b152a21ab3112c21",
+        "android_client_info": {
+          "package_name": "com.example.disorder_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "163604136308-rs6dfgiev672le449mkr02t693k5nk59.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDW5n0vDnU-doScO--fs4f9FHseImn2aAc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "163604136308-rs6dfgiev672le449mkr02t693k5nk59.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

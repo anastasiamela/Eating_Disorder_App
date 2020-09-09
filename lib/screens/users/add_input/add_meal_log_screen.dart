@@ -1,0 +1,1048 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:toggle_switch/toggle_switch.dart';
+//import 'package:flutter_form_builder/flutter_form_builder.dart';
+
+import '../../../providers/meal_log.dart';
+import '../../../providers/meal_logs.dart';
+import '../../../providers/auth.dart';
+//import '../widgets/app_drawer.dart';
+
+List<String> _overallFeelings = [
+  'depressed',
+  'down',
+  'flat',
+  'average',
+  'good',
+  'great',
+  'overjoyed',
+];
+
+List<String> _mealTypes = [
+  'breakfast',
+  'morning snack',
+  'lunch',
+  'afternoon snack',
+  'dinner',
+  'evening snack',
+  'light snack',
+  'drink',
+  'grazing',
+  'planned binge',
+];
+
+List<String> _mealCompany = [
+  'alone',
+  'friends',
+  'parents',
+  'staff',
+  'partner',
+  'immediate family',
+  'relatives',
+  'co-workers',
+  'other',
+];
+
+List<String> _mealLocations = [
+  'school, college, university',
+  'work',
+  'home',
+  'friend\'s house',
+  'outside',
+  'restaurant, cafe',
+  'at a treatment facility',
+  'other',
+];
+
+List<int> _mealAgoTime = [
+  5,
+  10,
+  30,
+  0,
+];
+
+List<String> _mealPortion = [
+  'inadequate',
+  'adequate',
+  'excessive',
+];
+
+class AddMealLogScreen extends StatefulWidget {
+  static const routeName = '/add-meal-log';
+
+  @override
+  _AddMealLogScreenState createState() => _AddMealLogScreenState();
+}
+
+class _AddMealLogScreenState extends State<AddMealLogScreen> {
+  final _form = GlobalKey<FormState>();
+  bool _skip;
+  // a new change
+  String _overallFeeling;
+  String _selectedMealType;
+  String _selectedMealCompany;
+  String _selectedMealLocation;
+  int _selectedMealAgoTime;
+  bool _otherAgoTime;
+  TimeOfDay _selectedTime;
+  String _selectedPortion;
+  bool _isBackLog;
+  DateTime _selectedMealDate; //for backlog
+  bool _hasSelectedDateBackLog;
+  bool _hasSelectedTimeBackLog;
+
+  //extra init values for the editing
+  String _initDescription;
+  String _initThoughts;
+  String _initSkippingReason;
+
+  var _editedMealLog = MealLog(
+    id: null,
+    userId: 'anastasia',
+    date: null,
+    skip: false,
+    feelingOverall: '',
+    mealType: '',
+    mealCompany: '',
+    mealLocation: '',
+    mealPhoto: '',
+    mealDescription: '',
+    mealPortion: '',
+    thoughts: '',
+    skippingReason: '',
+    isBackLogMeal: false,
+    dateTimeOfLog: null,
+  );
+
+  var _isInit = true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      _skip = _editedMealLog.skip;
+      _isBackLog = _editedMealLog.isBackLogMeal;
+      _hasSelectedDateBackLog = false;
+      _hasSelectedTimeBackLog = false;
+      _selectedMealDate = DateTime.now();
+      _overallFeeling = 'average';
+      _selectedMealType = 'breakfast';
+      _selectedMealLocation = _editedMealLog.mealLocation;
+      _selectedMealCompany = _editedMealLog.mealCompany;
+      _selectedPortion = _editedMealLog.mealPortion;
+      _otherAgoTime = false;
+      _selectedTime = TimeOfDay.now();
+      _initDescription = '';
+      _initThoughts = '';
+      _initSkippingReason = '';
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  void _saveForm() {
+    final isValid = _form.currentState.validate();
+    if (!isValid) {
+      return;
+    }
+
+    DateTime date = DateTime.now();
+    DateTime dateTimeOfMealFinal;
+    //find the datetime of the meal
+    if (!_skip) {
+      if (!_isBackLog) {
+        if (_otherAgoTime) {
+          dateTimeOfMealFinal = new DateTime(date.year, date.month, date.day,
+              _selectedTime.hour, _selectedTime.minute);
+        } else if (_selectedMealAgoTime != null) {
+          dateTimeOfMealFinal =
+              date.subtract(Duration(minutes: _selectedMealAgoTime));
+        }
+      } else {
+        if (_hasSelectedTimeBackLog && _hasSelectedDateBackLog) {
+          dateTimeOfMealFinal = new DateTime(
+              _selectedMealDate.year,
+              _selectedMealDate.month,
+              _selectedMealDate.day,
+              _selectedTime.hour,
+              _selectedTime.minute);
+        }
+      }
+    } else {
+      if (!_isBackLog) {
+        dateTimeOfMealFinal = date;
+      } else {
+        dateTimeOfMealFinal = new DateTime(
+          _selectedMealDate.year,
+          _selectedMealDate.month,
+          _selectedMealDate.day,
+        );
+      }
+    }
+
+    _form.currentState.save();
+
+    _editedMealLog = MealLog(
+      id: _editedMealLog.id,
+      userId: _editedMealLog.userId,
+      date: dateTimeOfMealFinal,
+      skip: _skip,
+      feelingOverall: _overallFeeling,
+      mealType: _selectedMealType,
+      mealCompany: _selectedMealCompany,
+      mealLocation: _selectedMealLocation,
+      mealPhoto: _editedMealLog.mealPhoto,
+      mealDescription: _editedMealLog.mealDescription,
+      mealPortion: _selectedPortion,
+      thoughts: _editedMealLog.thoughts,
+      skippingReason: _editedMealLog.skippingReason,
+      isBackLogMeal: _editedMealLog.isBackLogMeal,
+      dateTimeOfLog: date,
+      dateTimeOfLastUpdate: DateTime.now(),
+    );
+    final userId = Provider.of<Auth>(context, listen: false).userId;
+    Provider.of<MealLogs>(context, listen: false).addMealLog(_editedMealLog, userId);
+    Navigator.of(context).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Add meal log'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.save,
+                color: Colors.white,
+              ),
+              onPressed: _saveForm,
+            ),
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Form(
+            //autovalidate: true,
+            key: _form,
+            child: (!_skip)
+                ? ListView(
+                    children: <Widget>[
+                      //skip input
+                      _buildSkipInput(),
+                      //meal type input
+                      _buildMealTypeInput(),
+                      //meal description input
+                      _buildMealDescriptionInput(),
+                      //meal is backlog input
+                      _buildMealIsBacklogIinput(),
+                      (!_isBackLog)
+                          ?
+                          //meal ago time input
+                          _buildMealAgoTimeInput()
+                          //meal date and time input for a backlog meal
+                          : _buildDateBackLogInput(),
+                      (!_isBackLog)
+                          ? SizedBox(height: 0)
+                          //meal date and time input for a backlog meal
+                          : _buildTimeBackLogInput(),
+                      //feeling overall input
+                      _buildOverallFeelingInput(),
+                      //meal company input
+                      _buildMealCompanyInput(),
+                      //meal location input
+                      _buildMealLocationInput(),
+                      //meal portion size input
+                      _buildMealPortionInput(),
+                      //meal thoughts input
+                      _buildMealThoughts(),
+                    ],
+                  )
+                : ListView(
+                    children: <Widget>[
+                      //skip input
+                      _buildSkipInput(),
+                      //meal is backlog input
+                      _buildMealIsBacklogIinput(),
+                      (!_isBackLog)
+                          ? SizedBox(height: 0)
+                          //meal date input for a backlog meal
+                          : _buildDateBackLogInput(),
+                      //meal type input
+                      _buildMealTypeInput(),
+                      //feeling overall input
+                      _buildOverallFeelingInput(),
+                      //meal thoughts input
+                      _buildMealThoughts(),
+                      //meal skipping reason
+                      _buildMealSkippingReason(),
+                    ],
+                  ),
+          ),
+        ),
+        //drawer: AppDrawer(),
+      ),
+    );
+  }
+
+  //feeling overall input
+  Widget _buildOverallFeelingInput() {
+    return Card(
+      shadowColor: Theme.of(context).primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              title: Text(
+                'How are you felling overall?',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18.0,
+                ),
+              ),
+              contentPadding: EdgeInsets.all(0.0),
+            ),
+            Column(
+              children: _overallFeelings
+                  .map(
+                    (String feeling) => Row(
+                      children: <Widget>[
+                        Radio(
+                          value: feeling,
+                          groupValue: _overallFeeling,
+                          onChanged: (String value) {
+                            setState(() {
+                              _overallFeeling = value;
+                            });
+                          },
+                        ),
+                        Text(feeling),
+                      ],
+                    ),
+                  )
+                  .toList(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  //skip input
+  Widget _buildSkipInput() {
+    return Card(
+      shadowColor: Theme.of(context).primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              'Did you skip this meal?',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            ToggleSwitch(
+              labels: ['Yes', 'No'],
+              initialLabelIndex: (_skip) ? 0 : 1,
+              onToggle: (index) {
+                setState(() {
+                  _skip = !_skip;
+                  _overallFeeling = 'average';
+                  _selectedMealType = 'breakfast';
+                });
+              },
+              activeBgColor: Theme.of(context).primaryColor,
+              activeFgColor: Colors.white,
+              inactiveBgColor: Colors.purple[50],
+              inactiveFgColor: Colors.grey[900],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMealTypeInput() {
+    return Card(
+      shadowColor: Theme.of(context).primaryColor,
+      child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Which meal?',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
+              Wrap(
+                spacing: 8.0,
+                children: _mealTypes
+                    .map(
+                      (String type) => ChoiceChip(
+                        label: Text(
+                          type,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        selected: _selectedMealType == type,
+                        onSelected: (bool selected) {
+                          setState(() {
+                            if (selected) {
+                              _selectedMealType = type;
+                            }
+                          });
+                        },
+                        selectedColor: Theme.of(context).primaryColor,
+                        backgroundColor: Colors.black38,
+                        padding: EdgeInsets.all(8.0),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ],
+          )),
+    );
+  }
+
+  Widget _buildMealCompanyInput() {
+    return Card(
+      shadowColor: Theme.of(context).primaryColor,
+      child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Who did you eat with?',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
+              Wrap(
+                spacing: 8.0,
+                children: _mealCompany
+                    .map(
+                      (String company) => ChoiceChip(
+                        label: Text(
+                          company,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        selected: _selectedMealCompany == company,
+                        onSelected: (bool selected) {
+                          setState(() {
+                            if (selected) {
+                              _selectedMealCompany = company;
+                            }
+                          });
+                        },
+                        selectedColor: Theme.of(context).primaryColor,
+                        backgroundColor: Colors.black38,
+                        padding: EdgeInsets.all(8.0),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ],
+          )),
+    );
+  }
+
+  Widget _buildMealLocationInput() {
+    return Card(
+      shadowColor: Theme.of(context).primaryColor,
+      child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Where did you eat?',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
+              Wrap(
+                spacing: 8.0,
+                children: _mealLocations
+                    .map(
+                      (String location) => ChoiceChip(
+                        label: Text(
+                          location,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        selected: _selectedMealLocation == location,
+                        onSelected: (bool selected) {
+                          setState(() {
+                            if (selected) {
+                              _selectedMealLocation = location;
+                            }
+                          });
+                        },
+                        selectedColor: Theme.of(context).primaryColor,
+                        backgroundColor: Colors.black38,
+                        padding: EdgeInsets.all(8.0),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ],
+          )),
+    );
+  }
+
+  Widget _buildMealAgoTimeInput() {
+    //print('${_selectedTime.toString()}');
+    return Card(
+      shadowColor: Theme.of(context).primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  'How long ago did you eat?',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                (_otherAgoTime)
+                    ? Text(
+                        '${printTime(_selectedTime)}',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )
+                    : Text(''),
+              ],
+            ),
+            SizedBox(
+              height: 8.0,
+            ),
+            Wrap(
+              spacing: 8.0,
+              children: _mealAgoTime
+                  .map(
+                    (int agoTime) => ChoiceChip(
+                      label: (agoTime != 0)
+                          ? Text('$agoTime min',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                              ))
+                          : Text(
+                              'Select Time',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                      selected: _selectedMealAgoTime == agoTime,
+                      onSelected: (bool selected) {
+                        setState(() {
+                          if (selected) {
+                            _selectedMealAgoTime = agoTime;
+                            _otherAgoTime = false;
+                            _selectedTime = null;
+                          }
+                          if (agoTime == 0) {
+                            _pickTime();
+                            _otherAgoTime = true;
+                            if (_selectedTime == null) {
+                              _selectedMealAgoTime = null;
+                              _otherAgoTime = false;
+                            }
+                          }
+                        });
+                      },
+                      selectedColor: Theme.of(context).primaryColor,
+                      backgroundColor: Colors.black38,
+                      padding: EdgeInsets.all(8.0),
+                    ),
+                  )
+                  .toList(),
+            ),
+            TextFormField(
+              initialValue: '',
+              readOnly: true,
+              validator: (value) {
+                if (!_otherAgoTime && _selectedMealAgoTime == null) {
+                  //if you have not selected any time option
+                  return 'You have to select time!';
+                }
+                return null;
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDateBackLogInput() {
+    return Card(
+      shadowColor: Theme.of(context).primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  'When was the meal?',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                RaisedButton(
+                  child: Text(
+                    'Select Day',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  onPressed: _pickDate,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ],
+            ),
+            (_hasSelectedDateBackLog)
+                ? Text(
+                    '${_selectedMealDate.day}. ${_selectedMealDate.month}. ${_selectedMealDate.year}',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  )
+                : Text(''),
+            TextFormField(
+              initialValue: '',
+              readOnly: true,
+              validator: (value) {
+                if (_hasSelectedDateBackLog == false) {
+                  //if you have not selected day
+                  return 'You have to select a day!';
+                }
+                return null;
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTimeBackLogInput() {
+    return Card(
+      shadowColor: Theme.of(context).primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  'What time was your meal?',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                RaisedButton(
+                  child: Text(
+                    'Select Time',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  onPressed: _pickTime,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ],
+            ),
+            (_hasSelectedTimeBackLog)
+                ? Text(
+                    '${printTime(_selectedTime)}',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  )
+                : Text(''),
+            TextFormField(
+              initialValue: '',
+              readOnly: true,
+              autovalidate: true,
+              validator: (value) {
+                if (_hasSelectedTimeBackLog == false) {
+                  //if you have not selected day
+                  return 'You have to select a time!';
+                }
+                return null;
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _pickTime() async {
+    TimeOfDay t = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (t != null) {
+      if (!_isBackLog) {
+        setState(() {
+          _selectedTime = t;
+          _otherAgoTime = true;
+          _hasSelectedTimeBackLog = false;
+        });
+      } else {
+        setState(() {
+          _selectedTime = t;
+          _hasSelectedTimeBackLog = true;
+          _otherAgoTime = false;
+        });
+      }
+    }
+  }
+
+  _pickDate() async {
+    DateTime today = DateTime.now();
+    DateTime date = await showDatePicker(
+      context: context,
+      firstDate: today.subtract(Duration(days: 6)),
+      lastDate: today,
+      initialDate: today,
+    );
+    if (date != null)
+      setState(() {
+        _selectedMealDate = date;
+        _hasSelectedDateBackLog = true;
+      });
+  }
+
+  String printTime(TimeOfDay time) {
+    String _addLeadingZeroIfNeeded(int value) {
+      if (value < 10) return '0$value';
+      return value.toString();
+    }
+
+    final String hourLabel = _addLeadingZeroIfNeeded(time.hour);
+    final String minuteLabel = _addLeadingZeroIfNeeded(time.minute);
+
+    return '$hourLabel:$minuteLabel';
+  }
+
+  Widget _buildMealDescriptionInput() {
+    return Card(
+      shadowColor: Theme.of(context).primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  'What did you eat?',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Icon(
+                  Icons.camera_alt,
+                  size: 30.0,
+                ),
+              ],
+            ),
+            TextFormField(
+              initialValue: _initDescription,
+              //decoration: InputDecoration(labelText: 'Description'),
+              autovalidate: true,
+              maxLines: 3,
+              keyboardType: TextInputType.multiline,
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Please enter a description.';
+                }
+                if (value.length < 5) {
+                  return 'Should be at least 5 characters long.';
+                }
+                return null;
+              },
+              onSaved: (value) {
+                _editedMealLog = MealLog(
+                  id: _editedMealLog.id,
+                  userId: _editedMealLog.userId,
+                  date: _editedMealLog.date,
+                  skip: _editedMealLog.skip,
+                  feelingOverall: _editedMealLog.feelingOverall,
+                  mealType: _editedMealLog.mealType,
+                  mealCompany: _editedMealLog.mealCompany,
+                  mealLocation: _editedMealLog.mealLocation,
+                  mealPhoto: _editedMealLog.mealPhoto,
+                  mealDescription: value,
+                  mealPortion: _editedMealLog.mealPortion,
+                  thoughts: _editedMealLog.thoughts,
+                  skippingReason: _editedMealLog.skippingReason,
+                  isBackLogMeal: _editedMealLog.isBackLogMeal,
+                  dateTimeOfLog: _editedMealLog.date,
+                  isFavorite: _editedMealLog.isFavorite,
+                );
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMealPortionInput() {
+    return Card(
+      shadowColor: Theme.of(context).primaryColor,
+      child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'How much did you eat?',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
+              Wrap(
+                spacing: 8.0,
+                children: _mealPortion
+                    .map(
+                      (String portion) => ChoiceChip(
+                        label: Text(
+                          portion,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        selected: _selectedPortion == portion,
+                        onSelected: (bool selected) {
+                          setState(() {
+                            if (selected) {
+                              _selectedPortion = portion;
+                            }
+                          });
+                        },
+                        selectedColor: Theme.of(context).primaryColor,
+                        backgroundColor: Colors.black38,
+                        padding: EdgeInsets.all(8.0),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ],
+          )),
+    );
+  }
+
+  Widget _buildMealThoughts() {
+    return Card(
+      shadowColor: Theme.of(context).primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              'Which are your thoughts?',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            TextFormField(
+              initialValue: _initThoughts,
+              //decoration: InputDecoration(labelText: 'Description'),
+              maxLines: 3,
+              keyboardType: TextInputType.multiline,
+              onSaved: (value) {
+                _editedMealLog = MealLog(
+                  id: _editedMealLog.id,
+                  userId: _editedMealLog.userId,
+                  date: _editedMealLog.date,
+                  skip: _editedMealLog.skip,
+                  feelingOverall: _editedMealLog.feelingOverall,
+                  mealType: _editedMealLog.mealType,
+                  mealCompany: _editedMealLog.mealCompany,
+                  mealLocation: _editedMealLog.mealLocation,
+                  mealPhoto: _editedMealLog.mealPhoto,
+                  mealDescription: _editedMealLog.mealDescription,
+                  mealPortion: _editedMealLog.mealPortion,
+                  thoughts: value,
+                  skippingReason: _editedMealLog.skippingReason,
+                  isBackLogMeal: _editedMealLog.isBackLogMeal,
+                  dateTimeOfLog: _editedMealLog.date,
+                  isFavorite: _editedMealLog.isFavorite,
+                );
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMealSkippingReason() {
+    return Card(
+      shadowColor: Theme.of(context).primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              'Why did you skip this meal?',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            TextFormField(
+              initialValue: _initSkippingReason,
+              //decoration: InputDecoration(labelText: 'Description'),
+              maxLines: 3,
+              keyboardType: TextInputType.multiline,
+              onSaved: (value) {
+                _editedMealLog = MealLog(
+                  id: _editedMealLog.id,
+                  userId: _editedMealLog.userId,
+                  date: _editedMealLog.date,
+                  skip: _editedMealLog.skip,
+                  feelingOverall: _editedMealLog.feelingOverall,
+                  mealType: _editedMealLog.mealType,
+                  mealCompany: _editedMealLog.mealCompany,
+                  mealLocation: _editedMealLog.mealLocation,
+                  mealPhoto: _editedMealLog.mealPhoto,
+                  mealDescription: _editedMealLog.mealDescription,
+                  mealPortion: _editedMealLog.mealPortion,
+                  thoughts: _editedMealLog.thoughts,
+                  skippingReason: value,
+                  isBackLogMeal: _editedMealLog.isBackLogMeal,
+                  dateTimeOfLog: _editedMealLog.date,
+                  isFavorite: _editedMealLog.isFavorite,
+                );
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMealIsBacklogIinput() {
+    return Card(
+      shadowColor: Theme.of(context).primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              'Is this meal for today?',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            ToggleSwitch(
+              labels: ['Yes', 'No'],
+              initialLabelIndex: (_isBackLog) ? 1 : 0,
+              onToggle: (index) {
+                if (index == 0) {
+                  setState(() {
+                    _isBackLog = !_isBackLog;
+                    _hasSelectedDateBackLog = false;
+                    _hasSelectedTimeBackLog = false;
+                    _selectedTime = null;
+                    _otherAgoTime = false;
+                  });
+                } else {
+                  setState(() {
+                    _isBackLog = !_isBackLog;
+                    _selectedTime = null;
+                    _hasSelectedDateBackLog = false;
+                    _hasSelectedTimeBackLog = false;
+                  });
+                }
+              },
+              activeBgColor: Theme.of(context).primaryColor,
+              activeFgColor: Colors.white,
+              inactiveBgColor: Colors.purple[50],
+              inactiveFgColor: Colors.grey[900],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
