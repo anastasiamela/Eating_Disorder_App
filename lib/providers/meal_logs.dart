@@ -74,6 +74,7 @@ class MealLogs with ChangeNotifier {
         ));
       });
       _meals = loadedMealLogs;
+      print(_meals);
       notifyListeners();
     } catch (error) {
       throw (error);
@@ -89,7 +90,7 @@ class MealLogs with ChangeNotifier {
           .collection('mealLogs')
           .add({
         'userId': userId,
-        'dateTimeOfMeal': meal.date.toIso8601String(),
+        'date': meal.date.toIso8601String(),
         'skip': meal.skip,
         'feelingOverall': meal.feelingOverall,
         'mealType': meal.mealType,
@@ -144,7 +145,7 @@ class MealLogs with ChangeNotifier {
           .doc(id)
           .update({
         'userId': userId,
-        'dateTimeOfMeal': newMealLog.date.toIso8601String(),
+        'date': newMealLog.date.toIso8601String(),
         'skip': newMealLog.skip,
         'feelingOverall': newMealLog.feelingOverall,
         'mealType': newMealLog.mealType,
