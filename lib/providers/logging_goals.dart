@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MealsPerDayData {
   final int mainMeals;
@@ -19,6 +20,54 @@ class LoggingGoals with ChangeNotifier {
   var _mainMealsWeekend = 3;
   var _snacksWeekend = 2;
 
+  Future<void> fetchAndSetLoggingGoalsSettings(String userId) async {
+    try {
+      final response = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('loggingGoalsSettings')
+          .doc(userId)
+          .get();
+
+      if (response == null) {
+        return;
+      }
+      var responseData = response.data();
+      _mainMealsWeekday = responseData['mainMealsWeekday'];
+      _snacksWeekday = responseData['snacksWeekDay'];
+      _mainMealsWeekend = responseData['mainMealsWeekend'];
+      _snacksWeekend = responseData['snacksWeekend'];
+      notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<void> setSettings(int mainMealsWeekdayInput, int snacksWeekdayInput,
+      int mainMealsWeekendInput, int snacksWeekendInput, String userId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('loggingGoalsSettings')
+          .doc(userId)
+          .set({
+        'mainMealsWeekday': mainMealsWeekdayInput,
+        'snacksWeekDay': snacksWeekdayInput,
+        'mainMealsWeekend': mainMealsWeekendInput,
+        'snacksWeekend': snacksWeekendInput,
+      });
+      _mainMealsWeekday = mainMealsWeekdayInput;
+      _snacksWeekday = snacksWeekdayInput;
+      _mainMealsWeekend = mainMealsWeekendInput;
+      _snacksWeekend = snacksWeekendInput;
+      notifyListeners();
+    } catch (error) {
+      print(error);
+      throw error;
+    }
+  }
+
   Map<DateTime, MealsPerDayData> get loggingGoals {
     return {..._loggingGoals};
   }
@@ -37,19 +86,6 @@ class LoggingGoals with ChangeNotifier {
 
   int get snacksWeekend {
     return _snacksWeekend;
-  }
-
-  void setSettings(
-    int mainMealsWeekday,
-    int snacksWeekday,
-    int mainMealsWeekend,
-    int snacksWeekend,
-  ) {
-    _mainMealsWeekday = mainMealsWeekday;
-    _mainMealsWeekend = mainMealsWeekend;
-    _snacksWeekday = snacksWeekday;
-    _snacksWeekend = snacksWeekend;
-    notifyListeners();
   }
 
   void addMealForGoals(DateTime dateOfMeal, String typeOfMeal) {

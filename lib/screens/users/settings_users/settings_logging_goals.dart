@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/logging_goals.dart';
+import '../../../providers/auth.dart';
 
 class SettingsLoggingGoals extends StatefulWidget {
   static const routeName = '/settings-logging-goals';
@@ -26,9 +27,9 @@ class _SettingsLoggingGoalsState extends State<SettingsLoggingGoals> {
       final loggingGoalsData =
           Provider.of<LoggingGoals>(context, listen: false);
       _selectedMainMealsWeekday = loggingGoalsData.mainMealsWeekday;
-      _selectedMainWeekdayList[_selectedMainMealsWeekday -1] = true;
+      _selectedMainWeekdayList[_selectedMainMealsWeekday - 1] = true;
       _selectedMainMealsWeekend = loggingGoalsData.mainMealsWeekend;
-      _selectedMainWeekendList[_selectedMainMealsWeekend -1] = true;
+      _selectedMainWeekendList[_selectedMainMealsWeekend - 1] = true;
       _selectedSnacksWeekday = loggingGoalsData.snacksWeekday;
       _selectedSnacksWeekdayList[_selectedSnacksWeekday] = true;
       _selectedSnacksWeekend = loggingGoalsData.snacksWeekend;
@@ -40,6 +41,7 @@ class _SettingsLoggingGoalsState extends State<SettingsLoggingGoals> {
 
   @override
   Widget build(BuildContext context) {
+    final userId = Provider.of<Auth>(context).userId;
     return Scaffold(
       appBar: AppBar(
         title: Text('Logging Goals Settings'),
@@ -51,7 +53,8 @@ class _SettingsLoggingGoalsState extends State<SettingsLoggingGoals> {
                   _selectedMainMealsWeekday,
                   _selectedSnacksWeekday,
                   _selectedMainMealsWeekend,
-                  _selectedSnacksWeekend);
+                  _selectedSnacksWeekend,
+                  userId);
               Navigator.of(context).pop();
             },
           ),
@@ -75,7 +78,8 @@ class _SettingsLoggingGoalsState extends State<SettingsLoggingGoals> {
           ),
           _buildInputRow(
               'Main Meals', 'main', 'weekday', _selectedMainWeekdayList),
-          _buildInputRow('Snacks', 'snack', 'weekday', _selectedSnacksWeekdayList),
+          _buildInputRow(
+              'Snacks', 'snack', 'weekday', _selectedSnacksWeekdayList),
           SizedBox(height: 5.0),
           Text(
             'Weekend',
@@ -87,7 +91,8 @@ class _SettingsLoggingGoalsState extends State<SettingsLoggingGoals> {
           ),
           _buildInputRow(
               'Main Meals', 'main', 'weekend', _selectedMainWeekendList),
-          _buildInputRow('Snacks', 'snack', 'weekdend', _selectedSnacksWeekendList),
+          _buildInputRow(
+              'Snacks', 'snack', 'weekend', _selectedSnacksWeekendList),
         ],
       ),
     );
@@ -137,25 +142,21 @@ class _SettingsLoggingGoalsState extends State<SettingsLoggingGoals> {
                       isSelected[buttonIndex] = false;
                     }
                   }
-                  if (typeOfMeal == 'main' && typeOfDay == 'weekday'){
+                  if (typeOfMeal == 'main' && typeOfDay == 'weekday') {
                     _selectedMainWeekdayList = isSelected;
                     _selectedMainMealsWeekday = index + 1;
-                  }
-                  else if (typeOfMeal == 'main' && typeOfDay == 'weekday'){
+                  } else if (typeOfMeal == 'main' && typeOfDay == 'weekend') {
                     _selectedMainWeekendList = isSelected;
                     _selectedMainMealsWeekend = index + 1;
-                  }
-                  else if (typeOfMeal == 'snack' && typeOfDay == 'weekday'){
+                  } else if (typeOfMeal == 'snack' && typeOfDay == 'weekday') {
                     _selectedSnacksWeekdayList = isSelected;
                     _selectedSnacksWeekday = index;
-                  }
-                  else {
+                  } else if (typeOfMeal == 'snack' && typeOfDay == 'weekend') {
                     _selectedSnacksWeekendList = isSelected;
                     _selectedSnacksWeekend = index;
                   }
                 });
               },
-              
             )
           ],
         ),

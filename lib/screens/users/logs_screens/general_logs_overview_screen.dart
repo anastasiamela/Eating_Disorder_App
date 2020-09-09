@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../providers/meal_logs.dart';
 import '../../../providers/thoughts.dart';
 import '../../../providers/auth.dart';
+import '../../../providers/logging_goals.dart';
 
 import '../../../widgets/users/app_drawer.dart';
 import '../../../widgets/users/overview/general_list.dart';
@@ -62,6 +63,7 @@ class _GeneralLogsOverviewScreenState extends State<GeneralLogsOverviewScreen>
         _isLoading = true;
       });
       final userId = Provider.of<Auth>(context, listen: false).userId;
+      Provider.of<LoggingGoals>(context).fetchAndSetLoggingGoalsSettings(userId);
       Provider.of<Thoughts>(context).fetchAndSetThoughts(userId);
       Provider.of<MealLogs>(context).fetchAndSetMealLogs(userId).then((_) {
         setState(() {
