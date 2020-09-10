@@ -6,9 +6,11 @@ import 'package:sticky_grouped_list/sticky_grouped_list.dart';
 import '../../../providers/meal_logs.dart';
 import '../../../providers/meal_log.dart';
 import '../../../providers/thoughts.dart';
+import '../../../providers/feelings.dart';
 
 import './meal_log_item.dart';
 import './thought_item.dart';
+import './feeling_log_item.dart';
 
 class GeneralList extends StatelessWidget {
   final int selectedCategoryIndex;
@@ -27,19 +29,24 @@ class GeneralList extends StatelessWidget {
   Widget build(BuildContext context) {
     final mealsData = Provider.of<MealLogs>(context);
     final thoughtsData = Provider.of<Thoughts>(context);
+    final feelingsData = Provider.of<Feelings>(context);
     String messageEmpty;
+    List<Feeling> feelings;
     List<Thought> thoughts;
     List<MealLog> meals;
     List displayList;
     if (selectedCategoryIndex == 0) {
       meals = mealsData.mealsSorted;
       thoughts = thoughtsData.thoughts;
-      displayList = sort([...meals, ...thoughts]);
+      feelings = feelingsData.feelings;
+      //print(feelings);
+      displayList = sort([...meals, ...thoughts, ...feelings]);
       messageEmpty = 'There are no logs.';
     } else if (selectedCategoryIndex == 1) {
       meals = mealsData.favoriteMeals;
       thoughts = thoughtsData.favoriteThoughts;
-      displayList = sort([...meals, ...thoughts]);
+      feelings = feelingsData.favoriteFeelings;
+      displayList = sort([...meals, ...thoughts, ...feelings]);
       messageEmpty = 'There are no favorite logs.';
     } else if (selectedCategoryIndex == 2) {
       meals = mealsData.skippedMeals;
@@ -120,6 +127,11 @@ class GeneralList extends StatelessWidget {
                 return ChangeNotifierProvider.value(
                   value: obj,
                   child: ThoughtItem(),
+                );
+              if (obj is Feeling)
+                return ChangeNotifierProvider.value(
+                  value: obj,
+                  child: FeelingLogItem(),
                 );
               return null;
             },

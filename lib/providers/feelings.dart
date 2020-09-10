@@ -50,6 +50,10 @@ class Feelings with ChangeNotifier {
 
   Feelings();
 
+  List<Feeling> get feelings {
+    return [..._feelings];
+  }
+
   List<Feeling> get feelingsSorted {
     _feelings.sort(
       (a, b) => a.date.compareTo(b.date),
@@ -76,7 +80,7 @@ class Feelings with ChangeNotifier {
           .orderBy("createdAt", descending: true)
           .get();
       final extractedData = response.docs;
-
+      print(extractedData);
       if (extractedData == null) {
         return;
       }
@@ -89,12 +93,13 @@ class Feelings with ChangeNotifier {
             userId: feelingData['userId'],
             date: DateTime.parse(feelingData['date']),
             overallFeeling: feelingData['overallFeeling'],
-            moods: feelingData['moods'],
+            moods: new List<String>.from(feelingData['moods']),
             thoughts: feelingData['thoughts'],
             isFavorite: feelingData['isFavorite'],
           ),
         );
       });
+      print(_feelings);
       _feelings = loadedFeelings;
       notifyListeners();
     } catch (error) {
