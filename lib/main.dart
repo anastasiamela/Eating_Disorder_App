@@ -12,6 +12,7 @@ import './screens/users/settings_users/settings_logging_goals.dart';
 import './screens/users/add_input/add_thought_screen.dart';
 import './screens/users/logs_screens/general_logs_tabs_screen.dart';
 import './screens/users/logs_screens/calendar_meal_logs_screen.dart';
+import './screens/users/add_input/add_feeling_log_screen.dart';
 
 import './providers/meal_logs.dart';
 import './providers/logging_goals.dart';
@@ -66,6 +67,7 @@ class MyApp extends StatelessWidget {
                     SettingsLoggingGoals.routeName: (ctx) =>
                         SettingsLoggingGoals(),
                     AddThoughtScreen.routeName: (ctx) => AddThoughtScreen(),
+                    AddFeelingLogScreen.routeName: (ctx) => AddFeelingLogScreen(),
                   }),
             ),
           );
