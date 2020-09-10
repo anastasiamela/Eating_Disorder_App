@@ -63,6 +63,8 @@ class _AddFeelingLogScreenState extends State<AddFeelingLogScreen> {
   void didChangeDependencies() {
     if (_isInit) {
       moodsToDisplay.forEach((element) => _moodsSelected[element] = false);
+      _inputMoods = [];
+      _thoughtsInput = '';
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -75,6 +77,8 @@ class _AddFeelingLogScreenState extends State<AddFeelingLogScreen> {
     }
     _form.currentState.save();
     final userId = Provider.of<Auth>(context, listen: false).userId;
+    _inputOverallFeeling = _overallFeelings[_currentSliderValue.round() - 1];
+    _moodsSelected.forEach((key, value) => {if(value) _inputMoods.add(key)});
     Provider.of<Feelings>(context, listen: false)
         .addFeeling(_inputOverallFeeling, _inputMoods, _thoughtsInput, userId);
     Navigator.of(context).pop();
@@ -226,9 +230,6 @@ class _AddFeelingLogScreenState extends State<AddFeelingLogScreen> {
                     hintText: 'Your thoughts',
                     hintStyle: TextStyle(fontStyle: FontStyle.italic)),
                 validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Please write your thoughts.';
-                  }
                   if (value.length < 5) {
                     return 'Should be at least 5 characters long.';
                   }
