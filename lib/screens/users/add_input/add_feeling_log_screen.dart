@@ -7,13 +7,13 @@ import '../../../providers/auth.dart';
 import '../../../models/emoji_view.dart';
 
 List<String> _overallFeelings = [
-  'depressed',
-  'down',
-  'flat',
-  'average',
-  'good',
-  'great',
-  'overjoyed',
+  'Depressed',
+  'Down',
+  'Flat',
+  'Average',
+  'Good',
+  'Great',
+  'Overjoyed',
 ];
 
 List<String> moodsToDisplay = [

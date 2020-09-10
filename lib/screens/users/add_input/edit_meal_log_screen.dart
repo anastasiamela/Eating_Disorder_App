@@ -8,13 +8,13 @@ import '../../../providers/auth.dart';
 //import '../widgets/app_drawer.dart';
 
 List<String> _overallFeelings = [
-  'depressed',
-  'down',
-  'flat',
-  'average',
-  'good',
-  'great',
-  'overjoyed',
+  'Depressed',
+  'Down',
+  'Flat',
+  'Average',
+  'Good',
+  'Great',
+  'Overjoyed',
 ];
 
 List<String> _mealTypes = [
