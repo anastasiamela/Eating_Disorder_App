@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../screens/users/add_input/add_meal_log_screen.dart';
 import '../../screens/users/add_input/add_thought_screen.dart';
 import '../../screens/users/add_input/add_feeling_log_screen.dart';
+import '../../screens/users/add_input/add_behavior_log_screen.dart';
 
 import '../../providers/auth.dart';
 
@@ -61,6 +62,15 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushNamed(AddFeelingLogScreen.routeName);
+            },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.headset),
+            title: Text('Add behaviors'),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(AddBehaviorLogScreen.routeName);
             },
           ),
         ],
