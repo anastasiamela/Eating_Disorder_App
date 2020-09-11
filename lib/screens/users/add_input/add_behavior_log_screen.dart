@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 
 import '../../../providers/behaviors.dart';
 import '../../../providers/auth.dart';
@@ -60,6 +61,10 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
   Map<String, bool> _bodyCheckTypesSelected = new Map();
   String _otherTypeBodyCheck;
   TextEditingController _controller;
+  int _laxativesNumberInput;
+  int _dietPillsNumberInput;
+  int _drinksNumberInput;
+  String _thoughtsInput;
 
   var _isInit = true;
   @override
@@ -80,9 +85,18 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
       _bodyCheckTypes.forEach((type) => _bodyCheckTypesSelected[type] = false);
       _otherTypeBodyCheck = '';
       _controller = TextEditingController();
+      _laxativesNumberInput = -1;
+      _dietPillsNumberInput = -1;
+      _drinksNumberInput = -1;
+      _thoughtsInput = '';
     }
     _isInit = false;
     super.didChangeDependencies();
+  }
+
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   void _saveForm() {
@@ -98,8 +112,7 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
       if (value) {
         if (key == 'Other') {
           _bodyCheckTypeInput.add(_otherTypeBodyCheck);
-        }
-        else {
+        } else {
           _bodyCheckTypeInput.add(key);
         }
       }
@@ -114,6 +127,10 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
       purgeGrade: _purgeGradeInput,
       exerciseGrade: _exerciseGradeInput,
       bodyCheckType: _bodyCheckTypeInput,
+      laxativesNumber: _laxativesNumberInput,
+      dietPillsNumber: _dietPillsNumberInput,
+      drinksNumber: _drinksNumberInput,
+      thoughts: _thoughtsInput,
     );
 
     Provider.of<Behaviors>(context, listen: false)
@@ -140,11 +157,12 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
         padding: const EdgeInsets.all(8),
         child: Form(
           key: _form,
-          child: ListView(
-            children: _behaviorTypes
+          child: ListView(children: [
+            ...(_behaviorTypes
                 .map((behaviorType) => _buildBehaviorTypeWidget(behaviorType))
-                .toList(),
-          ),
+                .toList()),
+            _buildThoughtsInput(),
+          ]),
         ),
       ),
     );
@@ -190,7 +208,52 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
             _buildGradeSliderExercise(),
           if (behaviorType == 'bodyCheck' && _behaviorsSelected[behaviorType])
             _buildBodyCheckTypeInput(),
+          if (behaviorType == 'useLaxatives' &&
+              _behaviorsSelected[behaviorType])
+            _buildNumberInput('useLaxatives'),
+          if (behaviorType == 'useDietPills' &&
+              _behaviorsSelected[behaviorType])
+            _buildNumberInput('useDietPills'),
+          if (behaviorType == 'drinkAlcohol' &&
+              _behaviorsSelected[behaviorType])
+            _buildNumberInput('drinkAlcohol'),
         ],
+      ),
+    );
+  }
+
+  Widget _buildNumberInput(String type) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: ListTile(
+        title: Text('How many?'),
+        trailing: Container(
+          width: 150,
+          child: TextFormField(
+            textAlign: TextAlign.center,
+            keyboardType: TextInputType.number,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.digitsOnly
+            ],
+            decoration: InputDecoration(
+                hintText: 'Number',
+                hintStyle: TextStyle(fontStyle: FontStyle.italic)),
+            validator: (value) {
+              if (int.parse(value) < 1) {
+                return 'Press a valid number.';
+              }
+              return null;
+            },
+            onSaved: (value) => {
+              if (type == 'useLaxatives')
+                {_laxativesNumberInput = int.parse(value)}
+              else if (type == 'useDietPills')
+                {_dietPillsNumberInput = int.parse(value)}
+              else
+                {_drinksNumberInput = int.parse(value)}
+            },
+          ),
+        ),
       ),
     );
   }
@@ -392,6 +455,45 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
             },
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildThoughtsInput() {
+    return Card(
+      shadowColor: Theme.of(context).primaryColor,
+      child: Container(
+        //height: 70,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              ListTile(
+                title: Text(
+                  'Do you have any thoughts?',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18.0,
+                  ),
+                ),
+                contentPadding: EdgeInsets.all(0.0),
+              ),
+              TextFormField(
+                keyboardType: TextInputType.multiline,
+                decoration: InputDecoration(
+                    hintText: 'Your thoughts',
+                    hintStyle: TextStyle(fontStyle: FontStyle.italic)),
+                validator: (value) {
+                  if (value.length < 5) {
+                    return 'Should be at least 5 characters long.';
+                  }
+                  return null;
+                },
+                onSaved: (value) => _thoughtsInput = value,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

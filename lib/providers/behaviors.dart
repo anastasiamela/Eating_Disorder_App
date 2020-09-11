@@ -15,6 +15,7 @@ class Behavior with ChangeNotifier {
   final int dietPillsNumber;
   final int drinksNumber;
   final List<String> bodyCheckType;
+  final String thoughts;
 
   final DateTime date;
   bool isFavorite;
@@ -32,6 +33,7 @@ class Behavior with ChangeNotifier {
     this.dietPillsNumber = -1,
     this.drinksNumber = -1,
     @required this.bodyCheckType,
+    @required this.thoughts,
     @required this.date,
     this.isFavorite = false,
   });
@@ -113,6 +115,7 @@ class Behaviors with ChangeNotifier {
             dietPillsNumber: behaviorData['dietPillsNumber'],
             drinksNumber: behaviorData['drinksNumber'],
             bodyCheckType: new List<String>.from(behaviorData['bodyCheckType']),
+            thoughts: behaviorData['thoughts'],
             isFavorite: behaviorData['isFavorite'],
           ),
         );
@@ -143,6 +146,7 @@ class Behaviors with ChangeNotifier {
         'dietPillsNumber': behaviorInput.dietPillsNumber,
         'drinksNumber': behaviorInput.drinksNumber,
         'bodyCheckType': FieldValue.arrayUnion(behaviorInput.bodyCheckType),
+        'thoughts': behaviorInput.thoughts,
         'isFavorite': false,
         'createdAt': Timestamp.fromDate(timestamp),
       });
@@ -159,6 +163,7 @@ class Behaviors with ChangeNotifier {
         dietPillsNumber: behaviorInput.dietPillsNumber,
         drinksNumber: behaviorInput.drinksNumber,
         bodyCheckType: behaviorInput.bodyCheckType,
+        thoughts: behaviorInput.thoughts,
       );
       _behaviors.add(newBehavior);
       //_feelings.insert(0, newFeeling); // at the start of the list
