@@ -16,8 +16,10 @@ class Behavior with ChangeNotifier {
   final int drinksNumber;
   final List<String> bodyCheckType;
   final String thoughts;
-
   final DateTime date;
+  final bool isBackLog;
+  final DateTime dateTimeOfLog;
+  
   bool isFavorite;
   Timestamp createdAt;
 
@@ -35,6 +37,8 @@ class Behavior with ChangeNotifier {
     @required this.bodyCheckType,
     @required this.thoughts,
     @required this.date,
+    @required this.isBackLog,
+    @required this.dateTimeOfLog,
     this.isFavorite = false,
   });
 
@@ -121,6 +125,8 @@ class Behaviors with ChangeNotifier {
             bodyCheckType: new List<String>.from(behaviorData['bodyCheckType']),
             thoughts: behaviorData['thoughts'],
             isFavorite: behaviorData['isFavorite'],
+            isBackLog: behaviorData['isBackLog'],
+            dateTimeOfLog: DateTime.parse(behaviorData['dateTimeOfLog']),
           ),
         );
       });
@@ -140,7 +146,7 @@ class Behaviors with ChangeNotifier {
           .collection('behaviors')
           .add({
         'userId': userId,
-        'date': timestamp.toIso8601String(),
+        'date': behaviorInput.date.toIso8601String(),
         'behaviorsList': FieldValue.arrayUnion(behaviorInput.behaviorsList),
         'restrictGrade': behaviorInput.restrictGrade,
         'bingeGrade': behaviorInput.bingeGrade,
@@ -153,11 +159,13 @@ class Behaviors with ChangeNotifier {
         'thoughts': behaviorInput.thoughts,
         'isFavorite': false,
         'createdAt': Timestamp.fromDate(timestamp),
+        'isBackLog': behaviorInput.isBackLog,
+        'dateTimeOfLog': timestamp.toIso8601String(),
       });
       final newBehavior = Behavior(
         id: response.id,
         userId: userId,
-        date: timestamp,
+        date: behaviorInput.date,
         behaviorsList: behaviorInput.behaviorsList,
         restrictGrade: behaviorInput.restrictGrade,
         bingeGrade: behaviorInput.bingeGrade,
@@ -168,6 +176,8 @@ class Behaviors with ChangeNotifier {
         drinksNumber: behaviorInput.drinksNumber,
         bodyCheckType: behaviorInput.bodyCheckType,
         thoughts: behaviorInput.thoughts,
+        isBackLog: behaviorInput.isBackLog,
+        dateTimeOfLog: timestamp
       );
       _behaviors.add(newBehavior);
       //_feelings.insert(0, newFeeling); // at the start of the list
