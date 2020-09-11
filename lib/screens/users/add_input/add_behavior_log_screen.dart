@@ -58,6 +58,8 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
   String _exerciseGradeInput;
   List<String> _bodyCheckTypeInput;
   Map<String, bool> _bodyCheckTypesSelected = new Map();
+  String _otherTypeBodyCheck;
+  TextEditingController _controller;
 
   var _isInit = true;
   @override
@@ -75,8 +77,9 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
       _currentSliderValueExercice = 1.0;
       _exerciseGradeInput = '';
       _bodyCheckTypeInput = [];
-      _bodyCheckTypes
-          .forEach((type) => _bodyCheckTypesSelected[type] = false);
+      _bodyCheckTypes.forEach((type) => _bodyCheckTypesSelected[type] = false);
+      _otherTypeBodyCheck = '';
+      _controller = TextEditingController();
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -91,6 +94,16 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
     final userId = Provider.of<Auth>(context, listen: false).userId;
     _behaviorsSelected
         .forEach((key, value) => {if (value) _inputBehaviors.add(key)});
+    _bodyCheckTypesSelected.forEach((key, value) {
+      if (value) {
+        if (key == 'Other') {
+          _bodyCheckTypeInput.add(_otherTypeBodyCheck);
+        }
+        else {
+          _bodyCheckTypeInput.add(key);
+        }
+      }
+    });
     Behavior newBehaviorLog = Behavior(
       id: '',
       userId: userId,
@@ -188,13 +201,53 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
       child: Column(
         children: _bodyCheckTypes
             .map((type) => ListTile(
-                  title: Text(type),
+                  title: (type == 'Other' && _bodyCheckTypesSelected[type])
+                      ? Text(_otherTypeBodyCheck)
+                      : Text(type),
                   trailing: Checkbox(
                     value: _bodyCheckTypesSelected[type],
                     onChanged: (bool value) {
-                      setState(() {
-                        _bodyCheckTypesSelected[type] = value;
-                      });
+                      if (type == 'Other' && value) {
+                        return showDialog(
+                          context: context,
+                          builder: (ctx) => AlertDialog(
+                            title: Text('Body check type'),
+                            content: TextField(
+                              controller: _controller,
+                              decoration: InputDecoration(
+                                hintText: 'How did you check your body?',
+                              ),
+                            ),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text('Cancel'),
+                                onPressed: () {
+                                  Navigator.of(ctx).pop(false);
+                                },
+                              ),
+                              FlatButton(
+                                child: Text('Ok'),
+                                onPressed: () {
+                                  setState(() {
+                                    _otherTypeBodyCheck = _controller.text;
+                                    _controller.text = '';
+                                    if (_otherTypeBodyCheck != '')
+                                      _bodyCheckTypesSelected[type] = value;
+                                  });
+                                  Navigator.of(ctx).pop(true);
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        setState(() {
+                          _bodyCheckTypesSelected[type] = value;
+                          if (type == 'Other') {
+                            _otherTypeBodyCheck = '';
+                          }
+                        });
+                      }
                     },
                   ),
                 ))

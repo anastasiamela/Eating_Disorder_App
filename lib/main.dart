@@ -19,6 +19,7 @@ import './providers/meal_logs.dart';
 import './providers/logging_goals.dart';
 import './providers/thoughts.dart';
 import './providers/feelings.dart';
+import './providers/behaviors.dart';
 import './providers/auth.dart';
 
 void main() {
@@ -50,6 +51,9 @@ class MyApp extends StatelessWidget {
               ),
               ChangeNotifierProvider(
                 create: (_) => Feelings(),
+              ),
+              ChangeNotifierProvider(
+                create: (_) => Behaviors(),
               ),
             ],
             child: Consumer<Auth>(
