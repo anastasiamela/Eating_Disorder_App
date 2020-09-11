@@ -10,6 +10,7 @@ class BehaviorLogItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final scaffold = Scaffold.of(context);
     final behavior = Provider.of<Behavior>(context, listen: false);
+    final behaviorsNumber = behavior.behaviorsListLenght;
     final time = DateFormat.jm().format(behavior.date);
     final authData = Provider.of<Auth>(context, listen: false);
     return Dismissible(
@@ -79,6 +80,9 @@ class BehaviorLogItem extends StatelessWidget {
           backgroundColor: Colors.transparent,
         ),
         title: Text('$time  Behaviors'),
+        subtitle: (behaviorsNumber == 0)
+            ? Text('Disordered behaviors: none')
+            : Text('Disordered behaviors:  $behaviorsNumber'),
         trailing: Consumer<Behavior>(
           builder: (ctx, feeling, _) => IconButton(
             icon: Icon(

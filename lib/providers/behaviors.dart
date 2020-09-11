@@ -38,6 +38,10 @@ class Behavior with ChangeNotifier {
     this.isFavorite = false,
   });
 
+  int get behaviorsListLenght {
+    return behaviorsList.length;
+  }
+
   void _setFavValue(bool newValue) {
     isFavorite = newValue;
     notifyListeners();
