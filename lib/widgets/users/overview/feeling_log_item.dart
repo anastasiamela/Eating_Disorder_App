@@ -5,13 +5,17 @@ import 'package:provider/provider.dart';
 import '../../../providers/feelings.dart';
 import '../../../providers/auth.dart';
 
+import '../../../models/emoji_view.dart';
+
 class FeelingLogItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scaffold = Scaffold.of(context);
     final feeling = Provider.of<Feeling>(context, listen: false);
     final time = DateFormat.jm().format(feeling.date);
-    List<String> moodsEmojis;
+    List<String> moodsEmojis = [];
+    List<String> moods = feeling.moods;
+    moods.forEach((mood) => moodsEmojis.add(getEmojiTextView(mood)));
     final authData = Provider.of<Auth>(context, listen: false);
     return Dismissible(
       key: ValueKey(feeling.id),
@@ -80,7 +84,9 @@ class FeelingLogItem extends StatelessWidget {
           backgroundColor: Colors.transparent,
         ),
         title: Text('$time  Feelings'),
-        subtitle: Text(feeling.thoughts),
+        subtitle: Row(
+          children: moodsEmojis.map((mood) => Text('$mood ')).toList(),
+        ),
         trailing: Consumer<Feeling>(
           builder: (ctx, feeling, _) => IconButton(
             icon: Icon(
