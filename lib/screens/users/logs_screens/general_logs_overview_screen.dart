@@ -10,7 +10,6 @@ import '../../../providers/logging_goals.dart';
 import '../../../widgets/users/app_drawer.dart';
 import '../../../widgets/users/overview/general_list.dart';
 import '../../../widgets/users/overview/logging_goals_overview.dart';
-import '../../../widgets/users/overview/thoughts_overview.dart';
 import '../add_input/add_meal_log_screen.dart';
 import '../add_input/add_thought_screen.dart';
 
@@ -157,7 +156,7 @@ class _GeneralLogsOverviewScreenState extends State<GeneralLogsOverviewScreen>
           GeneralList(selectedIndex, tabsList[selectedIndex].text),
           GeneralList(selectedIndex, tabsList[selectedIndex].text),
           LoggingGoalsOverview(),
-          ThoughtsOverview(),
+          GeneralList(selectedIndex, tabsList[selectedIndex].text),
           GeneralList(selectedIndex, tabsList[selectedIndex].text),
         ],
       ),
