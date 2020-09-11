@@ -99,7 +99,6 @@ class Feelings with ChangeNotifier {
           ),
         );
       });
-      print(_feelings);
       _feelings = loadedFeelings;
       notifyListeners();
     } catch (error) {

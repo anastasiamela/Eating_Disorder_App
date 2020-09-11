@@ -27,15 +27,16 @@ class GeneralList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mealsData = Provider.of<MealLogs>(context);
-    final thoughtsData = Provider.of<Thoughts>(context);
-    final feelingsData = Provider.of<Feelings>(context);
-    String messageEmpty;
+    String messageEmpty = '';
     List<Feeling> feelings;
     List<Thought> thoughts;
     List<MealLog> meals;
     List displayList;
+
     if (selectedCategoryIndex == 0) {
+      final mealsData = Provider.of<MealLogs>(context);
+      final thoughtsData = Provider.of<Thoughts>(context);
+      final feelingsData = Provider.of<Feelings>(context);
       meals = mealsData.mealsSorted;
       thoughts = thoughtsData.thoughts;
       feelings = feelingsData.feelings;
@@ -43,49 +44,48 @@ class GeneralList extends StatelessWidget {
       displayList = sort([...meals, ...thoughts, ...feelings]);
       messageEmpty = 'There are no logs.';
     } else if (selectedCategoryIndex == 1) {
+      final mealsData = Provider.of<MealLogs>(context);
+      final thoughtsData = Provider.of<Thoughts>(context);
+      final feelingsData = Provider.of<Feelings>(context);
       meals = mealsData.favoriteMeals;
       thoughts = thoughtsData.favoriteThoughts;
       feelings = feelingsData.favoriteFeelings;
       displayList = sort([...meals, ...thoughts, ...feelings]);
       messageEmpty = 'There are no favorite logs.';
     } else if (selectedCategoryIndex == 2) {
+      final mealsData = Provider.of<MealLogs>(context);
       meals = mealsData.skippedMeals;
-      displayList = [...meals];
+      if (meals != null)
+        displayList = [...meals];
+      else
+        displayList = [];
       messageEmpty = 'There are no skipped meals.';
-    } else {
+    } else if (selectedCategoryIndex == 3) {
+      final mealsData = Provider.of<MealLogs>(context);
       meals = mealsData.backLogMeals;
-      displayList = [...meals];
+      if (meals != null)
+        displayList = [...meals];
+      else
+        displayList = [];
       messageEmpty = 'There are no back log meals.';
+    } else if (selectedCategoryIndex == 6) {
+      final feelingsData = Provider.of<Feelings>(context);
+      feelings = feelingsData.feelings;
+      displayList = [...feelings];
+      messageEmpty = 'There are no logs for feelings.';
     }
 
-    return (meals.isEmpty)
+    return (displayList == null || displayList.isEmpty)
         ? Center(
-            child: (selectedCategoryIndex != 0)
-                ? Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 150),
-                        child: Text(
-                          messageEmpty,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 20.0,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                : Text(
-                    'There are no meal logs!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20.0,
-                    ),
-                  ),
+            child: Text(
+              messageEmpty,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 20.0,
+              ),
+            ),
           )
         : StickyGroupedListView<dynamic, DateTime>(
             elements: displayList,

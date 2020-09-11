@@ -34,6 +34,7 @@ class _GeneralLogsOverviewScreenState extends State<GeneralLogsOverviewScreen>
     Tab(text: 'Back log meals'),
     Tab(text: 'Goals'),
     Tab(text: 'Thoughts'),
+    Tab(text: 'Feelings'),
   ];
 
   var selectedIndex = 0;
@@ -64,7 +65,8 @@ class _GeneralLogsOverviewScreenState extends State<GeneralLogsOverviewScreen>
         _isLoading = true;
       });
       final userId = Provider.of<Auth>(context, listen: false).userId;
-      Provider.of<LoggingGoals>(context).fetchAndSetLoggingGoalsSettings(userId);
+      Provider.of<LoggingGoals>(context)
+          .fetchAndSetLoggingGoalsSettings(userId);
       Provider.of<Thoughts>(context).fetchAndSetThoughts(userId);
       Provider.of<Feelings>(context).fetchAndSetFeelings(userId);
       Provider.of<MealLogs>(context).fetchAndSetMealLogs(userId).then((_) {
@@ -156,6 +158,7 @@ class _GeneralLogsOverviewScreenState extends State<GeneralLogsOverviewScreen>
           GeneralList(selectedIndex, tabsList[selectedIndex].text),
           LoggingGoalsOverview(),
           ThoughtsOverview(),
+          GeneralList(selectedIndex, tabsList[selectedIndex].text),
         ],
       ),
       drawer: AppDrawer(),
