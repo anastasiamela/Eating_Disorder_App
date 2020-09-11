@@ -8,7 +8,6 @@ import '../../screens/users/add_input/add_behavior_log_screen.dart';
 
 import '../../providers/auth.dart';
 
-
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -21,29 +20,18 @@ class AppDrawer extends StatelessWidget {
           ),
           Divider(),
           ListTile(
+            leading: Icon(Icons.home),
+            title: Text('My feed'),
+            onTap: () {
+              Navigator.of(context).pushReplacementNamed('/');
+            },
+          ),
+          Divider(),
+          ListTile(
             leading: Icon(Icons.add),
-            title: Text('Add meal log 2'),
+            title: Text('Add meal log'),
             onTap: () {
               Navigator.of(context).pushNamed(AddMealLogScreen.routeName);
-            },
-          ),
-          Divider(),
-          ListTile(
-            leading: Icon(Icons.home),
-            title: Text('My meal logs'),
-            onTap: () {
-              Navigator.of(context)
-                  .pushReplacementNamed('/');
-            },
-          ),
-          Divider(),
-          ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Logout'),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushReplacementNamed('/');
-              Provider.of<Auth>(context, listen: false).signout();
             },
           ),
           Divider(),
@@ -66,11 +54,21 @@ class AppDrawer extends StatelessWidget {
           ),
           Divider(),
           ListTile(
-            leading: Icon(Icons.headset),
+            leading: Icon(Icons.error_outline),
             title: Text('Add behaviors'),
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushNamed(AddBehaviorLogScreen.routeName);
+            },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.exit_to_app),
+            title: Text('Logout'),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacementNamed('/');
+              Provider.of<Auth>(context, listen: false).signout();
             },
           ),
         ],
