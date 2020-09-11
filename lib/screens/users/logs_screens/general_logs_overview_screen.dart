@@ -6,6 +6,7 @@ import '../../../providers/thoughts.dart';
 import '../../../providers/feelings.dart';
 import '../../../providers/auth.dart';
 import '../../../providers/logging_goals.dart';
+import '../../../providers/behaviors.dart';
 
 import '../../../widgets/users/app_drawer.dart';
 import '../../../widgets/users/overview/general_list.dart';
@@ -34,6 +35,7 @@ class _GeneralLogsOverviewScreenState extends State<GeneralLogsOverviewScreen>
     Tab(text: 'Goals'),
     Tab(text: 'Thoughts'),
     Tab(text: 'Feelings'),
+    Tab(text: 'Behaviors'),
   ];
 
   var selectedIndex = 0;
@@ -68,6 +70,7 @@ class _GeneralLogsOverviewScreenState extends State<GeneralLogsOverviewScreen>
           .fetchAndSetLoggingGoalsSettings(userId);
       Provider.of<Thoughts>(context).fetchAndSetThoughts(userId);
       Provider.of<Feelings>(context).fetchAndSetFeelings(userId);
+      Provider.of<Behaviors>(context).fetchAndSetBehaviors(userId);
       Provider.of<MealLogs>(context).fetchAndSetMealLogs(userId).then((_) {
         setState(() {
           _isLoading = false;
@@ -156,6 +159,7 @@ class _GeneralLogsOverviewScreenState extends State<GeneralLogsOverviewScreen>
           GeneralList(selectedIndex, tabsList[selectedIndex].text),
           GeneralList(selectedIndex, tabsList[selectedIndex].text),
           LoggingGoalsOverview(),
+          GeneralList(selectedIndex, tabsList[selectedIndex].text),
           GeneralList(selectedIndex, tabsList[selectedIndex].text),
           GeneralList(selectedIndex, tabsList[selectedIndex].text),
         ],

@@ -54,7 +54,7 @@ class _GeneralTabsScreenState extends State<GeneralLogsTabsScreen> {
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
             icon: Icon(Icons.account_box),
-            title: Text('My meal feed'),
+            title: Text('My feed'),
           ),
           BottomNavigationBarItem(
             backgroundColor: Theme.of(context).primaryColor,
