@@ -16,7 +16,7 @@ class MealLog with ChangeNotifier {
   final String thoughts;
   final String skippingReason;
   bool isFavorite;
-  final bool isBackLogMeal;
+  final bool isBackLog;
   final DateTime dateTimeOfLog;
   DateTime dateTimeOfLastUpdate;
   Timestamp createdAt;
@@ -36,7 +36,7 @@ class MealLog with ChangeNotifier {
     @required this.thoughts,
     @required this.skippingReason,
     this.isFavorite = false,
-    @required this.isBackLogMeal,
+    @required this.isBackLog,
     @required this.dateTimeOfLog,
     this.dateTimeOfLastUpdate,
   });

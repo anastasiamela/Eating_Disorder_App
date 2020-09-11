@@ -97,7 +97,7 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
     mealPortion: '',
     thoughts: '',
     skippingReason: '',
-    isBackLogMeal: false,
+    isBackLog: false,
     dateTimeOfLog: null,
   );
 
@@ -159,7 +159,7 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
         mealPortion: _selectedPortion,
         thoughts: _editedMealLog.thoughts,
         skippingReason: _editedMealLog.skippingReason,
-        isBackLogMeal: _editedMealLog.isBackLogMeal,
+        isBackLog: _editedMealLog.isBackLog,
         dateTimeOfLog: _editedMealLog.date,
         isFavorite: _editedMealLog.isFavorite,
         dateTimeOfLastUpdate: DateTime.now(),
@@ -602,7 +602,7 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
                   mealPortion: _editedMealLog.mealPortion,
                   thoughts: _editedMealLog.thoughts,
                   skippingReason: _editedMealLog.skippingReason,
-                  isBackLogMeal: _editedMealLog.isBackLogMeal,
+                  isBackLog: _editedMealLog.isBackLog,
                   dateTimeOfLog: _editedMealLog.date,
                   isFavorite: _editedMealLog.isFavorite,
                 );
@@ -699,7 +699,7 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
                   mealPortion: _editedMealLog.mealPortion,
                   thoughts: value,
                   skippingReason: _editedMealLog.skippingReason,
-                  isBackLogMeal: _editedMealLog.isBackLogMeal,
+                  isBackLog: _editedMealLog.isBackLog,
                   dateTimeOfLog: _editedMealLog.date,
                   isFavorite: _editedMealLog.isFavorite,
                 );
@@ -746,7 +746,7 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
                   mealPortion: _editedMealLog.mealPortion,
                   thoughts: _editedMealLog.thoughts,
                   skippingReason: value,
-                  isBackLogMeal: _editedMealLog.isBackLogMeal,
+                  isBackLog: _editedMealLog.isBackLog,
                   dateTimeOfLog: _editedMealLog.date,
                   isFavorite: _editedMealLog.isFavorite,
                 );

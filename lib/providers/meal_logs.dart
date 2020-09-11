@@ -29,7 +29,7 @@ class MealLogs with ChangeNotifier {
   }
 
   List<MealLog> get backLogMeals {
-    return _meals.where((meal) => meal.isBackLogMeal ?? () => null).toList();
+    return _meals.where((meal) => meal.isBackLog ?? () => null).toList();
   }
 
   MealLog findById(String id) {
@@ -66,7 +66,7 @@ class MealLogs with ChangeNotifier {
           mealPortion: mealData['mealPortion'],
           thoughts: mealData['thoughts'],
           skippingReason: mealData['skippingReason'],
-          isBackLogMeal: mealData['isBackLogMeal'],
+          isBackLog: mealData['isBackLog'],
           dateTimeOfLog: DateTime.parse(mealData['dateTimeOfLog']),
           dateTimeOfLastUpdate:
               DateTime.parse(mealData['dateTimeOfLastUpdate']),
@@ -100,7 +100,7 @@ class MealLogs with ChangeNotifier {
         'mealPortion': meal.mealPortion,
         'thoughts': meal.thoughts,
         'skippingReason': meal.skippingReason,
-        'isBackLogMeal': meal.isBackLogMeal,
+        'isBackLog': meal.isBackLog,
         'dateTimeOfLog': meal.dateTimeOfLog.toIso8601String(),
         'dateTimeOfLastUpdate': timestamp.toIso8601String(),
         'isFavorite': false,
@@ -120,7 +120,7 @@ class MealLogs with ChangeNotifier {
         mealPortion: meal.mealPortion,
         thoughts: meal.thoughts,
         skippingReason: meal.skippingReason,
-        isBackLogMeal: meal.isBackLogMeal,
+        isBackLog: meal.isBackLog,
         dateTimeOfLog: meal.dateTimeOfLog,
         dateTimeOfLastUpdate: timestamp,
       );
@@ -155,7 +155,7 @@ class MealLogs with ChangeNotifier {
         'mealPortion': newMealLog.mealPortion,
         'thoughts': newMealLog.thoughts,
         'skippingReason': newMealLog.skippingReason,
-        'isBackLogMeal': newMealLog.isBackLogMeal,
+        'isBackLog': newMealLog.isBackLog,
         'dateTimeOfLog': newMealLog.dateTimeOfLog.toIso8601String(),
         'dateTimeOfLastUpdate': timestamp.toIso8601String(),
         'isFavorite': newMealLog.isFavorite,

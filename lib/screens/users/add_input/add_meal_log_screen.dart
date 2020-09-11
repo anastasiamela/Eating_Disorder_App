@@ -110,7 +110,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
     mealPortion: '',
     thoughts: '',
     skippingReason: '',
-    isBackLogMeal: false,
+    isBackLog: false,
     dateTimeOfLog: null,
   );
 
@@ -125,7 +125,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
   void didChangeDependencies() {
     if (_isInit) {
       _skip = _editedMealLog.skip;
-      _isBackLog = _editedMealLog.isBackLogMeal;
+      _isBackLog = _editedMealLog.isBackLog;
       _hasSelectedDateBackLog = false;
       _hasSelectedTimeBackLog = false;
       _selectedMealDate = DateTime.now();
@@ -200,7 +200,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
       mealPortion: _selectedPortion,
       thoughts: _editedMealLog.thoughts,
       skippingReason: _editedMealLog.skippingReason,
-      isBackLogMeal: _editedMealLog.isBackLogMeal,
+      isBackLog: _editedMealLog.isBackLog,
       dateTimeOfLog: date,
       dateTimeOfLastUpdate: DateTime.now(),
     );
@@ -843,7 +843,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
                   mealPortion: _editedMealLog.mealPortion,
                   thoughts: _editedMealLog.thoughts,
                   skippingReason: _editedMealLog.skippingReason,
-                  isBackLogMeal: _editedMealLog.isBackLogMeal,
+                  isBackLog: _editedMealLog.isBackLog,
                   dateTimeOfLog: _editedMealLog.date,
                   isFavorite: _editedMealLog.isFavorite,
                 );
@@ -940,7 +940,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
                   mealPortion: _editedMealLog.mealPortion,
                   thoughts: value,
                   skippingReason: _editedMealLog.skippingReason,
-                  isBackLogMeal: _editedMealLog.isBackLogMeal,
+                  isBackLog: _editedMealLog.isBackLog,
                   dateTimeOfLog: _editedMealLog.date,
                   isFavorite: _editedMealLog.isFavorite,
                 );
@@ -987,7 +987,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
                   mealPortion: _editedMealLog.mealPortion,
                   thoughts: _editedMealLog.thoughts,
                   skippingReason: value,
-                  isBackLogMeal: _editedMealLog.isBackLogMeal,
+                  isBackLog: _editedMealLog.isBackLog,
                   dateTimeOfLog: _editedMealLog.date,
                   isFavorite: _editedMealLog.isFavorite,
                 );
