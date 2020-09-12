@@ -2,19 +2,19 @@ import 'package:intl/intl.dart';
 
 import '../../../providers/meal_logs.dart';
 import '../../../providers/meal_log.dart';
-import './meal_log_detail_screen.dart';
+import 'meal_log_detail_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:provider/provider.dart';
 
-class CalendarMealLogsScreen extends StatefulWidget {
-  static const routeName = '/calendar-meal-logs';
+class CalendarLogsScreen extends StatefulWidget {
+  static const routeName = '/calendar-logs';
   @override
-  _CalendarMealLogsScreenState createState() => _CalendarMealLogsScreenState();
+  _CalendarLogsScreenState createState() => _CalendarLogsScreenState();
 }
 
-class _CalendarMealLogsScreenState extends State<CalendarMealLogsScreen> {
+class _CalendarLogsScreenState extends State<CalendarLogsScreen> {
   CalendarController _controller;
   Map<DateTime, List<dynamic>> _events;
   List<dynamic> _selectedEvents = [];

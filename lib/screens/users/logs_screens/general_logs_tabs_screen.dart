@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import './calendar_meal_logs_screen.dart';
+import './calendar_logs_screen.dart';
 import './general_logs_overview_screen.dart';
 import '../../../widgets/users/app_drawer.dart';
 
@@ -22,7 +22,7 @@ class _GeneralTabsScreenState extends State<GeneralLogsTabsScreen> {
         'title': 'My Meal Logs',
       },
       {
-        'page': CalendarMealLogsScreen(),
+        'page': CalendarLogsScreen(),
         'title': 'Log Calendar',
       },
     ];
