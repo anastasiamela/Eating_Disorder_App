@@ -163,7 +163,7 @@ class Behaviors with ChangeNotifier {
         'bodyCheckType': FieldValue.arrayUnion(behaviorInput.bodyCheckType),
         'thoughts': behaviorInput.thoughts,
         'isFavorite': false,
-        'createdAt': Timestamp.fromDate(timestamp),
+        'createdAt': Timestamp.fromDate(behaviorInput.date),
         'isBackLog': behaviorInput.isBackLog,
         'dateTimeOfLog': timestamp.toIso8601String(),
       });
@@ -182,7 +182,7 @@ class Behaviors with ChangeNotifier {
         bodyCheckType: behaviorInput.bodyCheckType,
         thoughts: behaviorInput.thoughts,
         isBackLog: behaviorInput.isBackLog,
-        dateTimeOfLog: timestamp
+        dateTimeOfLog: timestamp,
       );
       _behaviors.add(newBehavior);
       //_feelings.insert(0, newFeeling); // at the start of the list

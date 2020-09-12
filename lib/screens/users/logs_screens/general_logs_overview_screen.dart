@@ -31,7 +31,7 @@ class _GeneralLogsOverviewScreenState extends State<GeneralLogsOverviewScreen>
     Tab(text: 'All'),
     Tab(text: 'Favorite'),
     Tab(text: 'Skipped meals'),
-    Tab(text: 'Back log meals'),
+    Tab(text: 'Back logs'),
     Tab(text: 'Goals'),
     Tab(text: 'Thoughts'),
     Tab(text: 'Feelings'),

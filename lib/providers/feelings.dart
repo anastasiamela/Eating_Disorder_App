@@ -10,6 +10,8 @@ class Feeling with ChangeNotifier {
   final List<String> moods;
   final String thoughts;
   final DateTime date;
+  final bool isBackLog;
+  final DateTime dateTimeOfLog;
   bool isFavorite;
   Timestamp createdAt;
 
@@ -20,6 +22,8 @@ class Feeling with ChangeNotifier {
     @required this.moods,
     @required this.thoughts,
     @required this.date,
+    @required this.isBackLog,
+    @required this.dateTimeOfLog,
     this.isFavorite = false,
   });
 
@@ -67,6 +71,11 @@ class Feelings with ChangeNotifier {
         .toList();
   }
 
+  List<Feeling> get backLogFeelings {
+    return _feelings.where((feeling) => feeling.isBackLog ?? () => null).toList();
+  }
+
+
   Feeling findById(String id) {
     return _feelings.firstWhere((feeling) => feeling.id == id);
   }
@@ -96,6 +105,8 @@ class Feelings with ChangeNotifier {
             moods: new List<String>.from(feelingData['moods']),
             thoughts: feelingData['thoughts'],
             isFavorite: feelingData['isFavorite'],
+            isBackLog: feelingData['isBackLog'],
+            dateTimeOfLog: DateTime.parse(feelingData['dateTimeOfLog']),
           ),
         );
       });
@@ -106,8 +117,7 @@ class Feelings with ChangeNotifier {
     }
   }
 
-  Future<void> addFeeling(String overallFeelingInput,
-      List<String> moodsInput, String thoughtsInput, String userId) async {
+  Future<void> addFeeling(Feeling feelingInput, String userId) async {
     final timestamp = DateTime.now();
     try {
       final response = await FirebaseFirestore.instance
@@ -116,20 +126,24 @@ class Feelings with ChangeNotifier {
           .collection('feelings')
           .add({
         'userId': userId,
-        'date': timestamp.toIso8601String(),
-        'overallFeeling': overallFeelingInput,
-        'moods': FieldValue.arrayUnion(moodsInput),
-        'thoughts': thoughtsInput,
+        'date': feelingInput.date.toIso8601String(),
+        'overallFeeling': feelingInput.overallFeeling,
+        'moods': FieldValue.arrayUnion(feelingInput.moods),
+        'thoughts': feelingInput.thoughts,
         'isFavorite': false,
-        'createdAt': Timestamp.fromDate(timestamp),
+        'createdAt': Timestamp.fromDate(feelingInput.date),
+        'isBackLog': feelingInput.isBackLog,
+        'dateTimeOfLog': timestamp.toIso8601String()
       });
       final newFeeling = Feeling(
         id: response.id,
         userId: userId,
-        date: timestamp,
-        overallFeeling: overallFeelingInput,
-        moods: moodsInput,
-        thoughts: thoughtsInput,
+        date: feelingInput.date,
+        overallFeeling: feelingInput.overallFeeling,
+        moods: feelingInput.moods,
+        thoughts: feelingInput.thoughts,
+        isBackLog: feelingInput.isBackLog,
+        dateTimeOfLog: timestamp,
       );
       _feelings.add(newFeeling);
       //_feelings.insert(0, newFeeling); // at the start of the list
