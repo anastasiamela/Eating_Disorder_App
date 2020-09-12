@@ -386,56 +386,58 @@ class _AddFeelingLogScreenState extends State<AddFeelingLogScreen> {
   Widget _buildTimeInput() {
     return Card(
       shadowColor: Theme.of(context).primaryColor,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
+      child: Container(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              ListTile(
+                title: Text(
                   'What time?',
                   style: TextStyle(
-                    fontSize: 18.0,
                     fontWeight: FontWeight.w600,
+                    fontSize: 18.0,
                   ),
                 ),
-                RaisedButton(
-                  child: Text(
-                    'Select Time',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.w600,
+                contentPadding: EdgeInsets.all(0.0),
+                trailing: Container(
+                  width: 150,
+                  child: RaisedButton(
+                    child: Text(
+                      'Select Time',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
+                    onPressed: _pickTime,
+                    color: Theme.of(context).primaryColor,
                   ),
-                  onPressed: _pickTime,
-                  color: Theme.of(context).primaryColor,
                 ),
-              ],
-            ),
-            (_hasSelectedTime)
-                ? Text(
-                    '${printTime(_selectedTime)}',
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.w600,
+              ),
+              (_hasSelectedTime)
+                  ? Text(
+                      '${printTime(_selectedTime)}',
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    )
+                  : TextFormField(
+                      initialValue: '',
+                      readOnly: true,
+                      validator: (value) {
+                        if (_hasSelectedTime == false) {
+                          return 'You have to select time!';
+                        }
+                        return null;
+                      },
                     ),
-                  )
-                : Text(''),
-            TextFormField(
-              initialValue: '',
-              readOnly: true,
-              validator: (value) {
-                if (_hasSelectedTime == false) {
-                  return 'You have to select time!';
-                }
-                return null;
-              },
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
