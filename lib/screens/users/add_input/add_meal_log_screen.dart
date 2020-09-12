@@ -630,17 +630,18 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  'When was your meal?',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w600,
-                  ),
+            ListTile(
+              title: Text(
+                'When was your meal?',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18.0,
                 ),
-                RaisedButton(
+              ),
+              contentPadding: EdgeInsets.all(0.0),
+              trailing: Container(
+                width: 150,
+                child: RaisedButton(
                   child: Text(
                     'Select Day',
                     style: TextStyle(
@@ -652,7 +653,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
                   onPressed: _pickDate,
                   color: Theme.of(context).primaryColor,
                 ),
-              ],
+              ),
             ),
             (_hasSelectedDateBackLog)
                 ? Text(
@@ -663,18 +664,17 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
                       fontWeight: FontWeight.w600,
                     ),
                   )
-                : Text(''),
-            TextFormField(
-              initialValue: '',
-              readOnly: true,
-              validator: (value) {
-                if (_hasSelectedDateBackLog == false) {
-                  //if you have not selected day
-                  return 'You have to select a day!';
-                }
-                return null;
-              },
-            ),
+                : TextFormField(
+                    initialValue: '',
+                    readOnly: true,
+                    validator: (value) {
+                      if (_hasSelectedDateBackLog == false) {
+                        //if you have not selected day
+                        return 'You have to select a day!';
+                      }
+                      return null;
+                    },
+                  ),
           ],
         ),
       ),
@@ -769,8 +769,8 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
     DateTime date = await showDatePicker(
       context: context,
       firstDate: today.subtract(Duration(days: 6)),
-      lastDate: today,
-      initialDate: today,
+      lastDate: today.subtract(Duration(days: 1)),
+      initialDate: today.subtract(Duration(days: 1)),
     );
     if (date != null)
       setState(() {
