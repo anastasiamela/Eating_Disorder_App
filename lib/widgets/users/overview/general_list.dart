@@ -87,7 +87,7 @@ class GeneralList extends StatelessWidget {
     } else if (selectedCategoryIndex == 5) {
       final thoughtsData = Provider.of<Thoughts>(context);
       final mealsData = Provider.of<MealLogs>(context);
-      meals = mealsData.MealsWithThoughts;
+      meals = mealsData.mealsWithThoughts;
       thoughts = thoughtsData.thoughts;
       displayList = [...thoughts, ...meals];
       messageEmpty = 'There are no logs with thoughts.';
@@ -95,8 +95,10 @@ class GeneralList extends StatelessWidget {
       routeNextToAdd = AddThoughtScreen.routeName;
     } else if (selectedCategoryIndex == 6) {
       final feelingsData = Provider.of<Feelings>(context);
+      final mealsData = Provider.of<MealLogs>(context);
+      meals = mealsData.mealsWithFeelings;
       feelings = feelingsData.feelings;
-      displayList = [...feelings];
+      displayList = [...feelings, ...meals];
       messageEmpty = 'There are no logs for feelings.';
       buttonTitleAdd = 'Add feelings';
       routeNextToAdd = AddFeelingLogScreen.routeName;
