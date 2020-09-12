@@ -32,6 +32,10 @@ class MealLogs with ChangeNotifier {
     return _meals.where((meal) => meal.isBackLog ?? () => null).toList();
   }
 
+  List<MealLog> get MealsWithThoughts {
+    return _meals.where((meal) => meal.thoughts != '' ?? () => null).toList();
+  }
+
   MealLog findById(String id) {
     return _meals.firstWhere((meal) => meal.id == id);
   }

@@ -86,9 +86,11 @@ class GeneralList extends StatelessWidget {
       messageEmpty = 'There are no back logs.';
     } else if (selectedCategoryIndex == 5) {
       final thoughtsData = Provider.of<Thoughts>(context);
+      final mealsData = Provider.of<MealLogs>(context);
+      meals = mealsData.MealsWithThoughts;
       thoughts = thoughtsData.thoughts;
-      displayList = [...thoughts];
-      messageEmpty = 'There are no logs for thoughts.';
+      displayList = [...thoughts, ...meals];
+      messageEmpty = 'There are no logs with thoughts.';
       buttonTitleAdd = 'Add a thought';
       routeNextToAdd = AddThoughtScreen.routeName;
     } else if (selectedCategoryIndex == 6) {
@@ -179,7 +181,7 @@ class GeneralList extends StatelessWidget {
               if (obj is MealLog)
                 return ChangeNotifierProvider.value(
                   value: obj,
-                  child: MealLogItem(),
+                  child: MealLogItem(selectedCategory),
                 );
               if (obj is Thought)
                 return ChangeNotifierProvider.value(
