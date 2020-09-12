@@ -207,17 +207,18 @@ class _AddThoughtScreenState extends State<AddThoughtScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  'For when is the log?',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w600,
-                  ),
+            ListTile(
+              title: Text(
+                'For when is the log?',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18.0,
                 ),
-                RaisedButton(
+              ),
+              contentPadding: EdgeInsets.all(0.0),
+              trailing: Container(
+                width: 150,
+                child: RaisedButton(
                   child: Text(
                     'Select Day',
                     style: TextStyle(
@@ -229,7 +230,7 @@ class _AddThoughtScreenState extends State<AddThoughtScreen> {
                   onPressed: _pickDate,
                   color: Theme.of(context).primaryColor,
                 ),
-              ],
+              ),
             ),
             (_hasSelectedDateBackLog)
                 ? Text(
@@ -240,17 +241,16 @@ class _AddThoughtScreenState extends State<AddThoughtScreen> {
                       fontWeight: FontWeight.w600,
                     ),
                   )
-                : Text(''),
-            TextFormField(
-              initialValue: '',
-              readOnly: true,
-              validator: (value) {
-                if (_hasSelectedDateBackLog == false) {
-                  return 'You have to select a day!';
-                }
-                return null;
-              },
-            ),
+                : TextFormField(
+                    initialValue: '',
+                    readOnly: true,
+                    validator: (value) {
+                      if (_hasSelectedDateBackLog == false) {
+                        return 'You have to select a day!';
+                      }
+                      return null;
+                    },
+                  ),
           ],
         ),
       ),
