@@ -8,6 +8,9 @@ import '../../../providers/auth.dart';
 import '../../../models/emoji_view.dart';
 
 class FeelingLogItem extends StatelessWidget {
+  final String subtitleType;
+
+  FeelingLogItem(this.subtitleType);
   @override
   Widget build(BuildContext context) {
     final scaffold = Scaffold.of(context);
@@ -17,6 +20,10 @@ class FeelingLogItem extends StatelessWidget {
     List<String> moods = feeling.moods;
     moods.forEach((mood) => moodsEmojis.add(getEmojiTextView(mood)));
     final authData = Provider.of<Auth>(context, listen: false);
+    String subtitleText = '';
+    if (subtitleType == 'Thoughts') {
+      subtitleText = 'Thoughts: ${feeling.thoughts}';
+    }
     return Dismissible(
       key: ValueKey(feeling.id),
       background: Container(
@@ -84,9 +91,11 @@ class FeelingLogItem extends StatelessWidget {
           backgroundColor: Colors.transparent,
         ),
         title: Text('$time  Feelings'),
-        subtitle: Row(
-          children: moodsEmojis.map((mood) => Text('$mood ')).toList(),
-        ),
+        subtitle: (subtitleType == 'Thoughts')
+            ? Text(subtitleText)
+            : Row(
+                children: moodsEmojis.map((mood) => Text('$mood ')).toList(),
+              ),
         trailing: Consumer<Feeling>(
           builder: (ctx, feeling, _) => IconButton(
             icon: Icon(

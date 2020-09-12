@@ -42,11 +42,12 @@ class GeneralList extends StatelessWidget {
     String buttonTitleAdd;
     String routeNextToAdd;
 
+    final thoughtsData = Provider.of<Thoughts>(context);
+    final mealsData = Provider.of<MealLogs>(context);
+    final behaviorsData = Provider.of<Behaviors>(context);
+    final feelingsData = Provider.of<Feelings>(context);
+
     if (selectedCategoryIndex == 0) {
-      final mealsData = Provider.of<MealLogs>(context);
-      final thoughtsData = Provider.of<Thoughts>(context);
-      final feelingsData = Provider.of<Feelings>(context);
-      final behaviorsData = Provider.of<Behaviors>(context);
       behaviors = behaviorsData.behaviors;
       meals = mealsData.mealsSorted;
       thoughts = thoughtsData.thoughts;
@@ -55,10 +56,6 @@ class GeneralList extends StatelessWidget {
       displayList = sort([...meals, ...thoughts, ...feelings, ...behaviors]);
       messageEmpty = 'There are no logs.';
     } else if (selectedCategoryIndex == 1) {
-      final mealsData = Provider.of<MealLogs>(context);
-      final thoughtsData = Provider.of<Thoughts>(context);
-      final feelingsData = Provider.of<Feelings>(context);
-      final behaviorsData = Provider.of<Behaviors>(context);
       behaviors = behaviorsData.favoriteBehaviors;
       meals = mealsData.favoriteMeals;
       thoughts = thoughtsData.favoriteThoughts;
@@ -66,7 +63,6 @@ class GeneralList extends StatelessWidget {
       displayList = sort([...meals, ...thoughts, ...feelings, ...behaviors]);
       messageEmpty = 'There are no favorite logs.';
     } else if (selectedCategoryIndex == 2) {
-      final mealsData = Provider.of<MealLogs>(context);
       meals = mealsData.skippedMeals;
       if (meals != null)
         displayList = [...meals];
@@ -74,10 +70,6 @@ class GeneralList extends StatelessWidget {
         displayList = [];
       messageEmpty = 'There are no skipped meals.';
     } else if (selectedCategoryIndex == 3) {
-      final mealsData = Provider.of<MealLogs>(context);
-      final behaviorsData = Provider.of<Behaviors>(context);
-      final feelingsData = Provider.of<Feelings>(context);
-      final thoughtsData = Provider.of<Thoughts>(context);
       thoughts = thoughtsData.backLogThoughts;
       feelings = feelingsData.backLogFeelings;
       behaviors = behaviorsData.backLogBehaviors;
@@ -85,19 +77,15 @@ class GeneralList extends StatelessWidget {
       displayList = [...meals, ...behaviors, ...feelings, ...thoughts];
       messageEmpty = 'There are no back logs.';
     } else if (selectedCategoryIndex == 5) {
-      final thoughtsData = Provider.of<Thoughts>(context);
-      final mealsData = Provider.of<MealLogs>(context);
-      final behaviorsData = Provider.of<Behaviors>(context);
+      feelings = feelingsData.feelingsWithThoughts;
       behaviors = behaviorsData.behaviorsWithThoughts;
       meals = mealsData.mealsWithThoughts;
       thoughts = thoughtsData.thoughts;
-      displayList = [...thoughts, ...meals, ...behaviors];
+      displayList = [...thoughts, ...meals, ...behaviors, ...feelings];
       messageEmpty = 'There are no logs with thoughts.';
       buttonTitleAdd = 'Add a thought';
       routeNextToAdd = AddThoughtScreen.routeName;
     } else if (selectedCategoryIndex == 6) {
-      final feelingsData = Provider.of<Feelings>(context);
-      final mealsData = Provider.of<MealLogs>(context);
       meals = mealsData.mealsWithFeelings;
       feelings = feelingsData.feelings;
       displayList = [...feelings, ...meals];
@@ -105,7 +93,6 @@ class GeneralList extends StatelessWidget {
       buttonTitleAdd = 'Add feelings';
       routeNextToAdd = AddFeelingLogScreen.routeName;
     } else if (selectedCategoryIndex == 7) {
-      final behaviorsData = Provider.of<Behaviors>(context);
       behaviors = behaviorsData.behaviors;
       displayList = [...behaviors];
       messageEmpty = 'There are no logs for behaviors.';
@@ -195,7 +182,7 @@ class GeneralList extends StatelessWidget {
               if (obj is Feeling)
                 return ChangeNotifierProvider.value(
                   value: obj,
-                  child: FeelingLogItem(),
+                  child: FeelingLogItem(selectedCategory),
                 );
               if (obj is Behavior)
                 return ChangeNotifierProvider.value(

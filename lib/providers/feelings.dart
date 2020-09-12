@@ -75,6 +75,10 @@ class Feelings with ChangeNotifier {
     return _feelings.where((feeling) => feeling.isBackLog ?? () => null).toList();
   }
 
+  List<Feeling> get feelingsWithThoughts {
+    return _feelings.where((feeling) => feeling.thoughts != '' ?? () => null).toList();
+  }
+
 
   Feeling findById(String id) {
     return _feelings.firstWhere((feeling) => feeling.id == id);
