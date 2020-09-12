@@ -13,6 +13,8 @@ import '../../../widgets/users/overview/general_list.dart';
 import '../../../widgets/users/overview/logging_goals_overview.dart';
 import '../add_input/add_meal_log_screen.dart';
 import '../add_input/add_thought_screen.dart';
+import '../add_input/add_behavior_log_screen.dart';
+import '../add_input/add_feeling_log_screen.dart';
 
 import '../settings_users/settings_logging_goals.dart';
 
@@ -119,7 +121,7 @@ class _GeneralLogsOverviewScreenState extends State<GeneralLogsOverviewScreen>
                           ),
                           SimpleDialogOption(
                             child: const Text(
-                              'Thought',
+                              'Thoughts',
                               textAlign: TextAlign.center,
                             ),
                             onPressed: () {
@@ -127,7 +129,29 @@ class _GeneralLogsOverviewScreenState extends State<GeneralLogsOverviewScreen>
                               Navigator.of(context)
                                   .pushNamed(AddThoughtScreen.routeName);
                             },
-                          )
+                          ),
+                          SimpleDialogOption(
+                            child: const Text(
+                              'Feelings',
+                              textAlign: TextAlign.center,
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Navigator.of(context)
+                                  .pushNamed(AddFeelingLogScreen.routeName);
+                            },
+                          ),
+                          SimpleDialogOption(
+                            child: const Text(
+                              'Behaviors',
+                              textAlign: TextAlign.center,
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Navigator.of(context)
+                                  .pushNamed(AddBehaviorLogScreen.routeName);
+                            },
+                          ),
                         ],
                       ),
                     );
