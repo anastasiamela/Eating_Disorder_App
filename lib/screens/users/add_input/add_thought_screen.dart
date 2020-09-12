@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../../providers/thoughts.dart';
 import '../../../providers/auth.dart';
@@ -14,6 +15,26 @@ class AddThoughtScreen extends StatefulWidget {
 class _AddThoughtScreenState extends State<AddThoughtScreen> {
   final _form = GlobalKey<FormState>();
   String _inputThought;
+  bool _isBackLog;
+  bool _hasSelectedDateBackLog;
+  bool _hasSelectedTime;
+  TimeOfDay _selectedTime;
+  DateTime _selectedDate;
+
+  var _isInit = true;
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      _inputThought = '';
+      _isBackLog = false;
+      _hasSelectedDateBackLog = false;
+      _hasSelectedTime = false;
+      _selectedTime = TimeOfDay.now();
+      _selectedDate = DateTime.now();
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
 
   void _saveForm() {
     final isValid = _form.currentState.validate();
@@ -22,7 +43,27 @@ class _AddThoughtScreenState extends State<AddThoughtScreen> {
     }
     _form.currentState.save();
     final userId = Provider.of<Auth>(context, listen: false).userId;
-    Provider.of<Thoughts>(context, listen: false).addThought(_inputThought, userId);
+
+    DateTime date = DateTime.now();
+    DateTime dateFinal;
+    if (_isBackLog) {
+      if (_hasSelectedTime && _hasSelectedDateBackLog) {
+        dateFinal = new DateTime(_selectedDate.year, _selectedDate.month,
+            _selectedDate.day, _selectedTime.hour, _selectedTime.minute);
+      }
+    } else {
+      dateFinal = new DateTime(date.year, date.month, date.day,
+          _selectedTime.hour, _selectedTime.minute);
+    }
+    Thought newThought = Thought(
+        id: '',
+        userId: userId,
+        date: dateFinal,
+        thought: _inputThought,
+        isBackLog: _isBackLog,
+        dateTimeOfLog: date);
+    Provider.of<Thoughts>(context, listen: false)
+        .addThought(newThought, userId);
     Navigator.of(context).pop();
   }
 
@@ -45,36 +86,15 @@ class _AddThoughtScreenState extends State<AddThoughtScreen> {
         padding: const EdgeInsets.all(8.0),
         child: Form(
           key: _form,
-          child: Column(
+          child: ListView(
             children: <Widget>[
-              Text('Which thoughts or concers are you facing?'),
+              _buildIsBacklogIinput(),
+              if (_isBackLog) _buildDateBackLogInput(),
+              _buildTimeInput(),
               SizedBox(
                 height: 10,
               ),
-              Card(
-                child: Container(
-                  height: 70,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      keyboardType: TextInputType.multiline,
-                      decoration: InputDecoration(
-                          hintText: 'Your thoughts',
-                          hintStyle: TextStyle(fontStyle: FontStyle.italic)),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Please write your thoughts.';
-                        }
-                        if (value.length < 5) {
-                          return 'Should be at least 5 characters long.';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) => _inputThought = value,
-                    ),
-                  ),
-                ),
-              ),
+              _buildThoughtsInput(),
               SizedBox(
                 height: 10,
               ),
@@ -92,5 +112,246 @@ class _AddThoughtScreenState extends State<AddThoughtScreen> {
         ),
       ),
     );
+  }
+
+  Widget _buildThoughtsInput() {
+    return Card(
+      shadowColor: Theme.of(context).primaryColor,
+      child: Container(
+        //height: 70,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              ListTile(
+                title: Text(
+                  'Do you have any thoughts?',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18.0,
+                  ),
+                ),
+                contentPadding: EdgeInsets.all(0.0),
+              ),
+              TextFormField(
+                keyboardType: TextInputType.multiline,
+                decoration: InputDecoration(
+                    hintText: 'Your thoughts',
+                    hintStyle: TextStyle(fontStyle: FontStyle.italic)),
+                validator: (value) {
+                  if (value.length < 5) {
+                    return 'Should be at least 5 characters long.';
+                  }
+                  return null;
+                },
+                onSaved: (value) => _inputThought = value,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildIsBacklogIinput() {
+    return Card(
+      shadowColor: Theme.of(context).primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              'Is this log for today?',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            ToggleSwitch(
+              labels: ['Yes', 'No'],
+              initialLabelIndex: (_isBackLog) ? 1 : 0,
+              onToggle: (index) {
+                if (index == 0) {
+                  setState(() {
+                    _isBackLog = !_isBackLog;
+                    _hasSelectedDateBackLog = false;
+                    _hasSelectedTime = false;
+                    _selectedTime = null;
+                  });
+                } else {
+                  setState(() {
+                    _isBackLog = !_isBackLog;
+                    _selectedTime = null;
+                    _hasSelectedDateBackLog = false;
+                    _hasSelectedTime = false;
+                  });
+                }
+              },
+              activeBgColor: Theme.of(context).primaryColor,
+              activeFgColor: Colors.white,
+              inactiveBgColor: Colors.purple[50],
+              inactiveFgColor: Colors.grey[900],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDateBackLogInput() {
+    return Card(
+      shadowColor: Theme.of(context).primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  'For when is the log?',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                RaisedButton(
+                  child: Text(
+                    'Select Day',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  onPressed: _pickDate,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ],
+            ),
+            (_hasSelectedDateBackLog)
+                ? Text(
+                    '${_selectedDate.day}. ${_selectedDate.month}. ${_selectedDate.year}',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  )
+                : Text(''),
+            TextFormField(
+              initialValue: '',
+              readOnly: true,
+              validator: (value) {
+                if (_hasSelectedDateBackLog == false) {
+                  return 'You have to select a day!';
+                }
+                return null;
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTimeInput() {
+    return Card(
+      shadowColor: Theme.of(context).primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  'What time?',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                RaisedButton(
+                  child: Text(
+                    'Select Time',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  onPressed: _pickTime,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ],
+            ),
+            (_hasSelectedTime)
+                ? Text(
+                    '${printTime(_selectedTime)}',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  )
+                : Text(''),
+            TextFormField(
+              initialValue: '',
+              readOnly: true,
+              validator: (value) {
+                if (_hasSelectedTime == false) {
+                  return 'You have to select time!';
+                }
+                return null;
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _pickTime() async {
+    TimeOfDay t = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (t != null) {
+      setState(() {
+        _selectedTime = t;
+        _hasSelectedTime = true;
+      });
+    }
+  }
+
+  _pickDate() async {
+    DateTime today = DateTime.now();
+    DateTime date = await showDatePicker(
+      context: context,
+      firstDate: today.subtract(Duration(days: 7)),
+      lastDate: today.subtract(Duration(days: 1)),
+      initialDate: today.subtract(Duration(days: 1)),
+    );
+    if (date != null)
+      setState(() {
+        _selectedDate = date;
+        _hasSelectedDateBackLog = true;
+      });
+  }
+
+  String printTime(TimeOfDay time) {
+    String _addLeadingZeroIfNeeded(int value) {
+      if (value < 10) return '0$value';
+      return value.toString();
+    }
+
+    final String hourLabel = _addLeadingZeroIfNeeded(time.hour);
+    final String minuteLabel = _addLeadingZeroIfNeeded(time.minute);
+
+    return '$hourLabel:$minuteLabel';
   }
 }

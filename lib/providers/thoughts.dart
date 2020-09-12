@@ -9,6 +9,8 @@ class Thought with ChangeNotifier {
   final DateTime date;
   final String thought;
   bool isFavorite;
+  final bool isBackLog;
+  final DateTime dateTimeOfLog;
   Timestamp createdAt;
 
   Thought({
@@ -16,6 +18,8 @@ class Thought with ChangeNotifier {
     @required this.userId,
     @required this.date,
     @required this.thought,
+    @required this.isBackLog,
+    @required this.dateTimeOfLog,
     this.isFavorite = false,
   });
 
@@ -63,6 +67,10 @@ class Thoughts with ChangeNotifier {
         .toList();
   }
 
+  List<Thought> get backLogThoughts {
+    return _thoughts.where((thought) => thought.isBackLog ?? () => null).toList();
+  }
+
   Thought findById(String id) {
     return _thoughts.firstWhere((thought) => thought.id == id);
   }
@@ -90,6 +98,8 @@ class Thoughts with ChangeNotifier {
             date: DateTime.parse(thoughtData['date']),
             thought: thoughtData['thought'],
             isFavorite: thoughtData['isFavorite'],
+            isBackLog: thoughtData['isBackLog'],
+            dateTimeOfLog: DateTime.parse(thoughtData['dateTimeOfLog']),
           ),
         );
       });
@@ -100,7 +110,7 @@ class Thoughts with ChangeNotifier {
     }
   }
 
-  Future<void> addThought(String thought, String userId) async {
+  Future<void> addThought(Thought thoughtInput, String userId) async {
     final timestamp = DateTime.now();
     try {
       final response = await FirebaseFirestore.instance
@@ -109,16 +119,20 @@ class Thoughts with ChangeNotifier {
           .collection('thoughts')
           .add({
         'userId': userId,
-        'date': timestamp.toIso8601String(),
-        'thought': thought,
+        'date': thoughtInput.date.toIso8601String(),
+        'thought': thoughtInput.thought,
         'isFavorite': false,
-        'createdAt': Timestamp.fromDate(timestamp),
+        'createdAt': Timestamp.fromDate(thoughtInput.date),
+        'isBackLog': thoughtInput.isBackLog,
+        'dateTimeOfLog': timestamp.toIso8601String()
       });
       final newThought = Thought(
         id: response.id,
         userId: userId,
-        date: timestamp,
-        thought: thought,
+        date: thoughtInput.date,
+        thought: thoughtInput.thought,
+        isBackLog: thoughtInput.isBackLog,
+        dateTimeOfLog: timestamp,
       );
       _thoughts.add(newThought);
       //_thoughts.insert(0, newThought); // at the start of the list

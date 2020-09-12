@@ -101,7 +101,6 @@ class _AddFeelingLogScreenState extends State<AddFeelingLogScreen> {
       dateFinal = new DateTime(date.year, date.month, date.day,
           _selectedTime.hour, _selectedTime.minute);
     }
-    print(dateFinal);
     Feeling newFeeling = Feeling(
       id: '',
       userId: userId,
