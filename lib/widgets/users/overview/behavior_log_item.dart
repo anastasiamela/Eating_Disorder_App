@@ -6,6 +6,10 @@ import '../../../providers/behaviors.dart';
 import '../../../providers/auth.dart';
 
 class BehaviorLogItem extends StatelessWidget {
+  final String subtitleType;
+
+  BehaviorLogItem(this.subtitleType);
+
   @override
   Widget build(BuildContext context) {
     final scaffold = Scaffold.of(context);
@@ -13,6 +17,16 @@ class BehaviorLogItem extends StatelessWidget {
     final behaviorsNumber = behavior.behaviorsListLenght;
     final time = DateFormat.jm().format(behavior.date);
     final authData = Provider.of<Auth>(context, listen: false);
+    String subtitleText = '';
+    if (subtitleType == 'Thoughts') {
+      subtitleText = 'Thoughts: ${behavior.thoughts}';
+    } else {
+      if (behaviorsNumber == 0) {
+        subtitleText = 'Disordered behaviors: none';
+      } else {
+        subtitleText = 'Disordered behaviors:  $behaviorsNumber';
+      }
+    }
     return Dismissible(
       key: ValueKey(behavior.id),
       background: Container(
@@ -80,9 +94,7 @@ class BehaviorLogItem extends StatelessWidget {
           backgroundColor: Colors.transparent,
         ),
         title: Text('$time  Behaviors'),
-        subtitle: (behaviorsNumber == 0)
-            ? Text('Disordered behaviors: none')
-            : Text('Disordered behaviors:  $behaviorsNumber'),
+        subtitle: Text(subtitleText),
         trailing: Consumer<Behavior>(
           builder: (ctx, feeling, _) => IconButton(
             icon: Icon(

@@ -672,7 +672,7 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
         children: [
           ListTile(
             title: Text(
-              'How strong is your urge to binge now?',
+              'How strong is your urge to exercise now?',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 18.0,

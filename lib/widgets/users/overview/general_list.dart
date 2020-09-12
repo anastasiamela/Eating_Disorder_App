@@ -87,9 +87,11 @@ class GeneralList extends StatelessWidget {
     } else if (selectedCategoryIndex == 5) {
       final thoughtsData = Provider.of<Thoughts>(context);
       final mealsData = Provider.of<MealLogs>(context);
+      final behaviorsData = Provider.of<Behaviors>(context);
+      behaviors = behaviorsData.behaviorsWithThoughts;
       meals = mealsData.mealsWithThoughts;
       thoughts = thoughtsData.thoughts;
-      displayList = [...thoughts, ...meals];
+      displayList = [...thoughts, ...meals, ...behaviors];
       messageEmpty = 'There are no logs with thoughts.';
       buttonTitleAdd = 'Add a thought';
       routeNextToAdd = AddThoughtScreen.routeName;
@@ -99,7 +101,7 @@ class GeneralList extends StatelessWidget {
       meals = mealsData.mealsWithFeelings;
       feelings = feelingsData.feelings;
       displayList = [...feelings, ...meals];
-      messageEmpty = 'There are no logs for feelings.';
+      messageEmpty = 'There are no logs with feelings.';
       buttonTitleAdd = 'Add feelings';
       routeNextToAdd = AddFeelingLogScreen.routeName;
     } else if (selectedCategoryIndex == 7) {
@@ -198,7 +200,7 @@ class GeneralList extends StatelessWidget {
               if (obj is Behavior)
                 return ChangeNotifierProvider.value(
                   value: obj,
-                  child: BehaviorLogItem(),
+                  child: BehaviorLogItem(selectedCategory),
                 );
               return null;
             },

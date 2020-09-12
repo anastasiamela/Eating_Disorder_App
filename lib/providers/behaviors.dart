@@ -94,6 +94,9 @@ class Behaviors with ChangeNotifier {
     return _behaviors.where((behavior) => behavior.isBackLog ?? () => null).toList();
   }
 
+  List<Behavior> get behaviorsWithThoughts {
+    return _behaviors.where((behavior) => behavior.thoughts != '' ?? () => null).toList();
+  }
 
   Behavior findById(String id) {
     return _behaviors.firstWhere((behavior) => behavior.id == id);
