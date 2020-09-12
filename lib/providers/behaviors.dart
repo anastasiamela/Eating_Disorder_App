@@ -90,6 +90,11 @@ class Behaviors with ChangeNotifier {
         .toList();
   }
 
+  List<Behavior> get backLogBehaviors {
+    return _behaviors.where((behavior) => behavior.isBackLog ?? () => null).toList();
+  }
+
+
   Behavior findById(String id) {
     return _behaviors.firstWhere((behavior) => behavior.id == id);
   }

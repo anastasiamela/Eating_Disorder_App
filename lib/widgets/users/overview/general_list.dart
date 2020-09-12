@@ -75,12 +75,11 @@ class GeneralList extends StatelessWidget {
       messageEmpty = 'There are no skipped meals.';
     } else if (selectedCategoryIndex == 3) {
       final mealsData = Provider.of<MealLogs>(context);
+      final behaviorsData = Provider.of<Behaviors>(context);
+      behaviors = behaviorsData.backLogBehaviors;
       meals = mealsData.backLogMeals;
-      if (meals != null)
-        displayList = [...meals];
-      else
-        displayList = [];
-      messageEmpty = 'There are no back log meals.';
+      displayList = [...meals, ...behaviors];
+      messageEmpty = 'There are no back logs.';
     } else if (selectedCategoryIndex == 5) {
       final thoughtsData = Provider.of<Thoughts>(context);
       thoughts = thoughtsData.thoughts;
