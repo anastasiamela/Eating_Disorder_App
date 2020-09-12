@@ -5,6 +5,7 @@ import './general_logs_overview_screen.dart';
 import '../../../widgets/users/app_drawer.dart';
 
 class GeneralLogsTabsScreen extends StatefulWidget {
+  static const routeName = '/generalLogs-tabsbottom-screen';
   @override
   _GeneralTabsScreenState createState() => _GeneralTabsScreenState();
 }

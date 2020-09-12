@@ -91,51 +91,53 @@ class MealLogItem extends StatelessWidget {
           );
         }
       },
-      child: ListTile(
-        leading: CircleAvatar(
-          radius: 30.0,
-          backgroundImage: NetworkImage(
-            (meal.mealPhoto == '') ? emptyImage : meal.mealPhoto,
+      child: Card(
+        child: ListTile(
+          leading: CircleAvatar(
+            radius: 30.0,
+            backgroundImage: NetworkImage(
+              (meal.mealPhoto == '') ? emptyImage : meal.mealPhoto,
+            ),
+            backgroundColor: Colors.transparent,
           ),
-          backgroundColor: Colors.transparent,
-        ),
-        title: (meal.skip)
-            ? Text('SKIP  ${meal.mealType}')
-            : Text('$time  ${meal.mealType}'),
-        subtitle: Text(subtitleText),
-        trailing: Wrap(
-          spacing: 12,
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () {
-                Navigator.of(context)
-                    .pushNamed(EditMealLogScreen.routeName, arguments: meal.id);
-              },
-              color: Theme.of(context).primaryColor,
-            ),
-            Consumer<MealLog>(
-              builder: (ctx, meal, _) => IconButton(
-                icon: Icon(
-                  meal.isFavorite ? Icons.favorite : Icons.favorite_border,
-                  size: 30.0,
-                ),
-                color: Theme.of(context).accentColor,
+          title: (meal.skip)
+              ? Text('SKIP  ${meal.mealType}')
+              : Text('$time  ${meal.mealType}'),
+          subtitle: Text(subtitleText),
+          trailing: Wrap(
+            spacing: 12,
+            children: <Widget>[
+              IconButton(
+                icon: Icon(Icons.edit),
                 onPressed: () {
-                  meal.toggleFavoriteStatus(
-                    authData.userId,
-                  );
+                  Navigator.of(context).pushNamed(EditMealLogScreen.routeName,
+                      arguments: meal.id);
                 },
+                color: Theme.of(context).primaryColor,
               ),
-            ),
-          ],
+              Consumer<MealLog>(
+                builder: (ctx, meal, _) => IconButton(
+                  icon: Icon(
+                    meal.isFavorite ? Icons.favorite : Icons.favorite_border,
+                    size: 30.0,
+                  ),
+                  color: Theme.of(context).accentColor,
+                  onPressed: () {
+                    meal.toggleFavoriteStatus(
+                      authData.userId,
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+          onTap: () {
+            Navigator.of(context).pushNamed(
+              MealLogDetailScreen.routeName,
+              arguments: meal.id,
+            );
+          },
         ),
-        onTap: () {
-          Navigator.of(context).pushNamed(
-            MealLogDetailScreen.routeName,
-            arguments: meal.id,
-          );
-        },
       ),
     );
   }

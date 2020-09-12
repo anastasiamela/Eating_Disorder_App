@@ -69,29 +69,31 @@ class ThoughtItem extends StatelessWidget {
           );
         }
       },
-      child: ListTile(
-        leading: CircleAvatar(
-          radius: 30.0,
-          child: Icon(
-            Icons.forum,
-            size: 40,
-          ), //feedback, lightbulb_outline
-          backgroundColor: Colors.transparent,
-        ),
-        title: Text('$time  Thoughts'),
-        subtitle: Text(thought.thought),
-        trailing: Consumer<Thought>(
-          builder: (ctx, thought, _) => IconButton(
-            icon: Icon(
-              thought.isFavorite ? Icons.favorite : Icons.favorite_border,
-              size: 30.0,
+      child: Card(
+        child: ListTile(
+          leading: CircleAvatar(
+            radius: 30.0,
+            child: Icon(
+              Icons.forum,
+              size: 40,
+            ), //feedback, lightbulb_outline
+            backgroundColor: Colors.transparent,
+          ),
+          title: Text('$time  Thoughts'),
+          subtitle: Text(thought.thought),
+          trailing: Consumer<Thought>(
+            builder: (ctx, thought, _) => IconButton(
+              icon: Icon(
+                thought.isFavorite ? Icons.favorite : Icons.favorite_border,
+                size: 30.0,
+              ),
+              color: Theme.of(context).accentColor,
+              onPressed: () {
+                thought.toggleFavoriteStatus(
+                  authData.userId,
+                );
+              },
             ),
-            color: Theme.of(context).accentColor,
-            onPressed: () {
-              thought.toggleFavoriteStatus(
-                authData.userId,
-              );
-            },
           ),
         ),
       ),

@@ -84,29 +84,31 @@ class BehaviorLogItem extends StatelessWidget {
           );
         }
       },
-      child: ListTile(
-        leading: CircleAvatar(
-          radius: 30.0,
-          child: Icon(
-            Icons.face,
-            size: 40,
-          ),
-          backgroundColor: Colors.transparent,
-        ),
-        title: Text('$time  Behaviors'),
-        subtitle: Text(subtitleText),
-        trailing: Consumer<Behavior>(
-          builder: (ctx, feeling, _) => IconButton(
-            icon: Icon(
-              feeling.isFavorite ? Icons.favorite : Icons.favorite_border,
-              size: 30.0,
+      child: Card(
+        child: ListTile(
+          leading: CircleAvatar(
+            radius: 30.0,
+            child: Icon(
+              Icons.face,
+              size: 40,
             ),
-            color: Theme.of(context).accentColor,
-            onPressed: () {
-              feeling.toggleFavoriteStatus(
-                authData.userId,
-              );
-            },
+            backgroundColor: Colors.transparent,
+          ),
+          title: Text('$time  Behaviors'),
+          subtitle: Text(subtitleText),
+          trailing: Consumer<Behavior>(
+            builder: (ctx, feeling, _) => IconButton(
+              icon: Icon(
+                feeling.isFavorite ? Icons.favorite : Icons.favorite_border,
+                size: 30.0,
+              ),
+              color: Theme.of(context).accentColor,
+              onPressed: () {
+                feeling.toggleFavoriteStatus(
+                  authData.userId,
+                );
+              },
+            ),
           ),
         ),
       ),

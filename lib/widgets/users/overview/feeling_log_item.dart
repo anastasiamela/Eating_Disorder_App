@@ -81,33 +81,35 @@ class FeelingLogItem extends StatelessWidget {
           );
         }
       },
-      child: ListTile(
-        leading: CircleAvatar(
-          radius: 30.0,
-          child: Icon(
-            Icons.face,
-            size: 40,
-          ), //feedback, lightbulb_outline
-          backgroundColor: Colors.transparent,
-        ),
-        title: Text('$time  Feelings'),
-        subtitle: (subtitleType == 'Thoughts')
-            ? Text(subtitleText)
-            : Row(
-                children: moodsEmojis.map((mood) => Text('$mood ')).toList(),
+      child: Card(
+        child: ListTile(
+          leading: CircleAvatar(
+            radius: 30.0,
+            child: Icon(
+              Icons.face,
+              size: 40,
+            ), //feedback, lightbulb_outline
+            backgroundColor: Colors.transparent,
+          ),
+          title: Text('$time  Feelings'),
+          subtitle: (subtitleType == 'Thoughts')
+              ? Text(subtitleText)
+              : Row(
+                  children: moodsEmojis.map((mood) => Text('$mood ')).toList(),
+                ),
+          trailing: Consumer<Feeling>(
+            builder: (ctx, feeling, _) => IconButton(
+              icon: Icon(
+                feeling.isFavorite ? Icons.favorite : Icons.favorite_border,
+                size: 30.0,
               ),
-        trailing: Consumer<Feeling>(
-          builder: (ctx, feeling, _) => IconButton(
-            icon: Icon(
-              feeling.isFavorite ? Icons.favorite : Icons.favorite_border,
-              size: 30.0,
+              color: Theme.of(context).accentColor,
+              onPressed: () {
+                feeling.toggleFavoriteStatus(
+                  authData.userId,
+                );
+              },
             ),
-            color: Theme.of(context).accentColor,
-            onPressed: () {
-              feeling.toggleFavoriteStatus(
-                authData.userId,
-              );
-            },
           ),
         ),
       ),

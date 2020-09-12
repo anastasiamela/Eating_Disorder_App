@@ -8,14 +8,13 @@ import '../../../providers/meal_log.dart';
 import '../../../providers/feelings.dart';
 import '../../../providers/thoughts.dart';
 import '../../../providers/behaviors.dart';
+import '../../../providers/auth.dart';
 
 import '../../../widgets/users/overview/meal_log_item.dart';
 import '../../../widgets/users/overview/thought_item.dart';
 import '../../../widgets/users/overview/feeling_log_item.dart';
 import '../../../widgets/users/overview/behavior_log_item.dart';
 import '../../../widgets/users/app_drawer.dart';
-
-import 'meal_log_detail_screen.dart';
 
 class CalendarLogsScreen extends StatefulWidget {
   static const routeName = '/calendar-logs';
@@ -35,31 +34,54 @@ class _CalendarLogsScreenState extends State<CalendarLogsScreen> {
     return list;
   }
 
+  var _isInit = true;
+  var _isLoading = false;
+
   @override
   void initState() {
     super.initState();
-    final _dayNow = DateTime.now();
-    final year = _dayNow.year;
-    final month = _dayNow.month;
-    final day = _dayNow.day;
-    final _selectedDay = DateTime(year, month, day);
-    _controller = CalendarController();
+  }
 
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final meals = Provider.of<MealLogs>(context, listen: false).meals;
-      final thoughts = Provider.of<Thoughts>(context, listen: false).thoughts;
-      final feelings = Provider.of<Feelings>(context, listen: false).feelings;
-      final behaviors =
-          Provider.of<Behaviors>(context, listen: false).behaviors;
-      List<dynamic> allLogs = [
-        ...meals,
-        ...thoughts,
-        ...feelings,
-        ...behaviors
-      ];
-      _events = initEvents(allLogs);
-      _selectedEvents = _events[_selectedDay] ?? [];
-    });
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      final userId = Provider.of<Auth>(context, listen: false).userId;
+      Provider.of<Thoughts>(context).fetchAndSetThoughts(userId);
+      Provider.of<Feelings>(context).fetchAndSetFeelings(userId);
+      Provider.of<Behaviors>(context).fetchAndSetBehaviors(userId);
+      Provider.of<MealLogs>(context).fetchAndSetMealLogs(userId).then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+      final _dayNow = DateTime.now();
+      final year = _dayNow.year;
+      final month = _dayNow.month;
+      final day = _dayNow.day;
+      final _selectedDay = DateTime(year, month, day);
+      _controller = CalendarController();
+
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        final meals = Provider.of<MealLogs>(context, listen: false).meals;
+        final thoughts = Provider.of<Thoughts>(context, listen: false).thoughts;
+        final feelings = Provider.of<Feelings>(context, listen: false).feelings;
+        final behaviors =
+            Provider.of<Behaviors>(context, listen: false).behaviors;
+        List<dynamic> allLogs = [
+          ...meals,
+          ...thoughts,
+          ...feelings,
+          ...behaviors
+        ];
+        _events = initEvents(allLogs);
+        _selectedEvents = _events[_selectedDay] ?? [];
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
   }
 
   Map<DateTime, List<dynamic>> initEvents(List<dynamic> logs) {
@@ -94,62 +116,66 @@ class _CalendarLogsScreenState extends State<CalendarLogsScreen> {
         title: Text('Log Calendar'),
       ),
       drawer: AppDrawer(),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          TableCalendar(
-            initialCalendarFormat: CalendarFormat.month,
-            events: _events,
-            calendarStyle: CalendarStyle(
-                todayColor: Theme.of(context).accentColor,
-                selectedColor: Theme.of(context).primaryColor,
-                todayStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    //fontSize: 18.0,
-                    color: Colors.white)),
-            headerStyle: HeaderStyle(
-              centerHeaderTitle: false,
-              titleTextStyle: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 20.0,
-                color: Theme.of(context).accentColor,
-              ),
-              formatButtonDecoration: BoxDecoration(
-                color: Theme.of(context).accentColor,
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              formatButtonTextStyle: TextStyle(color: Colors.white),
-              formatButtonShowsNext: false,
-            ),
-            startingDayOfWeek: StartingDayOfWeek.monday,
-            onDaySelected: (date, events) {
-              setState(() {
-                _selectedEvents = events;
-              });
-            },
-            builders: CalendarBuilders(
-              markersBuilder: (context, date, events, holidays) {
-                final children = <Widget>[];
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                TableCalendar(
+                  initialCalendarFormat: CalendarFormat.month,
+                  events: _events,
+                  calendarStyle: CalendarStyle(
+                      todayColor: Theme.of(context).accentColor,
+                      selectedColor: Theme.of(context).primaryColor,
+                      todayStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          //fontSize: 18.0,
+                          color: Colors.white)),
+                  headerStyle: HeaderStyle(
+                    centerHeaderTitle: false,
+                    titleTextStyle: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20.0,
+                      color: Theme.of(context).accentColor,
+                    ),
+                    formatButtonDecoration: BoxDecoration(
+                      color: Theme.of(context).accentColor,
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    formatButtonTextStyle: TextStyle(color: Colors.white),
+                    formatButtonShowsNext: false,
+                  ),
+                  startingDayOfWeek: StartingDayOfWeek.monday,
+                  onDaySelected: (date, events) {
+                    setState(() {
+                      _selectedEvents = events;
+                    });
+                  },
+                  builders: CalendarBuilders(
+                    markersBuilder: (context, date, events, holidays) {
+                      final children = <Widget>[];
 
-                if (events.isNotEmpty) {
-                  children.add(
-                    Positioned(
-                        right: 1,
-                        bottom: 1,
-                        child: Icon(
-                          Icons.dashboard,
-                          size: 12.0,
-                        )),
-                  );
-                }
-                return children;
-              },
+                      if (events.isNotEmpty) {
+                        children.add(
+                          Positioned(
+                              right: 1,
+                              bottom: 1,
+                              child: Icon(
+                                Icons.dashboard,
+                                size: 12.0,
+                              )),
+                        );
+                      }
+                      return children;
+                    },
+                  ),
+                  calendarController: _controller,
+                ),
+                Expanded(child: _buildEventList()),
+              ],
             ),
-            calendarController: _controller,
-          ),
-          Expanded(child: _buildEventList()),
-        ],
-      ),
     );
   }
 
