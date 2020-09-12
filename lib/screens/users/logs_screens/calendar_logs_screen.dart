@@ -1,12 +1,21 @@
 import 'package:intl/intl.dart';
-
-import '../../../providers/meal_logs.dart';
-import '../../../providers/meal_log.dart';
-import 'meal_log_detail_screen.dart';
-
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:provider/provider.dart';
+
+import '../../../providers/meal_logs.dart';
+import '../../../providers/meal_log.dart';
+import '../../../providers/feelings.dart';
+import '../../../providers/thoughts.dart';
+import '../../../providers/behaviors.dart';
+
+import '../../../widgets/users/overview/meal_log_item.dart';
+import '../../../widgets/users/overview/thought_item.dart';
+import '../../../widgets/users/overview/feeling_log_item.dart';
+import '../../../widgets/users/overview/behavior_log_item.dart';
+import '../../../widgets/users/app_drawer.dart';
+
+import 'meal_log_detail_screen.dart';
 
 class CalendarLogsScreen extends StatefulWidget {
   static const routeName = '/calendar-logs';
@@ -19,6 +28,13 @@ class _CalendarLogsScreenState extends State<CalendarLogsScreen> {
   Map<DateTime, List<dynamic>> _events;
   List<dynamic> _selectedEvents = [];
 
+  List<dynamic> sort(List<dynamic> list) {
+    list.sort(
+      (a, b) => a.date.compareTo(b.date),
+    );
+    return list;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -30,26 +46,35 @@ class _CalendarLogsScreenState extends State<CalendarLogsScreen> {
     _controller = CalendarController();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final mealsData = Provider.of<MealLogs>(context, listen: false);
-      final meals = mealsData.meals;
-      _events = initEvents(meals);
+      final meals = Provider.of<MealLogs>(context, listen: false).meals;
+      final thoughts = Provider.of<Thoughts>(context, listen: false).thoughts;
+      final feelings = Provider.of<Feelings>(context, listen: false).feelings;
+      final behaviors =
+          Provider.of<Behaviors>(context, listen: false).behaviors;
+      List<dynamic> allLogs = [
+        ...meals,
+        ...thoughts,
+        ...feelings,
+        ...behaviors
+      ];
+      _events = initEvents(allLogs);
       _selectedEvents = _events[_selectedDay] ?? [];
     });
   }
 
-  Map<DateTime, List<dynamic>> initEvents(List<MealLog> meals) {
+  Map<DateTime, List<dynamic>> initEvents(List<dynamic> logs) {
     Map<DateTime, List<dynamic>> map = {};
     setState(() {
-      meals.forEach((meal) {
-        final dateMeal = meal.date;
-        final year = dateMeal.year;
-        final month = dateMeal.month;
-        final day = dateMeal.day;
+      logs.forEach((log) {
+        final dateLog = log.date;
+        final year = dateLog.year;
+        final month = dateLog.month;
+        final day = dateLog.day;
         final date1 = DateTime(year, month, day);
         if (map[date1] != null) {
-          map[date1].add(meal);
+          map[date1].add(log);
         } else {
-          map[date1] = [meal];
+          map[date1] = [log];
         }
       });
     });
@@ -68,6 +93,7 @@ class _CalendarLogsScreenState extends State<CalendarLogsScreen> {
       appBar: AppBar(
         title: Text('Log Calendar'),
       ),
+      drawer: AppDrawer(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -128,34 +154,34 @@ class _CalendarLogsScreenState extends State<CalendarLogsScreen> {
   }
 
   Widget _buildEventList() {
-    print(_selectedEvents.length);
-    final emptyImage =
-        'https://i1.pngguru.com/preview/658/470/455/krzp-dock-icons-v-1-2-empty-grey-empty-text-png-clipart.jpg';
+    sort(_selectedEvents);
     return Container(
       height: 100.0,
       child: ListView.builder(
         itemCount: _selectedEvents.length,
         itemBuilder: (_, i) {
-          final meal = _selectedEvents[i];
-          final time = DateFormat.jm().format(meal.dateTimeOfMeal);
-          return ListTile(
-            trailing: CircleAvatar(
-              radius: 30.0,
-              backgroundImage: NetworkImage(
-                (meal.mealPhoto == '') ? emptyImage : meal.mealPhoto,
-              ),
-              backgroundColor: Colors.transparent,
-            ),
-            title: Text('$time  ${meal.mealType}'),
-            subtitle:
-                Text((meal.skip) ? 'Skipped meal.' : meal.mealDescription),
-            onTap: () {
-              Navigator.of(context).pushNamed(
-                MealLogDetailScreen.routeName,
-                arguments: meal.id,
-              );
-            },
-          );
+          final log = _selectedEvents[i];
+          if (log is MealLog)
+            return ChangeNotifierProvider.value(
+              value: log,
+              child: MealLogItem(''),
+            );
+          if (log is Thought)
+            return ChangeNotifierProvider.value(
+              value: log,
+              child: ThoughtItem(),
+            );
+          if (log is Feeling)
+            return ChangeNotifierProvider.value(
+              value: log,
+              child: FeelingLogItem(''),
+            );
+          if (log is Behavior)
+            return ChangeNotifierProvider.value(
+              value: log,
+              child: BehaviorLogItem(''),
+            );
+          return null;
         },
       ),
     );
