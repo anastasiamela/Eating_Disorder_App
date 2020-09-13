@@ -56,6 +56,18 @@ class MealPlans with ChangeNotifier {
     return _mealPlans.where((plan) => plan.isTemplate ?? () => null).toList();
   }
 
+  List<MealPlan> mealPlansForADay(String day) {
+    return _mealPlans
+        .where((plan) => plan.dayOfWeek == day ?? () => null)
+        .toList();
+  }
+
+  MealPlan findByDayAndType(String day, String type) {
+    return _mealPlans.firstWhere(
+        (plan) => plan.dayOfWeek == day.toLowerCase() && plan.typeOfMeal == type.toLowerCase(),
+        orElse: () => null);
+  }
+
   MealPlan findById(String id) {
     return _mealPlans.firstWhere((plan) => plan.id == id);
   }
@@ -84,8 +96,8 @@ class MealPlans with ChangeNotifier {
             typeOfMeal: plansData['typeOfMeal'],
             isTemplate: plansData['isTemplate'],
             mealItems: new List<String>.from(plansData['mealItems']),
-            createdAt:
-                DateTime.fromMicrosecondsSinceEpoch(plansData['createdAt']),
+            createdAt: DateTime.now(),
+                //DateTime.fromMicrosecondsSinceEpoch(plansData['createdAt']),
           ),
         );
       });
@@ -128,8 +140,7 @@ class MealPlans with ChangeNotifier {
   }
 
   Future<void> deleteMealPlan(String id, String userId) async {
-    final existingPlanIndex =
-        _mealPlans.indexWhere((plan) => plan.id == id);
+    final existingPlanIndex = _mealPlans.indexWhere((plan) => plan.id == id);
     var existingPlan = _mealPlans[existingPlanIndex];
     _mealPlans.removeAt(existingPlanIndex);
     notifyListeners();

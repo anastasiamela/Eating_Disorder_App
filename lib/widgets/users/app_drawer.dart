@@ -6,6 +6,7 @@ import '../../screens/users/add_input/add_thought_screen.dart';
 import '../../screens/users/add_input/add_feeling_log_screen.dart';
 import '../../screens/users/add_input/add_behavior_log_screen.dart';
 import '../../screens/users/logs_screens/general_logs_overview_screen.dart';
+import '../../screens/users/meal_plans.dart/meal_plans_overview_screen.dart';
 
 import '../../providers/auth.dart';
 
@@ -35,6 +36,15 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context)
                   .pushReplacementNamed(GeneralLogsOverviewScreen.routeName);
+            },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.account_box),
+            title: Text('My meal plans'),
+            onTap: () {
+              Navigator.of(context)
+                  .pushReplacementNamed(MealPlansOverviewScreen.routeName);
             },
           ),
           Divider(),

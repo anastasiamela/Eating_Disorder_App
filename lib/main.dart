@@ -14,6 +14,7 @@ import './screens/users/logs_screens/calendar_logs_screen.dart';
 import './screens/users/add_input/add_feeling_log_screen.dart';
 import './screens/users/add_input/add_behavior_log_screen.dart';
 import './screens/users/first_screen_user.dart';
+import './screens/users/meal_plans.dart/meal_plans_overview_screen.dart';
 
 import './providers/meal_logs.dart';
 import './providers/logging_goals.dart';
@@ -21,6 +22,7 @@ import './providers/thoughts.dart';
 import './providers/feelings.dart';
 import './providers/behaviors.dart';
 import './providers/auth.dart';
+import './providers/meal_plans.dart';
 
 void main() {
   runApp(MyApp());
@@ -28,7 +30,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
-  
+
   @override
   Widget build(BuildContext context) {
     final Future<FirebaseApp> _initialization = Firebase.initializeApp();
@@ -55,31 +57,36 @@ class MyApp extends StatelessWidget {
               ChangeNotifierProvider(
                 create: (_) => Behaviors(),
               ),
+              ChangeNotifierProvider(
+                create: (_) => MealPlans(),
+              ),
             ],
             child: Consumer<Auth>(
               builder: (ctx, auth, _) => MaterialApp(
-                  title: 'My diet app',
-                  theme: ThemeData(
-                    primaryColor: Colors.teal[400],
-                    primarySwatch: Colors.teal,
-                    accentColor: Colors.teal[200],
-                  ),
-                  home: auth.user != null ? FirstScreenUser() : AuthScreen(),
-                  routes: {
-                    MealLogDetailScreen.routeName: (ctx) =>
-                        MealLogDetailScreen(),
-                    GeneralLogsOverviewScreen.routeName: (ctx) =>
-                        GeneralLogsOverviewScreen(),
-                    CalendarLogsScreen.routeName: (ctx) =>
-                        CalendarLogsScreen(),
-                    AddMealLogScreen.routeName: (ctx) => AddMealLogScreen(),
-                    EditMealLogScreen.routeName: (ctx) => EditMealLogScreen(),
-                    SettingsLoggingGoals.routeName: (ctx) =>
-                        SettingsLoggingGoals(),
-                    AddThoughtScreen.routeName: (ctx) => AddThoughtScreen(),
-                    AddFeelingLogScreen.routeName: (ctx) => AddFeelingLogScreen(),
-                    AddBehaviorLogScreen.routeName: (ctx) => AddBehaviorLogScreen(), 
-                  }),
+                title: 'My diet app',
+                theme: ThemeData(
+                  primaryColor: Colors.teal[400],
+                  primarySwatch: Colors.teal,
+                  accentColor: Colors.teal[200],
+                ),
+                home: auth.user != null ? FirstScreenUser() : AuthScreen(),
+                routes: {
+                  MealLogDetailScreen.routeName: (ctx) => MealLogDetailScreen(),
+                  GeneralLogsOverviewScreen.routeName: (ctx) =>
+                      GeneralLogsOverviewScreen(),
+                  CalendarLogsScreen.routeName: (ctx) => CalendarLogsScreen(),
+                  AddMealLogScreen.routeName: (ctx) => AddMealLogScreen(),
+                  EditMealLogScreen.routeName: (ctx) => EditMealLogScreen(),
+                  SettingsLoggingGoals.routeName: (ctx) =>
+                      SettingsLoggingGoals(),
+                  AddThoughtScreen.routeName: (ctx) => AddThoughtScreen(),
+                  AddFeelingLogScreen.routeName: (ctx) => AddFeelingLogScreen(),
+                  AddBehaviorLogScreen.routeName: (ctx) =>
+                      AddBehaviorLogScreen(),
+                  MealPlansOverviewScreen.routeName: (ctx) =>
+                      MealPlansOverviewScreen(),
+                },
+              ),
             ),
           );
         });
