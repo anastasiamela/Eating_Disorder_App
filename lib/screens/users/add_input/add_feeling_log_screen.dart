@@ -175,7 +175,7 @@ class _AddFeelingLogScreenState extends State<AddFeelingLogScreen> {
                       borderRadius: BorderRadius.circular(50),
                     ),
                     color: _moodsSelected[mood]
-                        ? Colors.purple[100]
+                        ? Colors.teal[100]
                         : Colors.transparent,
                   ),
                   child: Column(

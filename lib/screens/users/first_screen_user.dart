@@ -100,7 +100,7 @@ class FirstScreenUser extends StatelessWidget {
                     return showDialog(
                       context: ctx,
                       builder: (ctx) => SimpleDialog(
-                        backgroundColor: Colors.lime[300],
+                        backgroundColor: Colors.teal[50].withOpacity(0.9),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -110,11 +110,10 @@ class FirstScreenUser extends StatelessWidget {
                           'Select to add:',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Colors.teal,
-                            fontSize: 30.0,
-                            fontWeight: FontWeight.w800,
-                            decoration: TextDecoration.underline
-                          ),
+                              color: Colors.teal,
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.w800,
+                              decoration: TextDecoration.underline),
                         ),
                         children: <Widget>[
                           SimpleDialogOption(
@@ -132,6 +131,9 @@ class FirstScreenUser extends StatelessWidget {
                                   .pushNamed(AddMealLogScreen.routeName);
                             },
                           ),
+                          Divider(
+                            color: Theme.of(ctx).accentColor,
+                          ),
                           SimpleDialogOption(
                             child: const Text(
                               'Thoughts',
@@ -147,6 +149,9 @@ class FirstScreenUser extends StatelessWidget {
                                   .pushNamed(AddThoughtScreen.routeName);
                             },
                           ),
+                          Divider(
+                            color: Theme.of(ctx).accentColor,
+                          ),
                           SimpleDialogOption(
                             child: const Text(
                               'Feelings',
@@ -161,6 +166,9 @@ class FirstScreenUser extends StatelessWidget {
                               Navigator.of(ctx)
                                   .pushNamed(AddFeelingLogScreen.routeName);
                             },
+                          ),
+                          Divider(
+                            color: Theme.of(ctx).accentColor,
                           ),
                           SimpleDialogOption(
                             child: const Text(

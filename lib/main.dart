@@ -61,6 +61,7 @@ class MyApp extends StatelessWidget {
                   title: 'My diet app',
                   theme: ThemeData(
                     primaryColor: Colors.teal[400],
+                    primarySwatch: Colors.teal,
                     accentColor: Colors.teal[200],
                   ),
                   home: auth.user != null ? FirstScreenUser() : AuthScreen(),
