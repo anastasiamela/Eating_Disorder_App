@@ -98,6 +98,7 @@ class _GeneralLogsOverviewScreenState extends State<GeneralLogsOverviewScreen>
                     return showDialog(
                       context: context,
                       builder: (ctx) => SimpleDialog(
+                        backgroundColor: Colors.teal[400],
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -106,12 +107,21 @@ class _GeneralLogsOverviewScreenState extends State<GeneralLogsOverviewScreen>
                         title: const Text(
                           'Select to add:',
                           textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.w800,
+                              decoration: TextDecoration.underline),
                         ),
                         children: <Widget>[
                           SimpleDialogOption(
                             child: const Text(
                               'Meal log',
                               textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25.0,
+                              ),
                             ),
                             onPressed: () {
                               Navigator.of(context).pop();
@@ -123,6 +133,10 @@ class _GeneralLogsOverviewScreenState extends State<GeneralLogsOverviewScreen>
                             child: const Text(
                               'Thoughts',
                               textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25.0,
+                              ),
                             ),
                             onPressed: () {
                               Navigator.of(context).pop();
@@ -134,6 +148,10 @@ class _GeneralLogsOverviewScreenState extends State<GeneralLogsOverviewScreen>
                             child: const Text(
                               'Feelings',
                               textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25.0,
+                              ),
                             ),
                             onPressed: () {
                               Navigator.of(context).pop();
@@ -145,6 +163,10 @@ class _GeneralLogsOverviewScreenState extends State<GeneralLogsOverviewScreen>
                             child: const Text(
                               'Behaviors',
                               textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25.0,
+                              ),
                             ),
                             onPressed: () {
                               Navigator.of(context).pop();

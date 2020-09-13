@@ -5,12 +5,16 @@ import '../../widgets/curved_list_item.dart';
 
 import '../../screens/users/logs_screens/general_logs_overview_screen.dart';
 import '../../screens/users/logs_screens/calendar_logs_screen.dart';
+import '../../screens/users/add_input/add_meal_log_screen.dart';
+import '../../screens/users/add_input/add_thought_screen.dart';
+import '../../screens/users/add_input/add_behavior_log_screen.dart';
+import '../../screens/users/add_input/add_feeling_log_screen.dart';
 
 class FirstScreenUser extends StatelessWidget {
   //static const routeName = '/first-screen';
   @override
   Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.of(context).size;
+    //final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text(''),
@@ -75,8 +79,8 @@ class FirstScreenUser extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(ctx).pushReplacementNamed(
-                        CalendarLogsScreen.routeName);
+                    Navigator.of(ctx)
+                        .pushReplacementNamed(CalendarLogsScreen.routeName);
                   },
                   child: CurvedListItem(
                     title: 'Calendar',
@@ -91,11 +95,98 @@ class FirstScreenUser extends StatelessWidget {
                   nextColor: Colors.teal[400],
                   icon: Icons.settings,
                 ),
-                CurvedListItem(
-                  title: 'Check in',
-                  color: Colors.teal[400],
-                  nextColor: Colors.teal[500],
-                  icon: Icons.note_add,
+                GestureDetector(
+                  onTap: () {
+                    return showDialog(
+                      context: ctx,
+                      builder: (ctx) => SimpleDialog(
+                        backgroundColor: Colors.lime[300],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        contentPadding: EdgeInsets.all(8),
+                        titlePadding: EdgeInsets.all(8),
+                        title: const Text(
+                          'Select to add:',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.teal,
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.w800,
+                            decoration: TextDecoration.underline
+                          ),
+                        ),
+                        children: <Widget>[
+                          SimpleDialogOption(
+                            child: const Text(
+                              'Meal log',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.teal,
+                                fontSize: 25.0,
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.of(ctx).pop();
+                              Navigator.of(ctx)
+                                  .pushNamed(AddMealLogScreen.routeName);
+                            },
+                          ),
+                          SimpleDialogOption(
+                            child: const Text(
+                              'Thoughts',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.teal,
+                                fontSize: 25.0,
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.of(ctx).pop();
+                              Navigator.of(ctx)
+                                  .pushNamed(AddThoughtScreen.routeName);
+                            },
+                          ),
+                          SimpleDialogOption(
+                            child: const Text(
+                              'Feelings',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.teal,
+                                fontSize: 25.0,
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.of(ctx).pop();
+                              Navigator.of(ctx)
+                                  .pushNamed(AddFeelingLogScreen.routeName);
+                            },
+                          ),
+                          SimpleDialogOption(
+                            child: const Text(
+                              'Behaviors',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.teal,
+                                fontSize: 25.0,
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.of(ctx).pop();
+                              Navigator.of(ctx)
+                                  .pushNamed(AddBehaviorLogScreen.routeName);
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  child: CurvedListItem(
+                    title: 'Check in',
+                    color: Colors.teal[400],
+                    nextColor: Colors.teal[500],
+                    icon: Icons.note_add,
+                  ),
                 ),
                 CurvedListItem(
                   title: 'Connect',
