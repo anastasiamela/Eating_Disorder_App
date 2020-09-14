@@ -7,6 +7,8 @@ import '../../../providers/auth.dart';
 import '../../../widgets/users/app_drawer.dart';
 import '../../../widgets/users/meal_plans/meal_plan_item_for_overwiew.dart';
 
+import '../add_input/add_meal_plan.dart';
+
 List<String> _days = [
   'Monday',
   'Thuesday',
@@ -140,6 +142,31 @@ class _MealPlansOverviewScreenState extends State<MealPlansOverviewScreen> {
                       ),
               ],
             ),
+            onTap: () {
+              if (plan == null) {
+                Navigator.of(context).pushNamed(
+                  AddMealPlan.routeName,
+                  arguments: MealPlan(
+                      id: null,
+                      userId: null,
+                      dayOfWeek: day,
+                      typeOfMeal: type,
+                      mealItems: [''],
+                      createdAt: null),
+                );
+              } else {
+                Navigator.of(context).pushNamed(
+                  AddMealPlan.routeName,
+                  arguments: MealPlan(
+                      id: null,
+                      userId: null,
+                      dayOfWeek: day,
+                      typeOfMeal: type,
+                      mealItems: [''],
+                      createdAt: null),
+                );
+              }
+            },
           ),
         ],
       ),

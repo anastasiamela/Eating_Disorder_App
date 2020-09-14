@@ -15,6 +15,7 @@ import './screens/users/add_input/add_feeling_log_screen.dart';
 import './screens/users/add_input/add_behavior_log_screen.dart';
 import './screens/users/first_screen_user.dart';
 import './screens/users/meal_plans.dart/meal_plans_overview_screen.dart';
+import './screens/users/add_input/add_meal_plan.dart';
 
 import './providers/meal_logs.dart';
 import './providers/logging_goals.dart';
@@ -85,6 +86,7 @@ class MyApp extends StatelessWidget {
                       AddBehaviorLogScreen(),
                   MealPlansOverviewScreen.routeName: (ctx) =>
                       MealPlansOverviewScreen(),
+                  AddMealPlan.routeName: (ctx) => AddMealPlan(),
                 },
               ),
             ),

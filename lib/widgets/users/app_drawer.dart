@@ -52,6 +52,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.add),
             title: Text('Add meal log'),
             onTap: () {
+              Navigator.of(context).pop();
               Navigator.of(context).pushNamed(AddMealLogScreen.routeName);
             },
           ),
