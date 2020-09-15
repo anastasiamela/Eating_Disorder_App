@@ -235,15 +235,21 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
             subtitle: Text(
               getBehaviorMessageExplaining(behaviorType),
             ),
-            leading: _behaviorsSelected[behaviorType]
+            trailing: _behaviorsSelected[behaviorType]
                 ? CircleAvatar(
                     radius: 30.0,
-                    child: Icon(
-                      Icons.check,
-                      size: 40,
-                      color: Theme.of(context).primaryColor,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Icon(
+                        //   Icons.check,
+                        //   size: 24,
+                        //   color: Theme.of(context).primaryColor,
+                        // ),
+                        Text('Yes'),
+                      ],
                     ),
-                    backgroundColor: Colors.purple[50],
+                    backgroundColor: Colors.teal[50],
                   )
                 : null,
             onTap: () {
