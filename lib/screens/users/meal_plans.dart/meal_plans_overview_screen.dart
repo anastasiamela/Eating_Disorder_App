@@ -92,64 +92,86 @@ class _MealPlansOverviewScreenState extends State<MealPlansOverviewScreen>
   Widget build(BuildContext context) {
     Provider.of<MealPlans>(context);
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Weekly Meal Planner'),
-          bottom: TabBar(
-            tabs: tabsList,
-            controller: _tabController,
-            isScrollable: true,
-          ),
-        ),
-        drawer: AppDrawer(),
-        body: TabBarView(
+      appBar: AppBar(
+        title: Text('Weekly Meal Planner'),
+        bottom: TabBar(
+          tabs: tabsList,
           controller: _tabController,
-          children: <Widget>[
-            _isLoading
-                ? Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : ListView.builder(
-                    padding: EdgeInsets.all(8.0),
-                    itemCount: _days.length,
-                    itemBuilder: (_, i) => _buildDay(_days[i], true),
-                  ),
-            ListView(
-              children: [
-                _buildDay(tabsList[selectedIndex].text, false),
-              ],
-            ),
-            ListView(
-              children: [
-                _buildDay(tabsList[selectedIndex].text, false),
-              ],
-            ),
-            ListView(
-              children: [
-                _buildDay(tabsList[selectedIndex].text, false),
-              ],
-            ),
-            ListView(
-              children: [
-                _buildDay(tabsList[selectedIndex].text, false),
-              ],
-            ),
-            ListView(
-              children: [
-                _buildDay(tabsList[selectedIndex].text, false),
-              ],
-            ),
-            ListView(
-              children: [
-                _buildDay(tabsList[selectedIndex].text, false),
-              ],
-            ),
-            ListView(
-              children: [
-                _buildDay(tabsList[selectedIndex].text, false),
-              ],
-            ),
-          ],
-        ));
+          isScrollable: true,
+        ),
+      ),
+      drawer: AppDrawer(),
+      body: TabBarView(
+        controller: _tabController,
+        // children: tabsList.map((tab) {
+        //   if (tab.text == 'All') {
+        //     if (_isLoading) {
+        //       Center(
+        //         child: CircularProgressIndicator(),
+        //       );
+        //     } else {
+        //       ListView.builder(
+        //         padding: EdgeInsets.all(8.0),
+        //         itemCount: _days.length,
+        //         itemBuilder: (_, i) => _buildDay(_days[i], true),
+        //       );
+        //     }
+        //   } else {
+        //     ListView(
+        //       children: [
+        //         _buildDay(tab.text, false),
+        //       ],
+        //     );
+        //   }
+        // }).toList(),
+        children: <Widget>[
+          _isLoading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : ListView.builder(
+                  padding: EdgeInsets.all(8.0),
+                  itemCount: _days.length,
+                  itemBuilder: (_, i) => _buildDay(_days[i], true),
+                ),
+          ListView(
+            children: [
+              _buildDay('Monday', false),
+            ],
+          ),
+          ListView(
+            children: [
+              _buildDay('Thuesday', false),
+            ],
+          ),
+          ListView(
+            children: [
+              _buildDay('Wednesday', false),
+            ],
+          ),
+          ListView(
+            children: [
+              _buildDay('Thursday', false),
+            ],
+          ),
+          ListView(
+            children: [
+              _buildDay('Friday', false),
+            ],
+          ),
+          ListView(
+            children: [
+              _buildDay('Saturday', false),
+            ],
+          ),
+          ListView(
+            children: [
+              _buildDay('Sunday', false),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildDay(String day, bool showDayText) {

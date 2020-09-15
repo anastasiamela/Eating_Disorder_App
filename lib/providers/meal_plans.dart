@@ -127,13 +127,15 @@ class MealPlans with ChangeNotifier {
       final newPlan = MealPlan(
         id: response.id,
         userId: userId,
-        dayOfWeek: planInput.dayOfWeek,
-        typeOfMeal: planInput.typeOfMeal,
+        dayOfWeek: planInput.dayOfWeek.toLowerCase(),
+        typeOfMeal: planInput.typeOfMeal.toLowerCase(),
         mealItems: planInput.mealItems,
         isTemplate: false,
         createdAt: planInput.createdAt,
       );
-      _mealPlans.add(newPlan);
+
+      _mealPlans.insert(0, newPlan);
+
       notifyListeners();
     } catch (error) {
       print(error);
