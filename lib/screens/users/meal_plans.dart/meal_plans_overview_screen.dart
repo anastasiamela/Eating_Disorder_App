@@ -59,6 +59,7 @@ class _MealPlansOverviewScreenState extends State<MealPlansOverviewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<MealPlans>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Weekly Meal Planner'),
@@ -111,6 +112,13 @@ class _MealPlansOverviewScreenState extends State<MealPlansOverviewScreen> {
   Widget _buildMealType(String day, String type) {
     final mealPlansData = Provider.of<MealPlans>(context);
     MealPlan plan = mealPlansData.findByDayAndType(day, type);
+    return ChangeNotifierProvider.value(
+            value: plan,
+            child: _buildMealTypeInfo(day, type, plan),
+          );
+  }
+
+  Widget _buildMealTypeInfo(String day, String type, MealPlan plan) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -136,10 +144,7 @@ class _MealPlansOverviewScreenState extends State<MealPlansOverviewScreen> {
                           fontStyle: FontStyle.italic,
                         ),
                       )
-                    : ChangeNotifierProvider.value(
-                        value: plan,
-                        child: MealPlanItemForOverview(),
-                      ),
+                    : MealPlanItemForOverview()
               ],
             ),
             onTap: () {
@@ -157,13 +162,7 @@ class _MealPlansOverviewScreenState extends State<MealPlansOverviewScreen> {
               } else {
                 Navigator.of(context).pushNamed(
                   AddMealPlan.routeName,
-                  arguments: MealPlan(
-                      id: null,
-                      userId: null,
-                      dayOfWeek: day,
-                      typeOfMeal: type,
-                      mealItems: [''],
-                      createdAt: null),
+                  arguments: plan
                 );
               }
             },

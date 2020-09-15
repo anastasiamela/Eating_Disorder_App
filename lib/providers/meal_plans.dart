@@ -64,7 +64,9 @@ class MealPlans with ChangeNotifier {
 
   MealPlan findByDayAndType(String day, String type) {
     return _mealPlans.firstWhere(
-        (plan) => plan.dayOfWeek == day.toLowerCase() && plan.typeOfMeal == type.toLowerCase(),
+        (plan) =>
+            plan.dayOfWeek == day.toLowerCase() &&
+            plan.typeOfMeal == type.toLowerCase(),
         orElse: () => null);
   }
 
@@ -97,7 +99,7 @@ class MealPlans with ChangeNotifier {
             isTemplate: plansData['isTemplate'],
             mealItems: new List<String>.from(plansData['mealItems']),
             createdAt: DateTime.now(),
-                //DateTime.fromMicrosecondsSinceEpoch(plansData['createdAt']),
+            //DateTime.fromMicrosecondsSinceEpoch(plansData['createdAt']),
           ),
         );
       });
@@ -116,8 +118,8 @@ class MealPlans with ChangeNotifier {
           .collection('mealPlans')
           .add({
         'userId': userId,
-        'dayOfWeek': planInput.dayOfWeek,
-        'typeOfMeal': planInput.typeOfMeal,
+        'dayOfWeek': planInput.dayOfWeek.toLowerCase(),
+        'typeOfMeal': planInput.typeOfMeal.toLowerCase(),
         'mealItems': FieldValue.arrayUnion(planInput.mealItems),
         'isTemplate': false,
         'createdAt': Timestamp.fromDate(planInput.createdAt),
@@ -136,6 +138,30 @@ class MealPlans with ChangeNotifier {
     } catch (error) {
       print(error);
       throw error;
+    }
+  }
+
+  Future<void> updateMealPlan(
+      String id, MealPlan planInput, String userId) async {
+    final planIndex = _mealPlans.indexWhere((plan) => plan.id == id);
+    if (planIndex >= 0) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('mealPlans')
+          .doc(id)
+          .set({
+        'userId': userId,
+        'dayOfWeek': planInput.dayOfWeek.toLowerCase(),
+        'typeOfMeal': planInput.typeOfMeal.toLowerCase(),
+        'mealItems': FieldValue.arrayUnion(planInput.mealItems),
+        'isTemplate': planInput.isTemplate,
+        'createdAt': Timestamp.fromDate(planInput.createdAt),
+      }, SetOptions(merge: false));
+      _mealPlans[planIndex] = planInput;
+      notifyListeners();
+    } else {
+      print('...');
     }
   }
 

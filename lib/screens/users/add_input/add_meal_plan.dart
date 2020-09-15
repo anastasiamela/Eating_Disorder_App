@@ -20,14 +20,22 @@ class _AddMealPlanState extends State<AddMealPlan> {
   bool _isTemplate;
 
   var _isInit = true;
+  bool _isEdit;
+
   @override
   void didChangeDependencies() {
     if (_isInit) {
       final entry = ModalRoute.of(context).settings.arguments as MealPlan;
-      _mealItems = [''];
       type = entry.typeOfMeal;
       day = entry.dayOfWeek;
       _isTemplate = entry.isTemplate;
+      if (entry.id == null) {
+        _mealItems = [''];
+        _isEdit = false;
+      } else {
+        _mealItems = entry.mealItems;
+        _isEdit = true;
+      }
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -60,16 +68,32 @@ class _AddMealPlanState extends State<AddMealPlan> {
     }
     final userId = Provider.of<Auth>(context, listen: false).userId;
     DateTime date = DateTime.now();
-    MealPlan newMealPlan = MealPlan(
-      id: '',
-      userId: userId,
-      dayOfWeek: day,
-      typeOfMeal: type,
-      mealItems: _mealItems,
-      createdAt: date,
-      isTemplate: _isTemplate,
-    );
-    Provider.of<MealPlans>(context, listen: false).addMealPlan(newMealPlan, userId);
+    if (!_isEdit) {
+      MealPlan newMealPlan = MealPlan(
+        id: '',
+        userId: userId,
+        dayOfWeek: day,
+        typeOfMeal: type,
+        mealItems: _mealItems,
+        createdAt: date,
+        isTemplate: _isTemplate,
+      );
+      Provider.of<MealPlans>(context, listen: false)
+          .addMealPlan(newMealPlan, userId);
+    } else {
+      final entry = ModalRoute.of(context).settings.arguments as MealPlan;
+      MealPlan newMealPlan = MealPlan(
+        id: entry.id,
+        userId: userId,
+        dayOfWeek: day,
+        typeOfMeal: type,
+        mealItems: _mealItems,
+        createdAt: date,
+        isTemplate: _isTemplate,
+      );
+      print(_mealItems);
+      Provider.of<MealPlans>(context, listen: false).updateMealPlan(entry.id, newMealPlan, userId);
+    }
     Navigator.of(context).pop();
   }
 
