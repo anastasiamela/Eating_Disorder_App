@@ -50,6 +50,9 @@ Map<String, BehaviorMessagesModel> myBehaviorMessages = {
   'weigh': BehaviorMessagesModel(
       behaviorTitleForAdd: 'Did you weigh yourself?',
       behaviorTitleForOverview: ''),
+  'bodyAvoid': BehaviorMessagesModel(
+      behaviorTitleForAdd: 'Did you avoid your body since your last log?',
+      behaviorTitleForOverview: ''),
   'bodyCheck': BehaviorMessagesModel(
       behaviorTitleForAdd: 'Did you check your body since your last log?',
       behaviorTitleForOverview: ''),

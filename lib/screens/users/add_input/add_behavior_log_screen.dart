@@ -21,6 +21,7 @@ List<String> _behaviorTypes = [
   'useDietPills',
   'drinkAlcohol',
   'weigh',
+  'bodyAvoid',
   'bodyCheck',
   'exercise',
 ];
@@ -37,6 +38,13 @@ List<String> _bodyCheckTypes = [
   'Checked body in mirror',
   'Compared body with others',
   'Measured Body',
+  'Other',
+];
+
+List<String> _bodyAvoidTypes = [
+  'Avoided body in mirror',
+  'Avoided tight clothes',
+  'Avoided physical contact with others',
   'Other',
 ];
 
@@ -62,6 +70,9 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
   Map<String, bool> _bodyCheckTypesSelected = new Map();
   String _otherTypeBodyCheck;
   TextEditingController _controller;
+  List<String> _bodyAvoidTypeInput;
+  Map<String, bool> _bodyAvoidTypesSelected = new Map();
+  String _otherTypeBodyAvoid;
   int _laxativesNumberInput;
   int _dietPillsNumberInput;
   int _drinksNumberInput;
@@ -92,6 +103,9 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
       _bodyCheckTypes.forEach((type) => _bodyCheckTypesSelected[type] = false);
       _otherTypeBodyCheck = '';
       _controller = TextEditingController();
+      _bodyAvoidTypeInput = [];
+      _bodyAvoidTypes.forEach((type) => _bodyAvoidTypesSelected[type] = false);
+      _otherTypeBodyAvoid = '';
       _laxativesNumberInput = -1;
       _dietPillsNumberInput = -1;
       _drinksNumberInput = -1;
@@ -129,6 +143,15 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
         }
       }
     });
+    _bodyAvoidTypesSelected.forEach((key, value) {
+      if (value) {
+        if (key == 'Other') {
+          _bodyAvoidTypeInput.add(_otherTypeBodyAvoid);
+        } else {
+          _bodyAvoidTypeInput.add(key);
+        }
+      }
+    });
     DateTime date = DateTime.now();
     DateTime dateFinal;
     if (_isBackLog) {
@@ -150,6 +173,7 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
       purgeGrade: _purgeGradeInput,
       exerciseGrade: _exerciseGradeInput,
       bodyCheckType: _bodyCheckTypeInput,
+      bodyAvoidType: _bodyAvoidTypeInput,
       laxativesNumber: _laxativesNumberInput,
       dietPillsNumber: _dietPillsNumberInput,
       drinksNumber: _drinksNumberInput,
@@ -199,6 +223,7 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
   }
 
   Widget _buildBehaviorTypeWidget(String behaviorType) {
+    print(behaviorType);
     return Card(
       shadowColor: Theme.of(context).primaryColor,
       child: Column(
@@ -236,6 +261,8 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
             _buildGradeSliderPurge(),
           if (behaviorType == 'exercise' && _behaviorsSelected[behaviorType])
             _buildGradeSliderExercise(),
+          if (behaviorType == 'bodyAvoid' && _behaviorsSelected[behaviorType])
+            _buildBodyAvoidTypeInput(),
           if (behaviorType == 'bodyCheck' && _behaviorsSelected[behaviorType])
             _buildBodyCheckTypeInput(),
           if (behaviorType == 'useLaxatives' &&
@@ -467,7 +494,9 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: ListTile(
-        title: Text('How many?'),
+        title: (type != 'drinkAlcohol')
+            ? Text('How many?')
+            : Text('How many drinks?'),
         trailing: Container(
           width: 150,
           child: TextFormField(
@@ -549,6 +578,67 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
                           _bodyCheckTypesSelected[type] = value;
                           if (type == 'Other') {
                             _otherTypeBodyCheck = '';
+                          }
+                        });
+                      }
+                    },
+                  ),
+                ))
+            .toList(),
+      ),
+    );
+  }
+
+  Widget _buildBodyAvoidTypeInput() {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        children: _bodyAvoidTypes
+            .map((type) => ListTile(
+                  title: (type == 'Other' && _bodyAvoidTypesSelected[type])
+                      ? Text(_otherTypeBodyAvoid)
+                      : Text(type),
+                  trailing: Checkbox(
+                    value: _bodyAvoidTypesSelected[type],
+                    onChanged: (bool value) {
+                      if (type == 'Other' && value) {
+                        return showDialog(
+                          context: context,
+                          builder: (ctx) => AlertDialog(
+                            title: Text('Body avoid type'),
+                            content: TextField(
+                              controller: _controller,
+                              decoration: InputDecoration(
+                                hintText: 'How did you avoid your body?',
+                              ),
+                            ),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text('Cancel'),
+                                onPressed: () {
+                                  Navigator.of(ctx).pop(false);
+                                },
+                              ),
+                              FlatButton(
+                                child: Text('Ok'),
+                                onPressed: () {
+                                  setState(() {
+                                    _otherTypeBodyAvoid = _controller.text;
+                                    _controller.text = '';
+                                    if (_otherTypeBodyAvoid != '')
+                                      _bodyAvoidTypesSelected[type] = value;
+                                  });
+                                  Navigator.of(ctx).pop(true);
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        setState(() {
+                          _bodyAvoidTypesSelected[type] = value;
+                          if (type == 'Other') {
+                            _otherTypeBodyAvoid = '';
                           }
                         });
                       }
@@ -724,12 +814,6 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
                 decoration: InputDecoration(
                     hintText: 'Your thoughts',
                     hintStyle: TextStyle(fontStyle: FontStyle.italic)),
-                validator: (value) {
-                  if (value.length < 5) {
-                    return 'Should be at least 5 characters long.';
-                  }
-                  return null;
-                },
                 onSaved: (value) => _thoughtsInput = value,
               ),
             ],

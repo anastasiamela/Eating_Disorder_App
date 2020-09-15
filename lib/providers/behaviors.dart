@@ -15,6 +15,7 @@ class Behavior with ChangeNotifier {
   final int dietPillsNumber;
   final int drinksNumber;
   final List<String> bodyCheckType;
+  final List<String> bodyAvoidType;
   final String thoughts;
   final DateTime date;
   final bool isBackLog;
@@ -34,6 +35,7 @@ class Behavior with ChangeNotifier {
     this.laxativesNumber = -1,
     this.dietPillsNumber = -1,
     this.drinksNumber = -1,
+    @required this.bodyAvoidType,
     @required this.bodyCheckType,
     @required this.thoughts,
     @required this.date,
@@ -131,6 +133,7 @@ class Behaviors with ChangeNotifier {
             dietPillsNumber: behaviorData['dietPillsNumber'],
             drinksNumber: behaviorData['drinksNumber'],
             bodyCheckType: new List<String>.from(behaviorData['bodyCheckType']),
+            bodyAvoidType: new List<String>.from(behaviorData['bodyAvoidType']),
             thoughts: behaviorData['thoughts'],
             isFavorite: behaviorData['isFavorite'],
             isBackLog: behaviorData['isBackLog'],
@@ -164,6 +167,7 @@ class Behaviors with ChangeNotifier {
         'dietPillsNumber': behaviorInput.dietPillsNumber,
         'drinksNumber': behaviorInput.drinksNumber,
         'bodyCheckType': FieldValue.arrayUnion(behaviorInput.bodyCheckType),
+        'bodyAvoidType': FieldValue.arrayUnion(behaviorInput.bodyAvoidType),
         'thoughts': behaviorInput.thoughts,
         'isFavorite': false,
         'createdAt': Timestamp.fromDate(behaviorInput.date),
@@ -182,6 +186,7 @@ class Behaviors with ChangeNotifier {
         laxativesNumber: behaviorInput.laxativesNumber,
         dietPillsNumber: behaviorInput.dietPillsNumber,
         drinksNumber: behaviorInput.drinksNumber,
+        bodyAvoidType: behaviorInput.bodyAvoidType,
         bodyCheckType: behaviorInput.bodyCheckType,
         thoughts: behaviorInput.thoughts,
         isBackLog: behaviorInput.isBackLog,
