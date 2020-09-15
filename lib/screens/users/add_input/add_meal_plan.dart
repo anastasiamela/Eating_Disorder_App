@@ -18,6 +18,7 @@ class _AddMealPlanState extends State<AddMealPlan> {
   String type;
   List<String> _mealItems;
   bool _isTemplate;
+  String _id;
 
   var _isInit = true;
   bool _isEdit;
@@ -33,6 +34,7 @@ class _AddMealPlanState extends State<AddMealPlan> {
         _mealItems = [''];
         _isEdit = false;
       } else {
+        _id = entry.id;
         _mealItems = entry.mealItems;
         _isEdit = true;
       }
@@ -92,7 +94,8 @@ class _AddMealPlanState extends State<AddMealPlan> {
         isTemplate: _isTemplate,
       );
       print(_mealItems);
-      Provider.of<MealPlans>(context, listen: false).updateMealPlan(entry.id, newMealPlan, userId);
+      Provider.of<MealPlans>(context, listen: false)
+          .updateMealPlan(entry.id, newMealPlan, userId);
     }
     Navigator.of(context).pop();
   }
@@ -103,6 +106,46 @@ class _AddMealPlanState extends State<AddMealPlan> {
       appBar: AppBar(
         title: Text('$day $type'),
         actions: <Widget>[
+          if (_isEdit)
+            IconButton(
+              icon: Icon(
+                Icons.delete,
+                color: Colors.white,
+              ),
+              onPressed: () async {
+                bool response = await showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: Text('Are you sure?'),
+                    content: Text(
+                      'Do you want to remove the meal plan?',
+                    ),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('No'),
+                        onPressed: () {
+                          Navigator.of(ctx).pop(true);
+                        },
+                      ),
+                      FlatButton(
+                        child: Text('Yes'),
+                        onPressed: () {
+                          Navigator.of(ctx).pop(false);
+                        },
+                      ),
+                    ],
+                  ),
+                );
+                print(response);
+                if (!response) {
+                  final userId =
+                      Provider.of<Auth>(context, listen: false).userId;
+                  Provider.of<MealPlans>(context, listen: false)
+                      .deleteMealPlan(_id, userId);
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
           IconButton(
             icon: Icon(
               Icons.save,
@@ -198,8 +241,8 @@ class _AddMealPlanState extends State<AddMealPlan> {
                 if (value.length < 3) {
                   return 'Should be at least 3 characters long.';
                 }
-                if (value.length > 20) {
-                  return 'Should be less than 20 characters long.';
+                if (value.length > 30) {
+                  return 'Should be less than 30 characters long.';
                 }
                 if (value.trim().isEmpty) {
                   return 'Please enter something or remove the meal item.';
