@@ -198,6 +198,9 @@ class _AddMealPlanState extends State<AddMealPlan> {
                 if (value.length < 3) {
                   return 'Should be at least 3 characters long.';
                 }
+                if (value.length > 20) {
+                  return 'Should be less than 20 characters long.';
+                }
                 if (value.trim().isEmpty) {
                   return 'Please enter something or remove the meal item.';
                 }

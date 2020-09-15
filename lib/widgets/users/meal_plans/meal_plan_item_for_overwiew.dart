@@ -10,14 +10,17 @@ class MealPlanItemForOverview extends StatelessWidget {
     //final authData = Provider.of<Auth>(context, listen: false);
     final mealItems = mealPlan.mealItems;
     return Container(
-      width: 200,
+      width: 180,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: mealItems
             .map((item) => Row(
+              //mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Icon(Icons.near_me),
-                    Expanded(child: Text(item)),
+                    Expanded(
+                      child: Text(item),
+                    ),
                   ],
                 ))
             .toList(),

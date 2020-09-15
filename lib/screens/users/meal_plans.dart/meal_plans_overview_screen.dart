@@ -35,9 +35,40 @@ class MealPlansOverviewScreen extends StatefulWidget {
       _MealPlansOverviewScreenState();
 }
 
-class _MealPlansOverviewScreenState extends State<MealPlansOverviewScreen> {
+class _MealPlansOverviewScreenState extends State<MealPlansOverviewScreen>
+    with SingleTickerProviderStateMixin {
+  TabController _tabController;
+
+  List<Tab> tabsList = [
+    Tab(text: 'All'),
+    Tab(text: 'Monday'),
+    Tab(text: 'Thuesday'),
+    Tab(text: 'Wednesday'),
+    Tab(text: 'Thursday'),
+    Tab(text: 'Friday'),
+    Tab(text: 'Saturday'),
+    Tab(text: 'Sunday'),
+  ];
+  var selectedIndex = 0;
   var _isInit = true;
   var _isLoading = false;
+
+  @override
+  void initState() {
+    _tabController = new TabController(length: tabsList.length, vsync: this);
+    _tabController.addListener(() {
+      setState(() {
+        selectedIndex = _tabController.index;
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   void didChangeDependencies() {
@@ -61,34 +92,79 @@ class _MealPlansOverviewScreenState extends State<MealPlansOverviewScreen> {
   Widget build(BuildContext context) {
     Provider.of<MealPlans>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Weekly Meal Planner'),
-      ),
-      drawer: AppDrawer(),
-      body: _isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : ListView.builder(
-              padding: EdgeInsets.all(8.0),
-              itemCount: _days.length,
-              itemBuilder: (_, i) => _buildDay(_days[i]),
-            ),
-    );
-  }
-
-  Widget _buildDay(String day) {
-    return Column(
-      children: [
-        Text(
-          day,
-          style: TextStyle(
-            color: Theme.of(context).primaryColor,
-            fontSize: 20.0,
-            fontWeight: FontWeight.w700,
-            fontStyle: FontStyle.italic,
+        appBar: AppBar(
+          title: Text('Weekly Meal Planner'),
+          bottom: TabBar(
+            tabs: tabsList,
+            controller: _tabController,
+            isScrollable: true,
           ),
         ),
+        drawer: AppDrawer(),
+        body: TabBarView(
+          controller: _tabController,
+          children: <Widget>[
+            _isLoading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ListView.builder(
+                    padding: EdgeInsets.all(8.0),
+                    itemCount: _days.length,
+                    itemBuilder: (_, i) => _buildDay(_days[i], true),
+                  ),
+            ListView(
+              children: [
+                _buildDay(tabsList[selectedIndex].text, false),
+              ],
+            ),
+            ListView(
+              children: [
+                _buildDay(tabsList[selectedIndex].text, false),
+              ],
+            ),
+            ListView(
+              children: [
+                _buildDay(tabsList[selectedIndex].text, false),
+              ],
+            ),
+            ListView(
+              children: [
+                _buildDay(tabsList[selectedIndex].text, false),
+              ],
+            ),
+            ListView(
+              children: [
+                _buildDay(tabsList[selectedIndex].text, false),
+              ],
+            ),
+            ListView(
+              children: [
+                _buildDay(tabsList[selectedIndex].text, false),
+              ],
+            ),
+            ListView(
+              children: [
+                _buildDay(tabsList[selectedIndex].text, false),
+              ],
+            ),
+          ],
+        ));
+  }
+
+  Widget _buildDay(String day, bool showDayText) {
+    return Column(
+      children: [
+        if (showDayText)
+          Text(
+            day,
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+              fontSize: 20.0,
+              fontWeight: FontWeight.w700,
+              fontStyle: FontStyle.italic,
+            ),
+          ),
         SizedBox(
           height: 12,
         ),
@@ -113,9 +189,9 @@ class _MealPlansOverviewScreenState extends State<MealPlansOverviewScreen> {
     final mealPlansData = Provider.of<MealPlans>(context);
     MealPlan plan = mealPlansData.findByDayAndType(day, type);
     return ChangeNotifierProvider.value(
-            value: plan,
-            child: _buildMealTypeInfo(day, type, plan),
-          );
+      value: plan,
+      child: _buildMealTypeInfo(day, type, plan),
+    );
   }
 
   Widget _buildMealTypeInfo(String day, String type, MealPlan plan) {
@@ -160,10 +236,8 @@ class _MealPlansOverviewScreenState extends State<MealPlansOverviewScreen> {
                       createdAt: null),
                 );
               } else {
-                Navigator.of(context).pushNamed(
-                  AddMealPlan.routeName,
-                  arguments: plan
-                );
+                Navigator.of(context)
+                    .pushNamed(AddMealPlan.routeName, arguments: plan);
               }
             },
           ),
