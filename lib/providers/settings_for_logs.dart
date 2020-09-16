@@ -47,6 +47,7 @@ class SettingsForLogs with ChangeNotifier {
     'Fearful',
     'Dynamic',
   ];
+  bool _settingsExist = false;
 
   List<String> get behaviorTypesList {
     return [..._behaviorTypesList];
@@ -54,6 +55,10 @@ class SettingsForLogs with ChangeNotifier {
 
   List<String> get feelingTypesList {
     return [..._feelingTypesList];
+  }
+
+  bool get settingsExist {
+    return _settingsExist;
   }
 
   Future<void> fetchAndSetSettingsForLogs(String userId) async {
@@ -72,7 +77,9 @@ class SettingsForLogs with ChangeNotifier {
           new List<String>.from(responseData['behaviorTypesList']);
       _feelingTypesList =
           new List<String>.from(responseData['feelingTypesList']);
+      _settingsExist = true;
       notifyListeners();
+    
     } catch (error) {
       throw (error);
     }

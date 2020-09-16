@@ -10,11 +10,240 @@ class SettingsForLogsScreen extends StatefulWidget {
   _SettingsForLogsScreenState createState() => _SettingsForLogsScreenState();
 }
 
+List<String> _behaviorTypesGeneral = [
+  'restrict',
+  'binge',
+  'purge',
+  'chewAndSpit',
+  'swallowAndRegurgitate',
+  'hideFood',
+  'eatInSecret',
+  'countCalories',
+  'useLaxatives',
+  'useDietPills',
+  'drinkAlcohol',
+  'weigh',
+  'bodyAvoid',
+  'bodyCheck',
+  'exercise',
+];
+
+List<String> _feelingTypesGeneral = [
+  'Happy',
+  'Tired',
+  'Anxious',
+  'Sad',
+  'Lonely',
+  'Proud',
+  'Hopeful',
+  'Frustrated',
+  'Guilty',
+  'Disgust',
+  'Bored',
+  'Physical Pain',
+  'Intrusive Food Thoughts',
+  'Dizzy / Headache',
+  'Irritable',
+  'Angry',
+  'Depressed',
+  'Motivated',
+  'Excited',
+  'Grateful',
+  'Joy',
+  'Loved',
+  'Satisfied',
+  'Fearful',
+  'Dynamic',
+];
+
 class _SettingsForLogsScreenState extends State<SettingsForLogsScreen> {
+  var _isInit = true;
+  var _isLoading = false;
+
+  List<String> _inputBehaviors;
+  Map<String, bool> _behaviorsSelected = new Map();
+  List<String> _behaviorsInitiallySelected = [];
+
+  List<String> _inputFeelings;
+  Map<String, bool> _feelingsSelected = new Map();
+  List<String> _feelingsInitiallySelected = [];
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      final userId = Provider.of<Auth>(context, listen: false).userId;
+      Provider.of<SettingsForLogs>(context)
+          .fetchAndSetSettingsForLogs(userId)
+          .then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+      _behaviorTypesGeneral
+          .forEach((behavior) => _behaviorsSelected[behavior] = false);
+      _feelingTypesGeneral
+          .forEach((feeling) => _feelingsSelected[feeling] = false);
+
+      if (Provider.of<SettingsForLogs>(context, listen: false).settingsExist) {
+        _behaviorsInitiallySelected =
+            Provider.of<SettingsForLogs>(context, listen: false)
+                .behaviorTypesList;
+        _behaviorsInitiallySelected
+            .forEach((behavior) => _behaviorsSelected[behavior] = true);
+        _feelingsInitiallySelected =
+            Provider.of<SettingsForLogs>(context, listen: false)
+                .feelingTypesList;
+        _feelingsInitiallySelected
+            .forEach((feeling) => _feelingsSelected[feeling] = true);
+      } else {
+        _behaviorsInitiallySelected = [];
+        _feelingsInitiallySelected = [];
+      }
+      _inputBehaviors = [];
+      _inputFeelings = [];
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  void _save() {
+    final userId = Provider.of<Auth>(context, listen: false).userId;
+    _behaviorsSelected
+        .forEach((key, value) => {if (value) _inputBehaviors.add(key)});
+    _feelingsSelected
+        .forEach((key, value) => {if (value) _inputFeelings.add(key)});
+    Provider.of<SettingsForLogs>(context, listen: false).setSettingsForLogs(_inputBehaviors, _inputFeelings, userId);
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+      appBar: AppBar(
+        title: Text('Settings for log questions'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.check),
+            onPressed: _save,
+          ),
+        ],
+      ),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView(
+                children: [
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      Text(
+                        ' Behaviors ',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w600,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                      Expanded(
+                        child: Divider(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Column(
+                    children: _behaviorTypesGeneral
+                        .map((behavior) => Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(behavior),
+                                  Checkbox(
+                                    value: _behaviorsSelected[behavior],
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _behaviorsSelected[behavior] = value;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ))
+                        .toList(),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      Text(
+                        ' Feelings ',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w600,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                      Expanded(
+                        child: Divider(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Column(
+                    children: _feelingTypesGeneral
+                        .map((feeling) => Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(feeling),
+                                  Checkbox(
+                                    value: _feelingsSelected[feeling],
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _feelingsSelected[feeling] = value;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ))
+                        .toList(),
+                  ),
+                ],
+              ),
+            ),
     );
   }
 }

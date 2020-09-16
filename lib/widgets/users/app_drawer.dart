@@ -7,6 +7,7 @@ import '../../screens/users/add_input/add_feeling_log_screen.dart';
 import '../../screens/users/add_input/add_behavior_log_screen.dart';
 import '../../screens/users/logs_screens/general_logs_overview_screen.dart';
 import '../../screens/users/meal_plans.dart/meal_plans_overview_screen.dart';
+import '../../screens/users/settings_users/settings_for_logs_screen.dart';
 
 import '../../providers/auth.dart';
 
@@ -14,7 +15,7 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: Column(
+      child: ListView(
         children: <Widget>[
           AppBar(
             title: Text('Hello Friend!'),
@@ -81,6 +82,15 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushNamed(AddBehaviorLogScreen.routeName);
+            },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.error_outline),
+            title: Text('Settings for logs'),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(SettingsForLogsScreen.routeName);
             },
           ),
           Divider(),

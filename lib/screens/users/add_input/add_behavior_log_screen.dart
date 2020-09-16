@@ -5,27 +5,26 @@ import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../../providers/behaviors.dart';
 import '../../../providers/auth.dart';
-import '../../../providers/settings_for_logs.dart';
 
 import '../../../models/behaviors_messages.dart';
 
-// List<String> _behaviorTypes = [
-//   'restrict',
-//   'binge',
-//   'purge',
-//   'chewAndSpit',
-//   'swallowAndRegurgitate',
-//   'hideFood',
-//   'eatInSecret',
-//   'countCalories',
-//   'useLaxatives',
-//   'useDietPills',
-//   'drinkAlcohol',
-//   'weigh',
-//   'bodyAvoid',
-//   'bodyCheck',
-//   'exercise',
-// ];
+List<String> _behaviorTypes = [
+  'restrict',
+  'binge',
+  'purge',
+  'chewAndSpit',
+  'swallowAndRegurgitate',
+  'hideFood',
+  'eatInSecret',
+  'countCalories',
+  'useLaxatives',
+  'useDietPills',
+  'drinkAlcohol',
+  'weigh',
+  'bodyAvoid',
+  'bodyCheck',
+  'exercise',
+];
 
 List<String> _gradeTypes = [
   'Not at all',
@@ -85,27 +84,11 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
   TimeOfDay _selectedTime;
   DateTime _selectedDate;
 
-  List<String> _behaviorTypes = [];
-
   var _isInit = true;
-  var _isLoading = false;
+  
   @override
   void didChangeDependencies() {
-    if (_isInit) {
-      setState(() {
-        _isLoading = true;
-      });
-      final userId = Provider.of<Auth>(context, listen: false).userId;
-      Provider.of<SettingsForLogs>(context)
-          .fetchAndSetSettingsForLogs(userId)
-          .then((_) {
-        setState(() {
-          _isLoading = false;
-        });
-      });
-      _behaviorTypes =
-          Provider.of<SettingsForLogs>(context, listen: false)
-              .behaviorTypesList;
+    if (_isInit) { 
       _behaviorTypes
           .forEach((behavior) => _behaviorsSelected[behavior] = false);
       _inputBehaviors = [];
@@ -220,11 +203,7 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
           ),
         ],
       ),
-      body: _isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : Padding(
+      body: Padding(
               padding: const EdgeInsets.all(8),
               child: Form(
                 key: _form,
@@ -304,7 +283,6 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
   }
 
   Widget _buildBehaviorTypeWidget(String behaviorType) {
-    print(behaviorType);
     return Card(
       shadowColor: Theme.of(context).primaryColor,
       child: Column(
