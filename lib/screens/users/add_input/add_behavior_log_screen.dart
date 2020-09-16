@@ -211,9 +211,67 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
               _buildIsBacklogIinput(),
               if (_isBackLog) _buildDateBackLogInput(),
               _buildTimeInput(),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Divider(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  Text(
+                    ' Behaviors ',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  Expanded(
+                    child: Divider(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
               ...(_behaviorTypes
                   .map((behaviorType) => _buildBehaviorTypeWidget(behaviorType))
                   .toList()),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Divider(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  Text(
+                    ' Thoughts ',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  Expanded(
+                    child: Divider(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
               _buildThoughtsInput(),
             ],
           ),
