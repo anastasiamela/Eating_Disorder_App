@@ -4,6 +4,9 @@ import 'package:provider/provider.dart';
 import '../../../providers/settings_for_logs.dart';
 import '../../../providers/auth.dart';
 
+import '../../../models/behaviors_messages.dart';
+import '../../../models/emoji_view.dart';
+
 class SettingsForLogsScreen extends StatefulWidget {
   static const routeName = '/settings-for-logs';
   @override
@@ -115,7 +118,8 @@ class _SettingsForLogsScreenState extends State<SettingsForLogsScreen> {
         .forEach((key, value) => {if (value) _inputBehaviors.add(key)});
     _feelingsSelected
         .forEach((key, value) => {if (value) _inputFeelings.add(key)});
-    Provider.of<SettingsForLogs>(context, listen: false).setSettingsForLogs(_inputBehaviors, _inputFeelings, userId);
+    Provider.of<SettingsForLogs>(context, listen: false)
+        .setSettingsForLogs(_inputBehaviors, _inputFeelings, userId);
     Navigator.of(context).pop();
   }
 
@@ -176,7 +180,39 @@ class _SettingsForLogsScreenState extends State<SettingsForLogsScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(behavior),
+                                  GestureDetector(
+                                    child: Text(
+                                      getBehaviorTitleForSettings(behavior),
+                                    ),
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text(
+                                              getBehaviorTitleForSettings(
+                                                  behavior),
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                            ),
+                                            content: Text(
+                                                getBehaviorLongExplaining(
+                                                    behavior)),
+                                            actions: [
+                                              FlatButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context).pop(),
+                                                child: Text('OK'),
+                                              )
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
                                   Checkbox(
                                     value: _behaviorsSelected[behavior],
                                     onChanged: (value) {
@@ -227,7 +263,15 @@ class _SettingsForLogsScreenState extends State<SettingsForLogsScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(feeling),
+                                  Text(
+                                    getEmojiTextView(feeling),
+                                  ),
+                                  SizedBox(width: 5),
+                                  Expanded(
+                                    child: Text(
+                                      feeling,
+                                    ),
+                                  ),
                                   Checkbox(
                                     value: _feelingsSelected[feeling],
                                     onChanged: (value) {
