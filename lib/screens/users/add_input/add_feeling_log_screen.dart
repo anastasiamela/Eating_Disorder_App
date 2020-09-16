@@ -4,6 +4,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../../providers/feelings.dart';
 import '../../../providers/auth.dart';
+import '../../../providers/settings_for_logs.dart';
 
 import '../../../models/emoji_view.dart';
 
@@ -17,33 +18,33 @@ List<String> _overallFeelings = [
   'Overjoyed',
 ];
 
-List<String> moodsToDisplay = [
-  'Happy',
-  'Tired',
-  'Anxious',
-  'Sad',
-  'Lonely',
-  'Proud',
-  'Hopeful',
-  'Frustrated',
-  'Guilty',
-  'Disgust',
-  'Bored',
-  'Physical Pain',
-  'Intrusive Food Thoughts',
-  'Dizzy / Headache',
-  'Irritable',
-  'Angry',
-  'Depressed',
-  'Motivated',
-  'Excited',
-  'Grateful',
-  'Joy',
-  'Loved',
-  'Satisfied',
-  'Fearful',
-  'Dynamic',
-];
+// List<String> moodsToDisplay = [
+//   'Happy',
+//   'Tired',
+//   'Anxious',
+//   'Sad',
+//   'Lonely',
+//   'Proud',
+//   'Hopeful',
+//   'Frustrated',
+//   'Guilty',
+//   'Disgust',
+//   'Bored',
+//   'Physical Pain',
+//   'Intrusive Food Thoughts',
+//   'Dizzy / Headache',
+//   'Irritable',
+//   'Angry',
+//   'Depressed',
+//   'Motivated',
+//   'Excited',
+//   'Grateful',
+//   'Joy',
+//   'Loved',
+//   'Satisfied',
+//   'Fearful',
+//   'Dynamic',
+// ];
 
 class AddFeelingLogScreen extends StatefulWidget {
   static const routeName = '/add-feeling';
@@ -64,10 +65,26 @@ class _AddFeelingLogScreenState extends State<AddFeelingLogScreen> {
   TimeOfDay _selectedTime;
   DateTime _selectedDate;
 
+  List<String> moodsToDisplay;
+
   var _isInit = true;
+  var _isLoading = false;
   @override
   void didChangeDependencies() {
     if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      final userId = Provider.of<Auth>(context, listen: false).userId;
+      Provider.of<SettingsForLogs>(context)
+          .fetchAndSetSettingsForLogs(userId)
+          .then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+      moodsToDisplay =
+          Provider.of<SettingsForLogs>(context, listen: false).feelingTypesList;
       moodsToDisplay.forEach((element) => _moodsSelected[element] = false);
       _inputMoods = [];
       _thoughtsInput = '';
@@ -131,22 +148,26 @@ class _AddFeelingLogScreenState extends State<AddFeelingLogScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.all(8),
-        child: Form(
-          key: _form,
-          child: ListView(
-            children: [
-              _buildIsBacklogIinput(),
-              if (_isBackLog) _buildDateBackLogInput(),
-              _buildTimeInput(),
-              _buildOverallFeelingSlider(),
-              _buildMoodsInput(),
-              _buildThoughtsInput(),
-            ],
-          ),
-        ),
-      ),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Padding(
+              padding: EdgeInsets.all(8),
+              child: Form(
+                key: _form,
+                child: ListView(
+                  children: [
+                    _buildIsBacklogIinput(),
+                    if (_isBackLog) _buildDateBackLogInput(),
+                    _buildTimeInput(),
+                    _buildOverallFeelingSlider(),
+                    _buildMoodsInput(),
+                    _buildThoughtsInput(),
+                  ],
+                ),
+              ),
+            ),
     );
   }
 

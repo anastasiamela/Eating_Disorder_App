@@ -5,26 +5,27 @@ import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../../providers/behaviors.dart';
 import '../../../providers/auth.dart';
+import '../../../providers/settings_for_logs.dart';
 
 import '../../../models/behaviors_messages.dart';
 
-List<String> _behaviorTypes = [
-  'restrict',
-  'binge',
-  'purge',
-  'chewAndSpit',
-  'swallowAndRegurgitate',
-  'hideFood',
-  'eatInSecret',
-  'countCalories',
-  'useLaxatives',
-  'useDietPills',
-  'drinkAlcohol',
-  'weigh',
-  'bodyAvoid',
-  'bodyCheck',
-  'exercise',
-];
+// List<String> _behaviorTypes = [
+//   'restrict',
+//   'binge',
+//   'purge',
+//   'chewAndSpit',
+//   'swallowAndRegurgitate',
+//   'hideFood',
+//   'eatInSecret',
+//   'countCalories',
+//   'useLaxatives',
+//   'useDietPills',
+//   'drinkAlcohol',
+//   'weigh',
+//   'bodyAvoid',
+//   'bodyCheck',
+//   'exercise',
+// ];
 
 List<String> _gradeTypes = [
   'Not at all',
@@ -84,10 +85,27 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
   TimeOfDay _selectedTime;
   DateTime _selectedDate;
 
+  List<String> _behaviorTypes = [];
+
   var _isInit = true;
+  var _isLoading = false;
   @override
   void didChangeDependencies() {
     if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      final userId = Provider.of<Auth>(context, listen: false).userId;
+      Provider.of<SettingsForLogs>(context)
+          .fetchAndSetSettingsForLogs(userId)
+          .then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+      _behaviorTypes =
+          Provider.of<SettingsForLogs>(context, listen: false)
+              .behaviorTypesList;
       _behaviorTypes
           .forEach((behavior) => _behaviorsSelected[behavior] = false);
       _inputBehaviors = [];
@@ -202,81 +220,86 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Form(
-          key: _form,
-          child: ListView(
-            children: [
-              _buildIsBacklogIinput(),
-              if (_isBackLog) _buildDateBackLogInput(),
-              _buildTimeInput(),
-              SizedBox(
-                height: 5,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Divider(
-                      color: Theme.of(context).primaryColor,
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Padding(
+              padding: const EdgeInsets.all(8),
+              child: Form(
+                key: _form,
+                child: ListView(
+                  children: [
+                    _buildIsBacklogIinput(),
+                    if (_isBackLog) _buildDateBackLogInput(),
+                    _buildTimeInput(),
+                    SizedBox(
+                      height: 5,
                     ),
-                  ),
-                  Text(
-                    ' Behaviors ',
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.w600,
-                      fontStyle: FontStyle.italic,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                        Text(
+                          ' Behaviors ',
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w600,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Expanded(
-                    child: Divider(
-                      color: Theme.of(context).primaryColor,
+                    SizedBox(
+                      height: 5,
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              ...(_behaviorTypes
-                  .map((behaviorType) => _buildBehaviorTypeWidget(behaviorType))
-                  .toList()),
-              SizedBox(
-                height: 5,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Divider(
-                      color: Theme.of(context).primaryColor,
+                    ...(_behaviorTypes
+                        .map((behaviorType) =>
+                            _buildBehaviorTypeWidget(behaviorType))
+                        .toList()),
+                    SizedBox(
+                      height: 5,
                     ),
-                  ),
-                  Text(
-                    ' Thoughts ',
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.w600,
-                      fontStyle: FontStyle.italic,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                        Text(
+                          ' Thoughts ',
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w600,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Expanded(
-                    child: Divider(
-                      color: Theme.of(context).primaryColor,
+                    SizedBox(
+                      height: 5,
                     ),
-                  ),
-                ],
+                    _buildThoughtsInput(),
+                  ],
+                ),
               ),
-              SizedBox(
-                height: 5,
-              ),
-              _buildThoughtsInput(),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 
