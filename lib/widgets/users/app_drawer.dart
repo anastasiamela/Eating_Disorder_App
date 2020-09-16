@@ -7,7 +7,7 @@ import '../../screens/users/add_input/add_feeling_log_screen.dart';
 import '../../screens/users/add_input/add_behavior_log_screen.dart';
 import '../../screens/users/logs_screens/general_logs_overview_screen.dart';
 import '../../screens/users/meal_plans.dart/meal_plans_overview_screen.dart';
-import '../../screens/users/settings_users/settings_for_logs_screen.dart';
+import '../../screens/users/settings_users/general_settings_users_screen.dart';
 
 import '../../providers/auth.dart';
 
@@ -48,49 +48,49 @@ class AppDrawer extends StatelessWidget {
                   .pushReplacementNamed(MealPlansOverviewScreen.routeName);
             },
           ),
+          // Divider(),
+          // ListTile(
+          //   leading: Icon(Icons.add),
+          //   title: Text('Add meal log'),
+          //   onTap: () {
+          //     Navigator.of(context).pop();
+          //     Navigator.of(context).pushNamed(AddMealLogScreen.routeName);
+          //   },
+          // ),
+          // Divider(),
+          // ListTile(
+          //   leading: Icon(Icons.add_comment),
+          //   title: Text('Add thoughts'),
+          //   onTap: () {
+          //     Navigator.of(context).pop();
+          //     Navigator.of(context).pushNamed(AddThoughtScreen.routeName);
+          //   },
+          // ),
+          // Divider(),
+          // ListTile(
+          //   leading: Icon(Icons.headset),
+          //   title: Text('Add feelings'),
+          //   onTap: () {
+          //     Navigator.of(context).pop();
+          //     Navigator.of(context).pushNamed(AddFeelingLogScreen.routeName);
+          //   },
+          // ),
+          // Divider(),
+          // ListTile(
+          //   leading: Icon(Icons.error_outline),
+          //   title: Text('Add behaviors'),
+          //   onTap: () {
+          //     Navigator.of(context).pop();
+          //     Navigator.of(context).pushNamed(AddBehaviorLogScreen.routeName);
+          //   },
+          // ),
           Divider(),
           ListTile(
-            leading: Icon(Icons.add),
-            title: Text('Add meal log'),
+            leading: Icon(Icons.settings),
+            title: Text('Settings'),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pushNamed(AddMealLogScreen.routeName);
-            },
-          ),
-          Divider(),
-          ListTile(
-            leading: Icon(Icons.add_comment),
-            title: Text('Add thoughts'),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushNamed(AddThoughtScreen.routeName);
-            },
-          ),
-          Divider(),
-          ListTile(
-            leading: Icon(Icons.headset),
-            title: Text('Add feelings'),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushNamed(AddFeelingLogScreen.routeName);
-            },
-          ),
-          Divider(),
-          ListTile(
-            leading: Icon(Icons.error_outline),
-            title: Text('Add behaviors'),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushNamed(AddBehaviorLogScreen.routeName);
-            },
-          ),
-          Divider(),
-          ListTile(
-            leading: Icon(Icons.error_outline),
-            title: Text('Settings for logs'),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushNamed(SettingsForLogsScreen.routeName);
+              Navigator.of(context).pushNamed(GeneralSettingsUsersScreen.routeName);
             },
           ),
           Divider(),

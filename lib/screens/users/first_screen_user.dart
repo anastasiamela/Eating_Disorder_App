@@ -9,6 +9,7 @@ import '../../screens/users/add_input/add_meal_log_screen.dart';
 import '../../screens/users/add_input/add_thought_screen.dart';
 import '../../screens/users/add_input/add_behavior_log_screen.dart';
 import '../../screens/users/add_input/add_feeling_log_screen.dart';
+import '../../screens/users/settings_users/general_settings_users_screen.dart';
 
 class FirstScreenUser extends StatelessWidget {
   //static const routeName = '/first-screen';
@@ -89,11 +90,17 @@ class FirstScreenUser extends StatelessWidget {
                     icon: Icons.calendar_today,
                   ),
                 ),
-                CurvedListItem(
-                  title: 'Settings',
-                  color: Colors.teal[300],
-                  nextColor: Colors.teal[400],
-                  icon: Icons.settings,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(ctx)
+                        .pushReplacementNamed(GeneralSettingsUsersScreen.routeName);
+                  },
+                  child: CurvedListItem(
+                    title: 'Settings',
+                    color: Colors.teal[300],
+                    nextColor: Colors.teal[400],
+                    icon: Icons.settings,
+                  ),
                 ),
                 GestureDetector(
                   onTap: () {
