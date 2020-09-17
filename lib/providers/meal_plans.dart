@@ -52,8 +52,12 @@ class MealPlans with ChangeNotifier {
     return [..._mealPlans];
   }
 
-  List<MealPlan> get templateMealPlans {
-    return _mealPlans.where((plan) => plan.isTemplate ?? () => null).toList();
+  List<MealPlan> getTemplateMealPlans(String type) {
+    return _mealPlans
+        .where((plan) =>
+            plan.isTemplate && plan.typeOfMeal == type.toLowerCase() ??
+            () => null)
+        .toList();
   }
 
   List<MealPlan> mealPlansForADay(String day) {

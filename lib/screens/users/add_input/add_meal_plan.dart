@@ -12,6 +12,10 @@ class AddMealPlan extends StatefulWidget {
   _AddMealPlanState createState() => _AddMealPlanState();
 }
 
+String capitalizeFirstLetter(String input) {
+  return "${input[0].toUpperCase()}${input.substring(1)}";
+}
+
 class _AddMealPlanState extends State<AddMealPlan> {
   final _form = GlobalKey<FormState>();
   String day;
@@ -19,6 +23,9 @@ class _AddMealPlanState extends State<AddMealPlan> {
   List<String> _mealItems;
   bool _isTemplate;
   String _id;
+  bool _selectedToShowTemplates;
+  List<MealPlan> _templates;
+  String _selectedTemplate; //will contain the id
 
   var _isInit = true;
   bool _isEdit;
@@ -38,6 +45,10 @@ class _AddMealPlanState extends State<AddMealPlan> {
         _mealItems = entry.mealItems;
         _isEdit = true;
       }
+      _selectedToShowTemplates = false;
+      _templates = Provider.of<MealPlans>(context, listen: false)
+          .getTemplateMealPlans(type);
+      _selectedTemplate = '';
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -159,26 +170,63 @@ class _AddMealPlanState extends State<AddMealPlan> {
         padding: const EdgeInsets.all(8.0),
         child: Form(
           key: _form,
-          child: ListView(
-            children: [
-              ..._getMealItems(),
-              ListTile(
-                title: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.add_circle),
-                      const SizedBox(
-                        width: 8.0,
-                      ),
-                      const Text('Add another meal item.'),
-                    ],
+          child: SingleChildScrollView(
+            clipBehavior: Clip.none,
+            child: Column(
+              children: [
+                ..._getMealItems(),
+                ListTile(
+                  title: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.add_circle),
+                        const SizedBox(
+                          width: 8.0,
+                        ),
+                        const Text('Add another meal item.'),
+                      ],
+                    ),
                   ),
+                  onTap: _add,
                 ),
-                onTap: _add,
-              ),
-              _buildIsTemplateInput(),
-            ],
+                ListTile(
+                  title: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.insert_drive_file),
+                        const SizedBox(
+                          width: 8.0,
+                        ),
+                        const Text('Select from templates.'),
+                      ],
+                    ),
+                  ),
+                  subtitle: (_selectedToShowTemplates && _templates.length == 0)
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'There are no templates for this type of meal.',
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        )
+                      : Text(''),
+                  onTap: () {
+                    setState(() {
+                      _selectedToShowTemplates = true;
+                    });
+                  },
+                ),
+                if (_selectedToShowTemplates && _templates.length > 0)
+                  _buildTemplatesOverview(),
+                _buildIsTemplateInput(),
+              ],
+            ),
           ),
         ),
       ),
@@ -294,6 +342,69 @@ class _AddMealPlanState extends State<AddMealPlan> {
             inactiveFgColor: Colors.grey[900],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTemplatesOverview() {
+    return SingleChildScrollView(
+      clipBehavior: Clip.none,
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: _templates
+            .map((template) => ChangeNotifierProvider.value(
+                  value: template,
+                  child: GestureDetector(
+                    child: Card(
+                      shadowColor: Theme.of(context).primaryColor,
+                      child: Container(
+                        color: (template.id == _selectedTemplate)
+                            ? Colors.teal[50]
+                            : Colors.transparent,
+                        height: 150.0,
+                        width: 180.0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SingleChildScrollView(
+                            clipBehavior: Clip.none,
+                            scrollDirection: Axis.vertical,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  capitalizeFirstLetter(template.dayOfWeek),
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                ...template.mealItems
+                                    .map((item) => Row(
+                                          children: [
+                                            Icon(Icons.near_me),
+                                            Text(item),
+                                          ],
+                                        ))
+                                    .toList(),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        _mealItems = template.mealItems;
+                        _selectedTemplate = template.id;
+                      });
+                    },
+                  ),
+                ))
+            .toList(),
       ),
     );
   }

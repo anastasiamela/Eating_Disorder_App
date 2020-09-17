@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../screens/users/add_input/add_meal_log_screen.dart';
-import '../../screens/users/add_input/add_thought_screen.dart';
-import '../../screens/users/add_input/add_feeling_log_screen.dart';
-import '../../screens/users/add_input/add_behavior_log_screen.dart';
+// import '../../screens/users/add_input/add_meal_log_screen.dart';
+// import '../../screens/users/add_input/add_thought_screen.dart';
+// import '../../screens/users/add_input/add_feeling_log_screen.dart';
+// import '../../screens/users/add_input/add_behavior_log_screen.dart';
 import '../../screens/users/logs_screens/general_logs_overview_screen.dart';
 import '../../screens/users/meal_plans.dart/meal_plans_overview_screen.dart';
 import '../../screens/users/settings_users/general_settings_users_screen.dart';
