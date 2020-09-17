@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
                   primarySwatch: Colors.teal,
                   accentColor: Colors.teal[200],
                 ),
-                home: auth.user != null ? FirstScreenUser() : AuthScreen(),
+                home: auth.user == null ? AuthScreen() : FirstScreenUser(),
                 routes: {
                   MealLogDetailScreen.routeName: (ctx) => MealLogDetailScreen(),
                   GeneralLogsOverviewScreen.routeName: (ctx) =>
