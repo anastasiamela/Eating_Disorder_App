@@ -1,4 +1,3 @@
-import 'package:disorder_app/widgets/users/app_drawer.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/curved_list_item.dart';
@@ -12,33 +11,26 @@ import '../../screens/users/add_input/add_feeling_log_screen.dart';
 import '../../screens/users/settings_users/general_settings_users_screen.dart';
 
 class FirstScreenUser extends StatelessWidget {
-  //static const routeName = '/first-screen';
   @override
   Widget build(BuildContext context) {
     //final deviceSize = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(''),
+    return Container(
+      decoration: BoxDecoration(
+        //borderRadius: BorderRadius.circular(8.0),
+        gradient: LinearGradient(
+          colors: [
+            Colors.teal[400],
+            Colors.teal[200],
+            Colors.teal[100],
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          //stops: [0, 1],
+        ),
       ),
-      drawer: AppDrawer(),
-      body: Container(
-        decoration: BoxDecoration(
-          //borderRadius: BorderRadius.circular(8.0),
-          gradient: LinearGradient(
-            colors: [
-              Colors.teal[400],
-              Colors.teal[200],
-              Colors.teal[100],
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            //stops: [0, 1],
-          ),
-        ),
-        constraints: BoxConstraints.expand(),
-        child: new Stack(
-          children: [_getContent(context)],
-        ),
+      constraints: BoxConstraints.expand(),
+      child: new Stack(
+        children: [_getContent(context)],
       ),
     );
   }
@@ -92,8 +84,8 @@ class FirstScreenUser extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(ctx)
-                        .pushReplacementNamed(GeneralSettingsUsersScreen.routeName);
+                    Navigator.of(ctx).pushReplacementNamed(
+                        GeneralSettingsUsersScreen.routeName);
                   },
                   child: CurvedListItem(
                     title: 'Settings',

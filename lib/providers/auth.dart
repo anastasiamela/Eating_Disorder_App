@@ -26,6 +26,19 @@ class Auth with ChangeNotifier {
         print("Log In: $firebaseUser");
         _user = firebaseUser;
         _userId = firebaseUser.uid;
+        try {
+          final response = await FirebaseFirestore.instance
+              .collection('users')
+              .doc(_userId)
+              .get();
+          if (response == null) {
+            return;
+          }
+          final responseData = response.data();
+          _userRole = responseData['role'];
+        } catch (error) {
+          print(error);
+        }
         notifyListeners();
       }
     }

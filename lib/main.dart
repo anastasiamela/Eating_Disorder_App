@@ -13,7 +13,7 @@ import './screens/users/add_input/add_thought_screen.dart';
 import './screens/users/logs_screens/calendar_logs_screen.dart';
 import './screens/users/add_input/add_feeling_log_screen.dart';
 import './screens/users/add_input/add_behavior_log_screen.dart';
-import './screens/users/first_screen_user.dart';
+import './screens/first_screen.dart';
 import './screens/users/meal_plans.dart/meal_plans_overview_screen.dart';
 import './screens/users/add_input/add_meal_plan.dart';
 import './screens/users/settings_users/settings_for_logs_screen.dart';
@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
                   primarySwatch: Colors.teal,
                   accentColor: Colors.teal[200],
                 ),
-                home: auth.user == null ? AuthScreen() : FirstScreenUser(),
+                home: auth.user == null ? AuthScreen() : FirstScreen(),
                 routes: {
                   MealLogDetailScreen.routeName: (ctx) => MealLogDetailScreen(),
                   GeneralLogsOverviewScreen.routeName: (ctx) =>
