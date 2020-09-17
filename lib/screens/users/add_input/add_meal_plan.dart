@@ -382,7 +382,7 @@ class _AddMealPlanState extends State<AddMealPlan> {
                                 SizedBox(
                                   height: 8,
                                 ),
-                                ...template.mealItems
+                                ...template.getMealItems
                                     .map((item) => Row(
                                           children: [
                                             Icon(Icons.near_me),
@@ -398,7 +398,7 @@ class _AddMealPlanState extends State<AddMealPlan> {
                     ),
                     onTap: () {
                       setState(() {
-                        _mealItems = template.mealItems;
+                        _mealItems = template.getMealItems;
                         _selectedTemplate = template.id;
                       });
                     },

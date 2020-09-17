@@ -21,6 +21,10 @@ class MealPlan with ChangeNotifier {
       this.isTemplate = false,
       @required this.createdAt});
 
+  List<String> get getMealItems {
+    return [...mealItems];
+  }
+
   void _setTemplateValue(bool newValue) {
     isTemplate = newValue;
     notifyListeners();
