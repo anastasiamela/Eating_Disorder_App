@@ -7,6 +7,7 @@ import '../widgets/clinicians/app_drawer_clinicians.dart';
 import '../widgets/users/app_drawer.dart';
 
 import './users/first_screen_user.dart';
+import './clinicians/first_screen_clinician.dart';
 
 class FirstScreen extends StatelessWidget {
   @override
@@ -17,7 +18,7 @@ class FirstScreen extends StatelessWidget {
         title: Text(''),
       ),
       drawer: (role == 'patient') ? AppDrawer() : AppDrawerClinicians(),
-      body: (role == 'patient') ? FirstScreenUser() : Text('clinician'),
+      body: (role == 'patient') ? FirstScreenUser() : FirstScreenClinician(),
     );
   }
 }
