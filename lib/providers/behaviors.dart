@@ -59,7 +59,7 @@ class Behavior with ChangeNotifier {
     notifyListeners();
     try {
       await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('behaviors')
           .doc(id)
@@ -107,7 +107,7 @@ class Behaviors with ChangeNotifier {
   Future<void> fetchAndSetBehaviors(String userId) async {
     try {
       final response = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('behaviors')
           .orderBy("createdAt", descending: true)
@@ -152,7 +152,7 @@ class Behaviors with ChangeNotifier {
     final timestamp = DateTime.now();
     try {
       final response = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('behaviors')
           .add({
@@ -209,7 +209,7 @@ class Behaviors with ChangeNotifier {
     notifyListeners();
     try {
       await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('behaviors')
           .doc(id)

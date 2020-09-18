@@ -30,7 +30,7 @@ class MealLogItem extends StatelessWidget {
       subtitleText = 'Overall feeling: ${meal.feelingOverall}';
     } else {
       if (meal.skip)
-        subtitleText = 'meal.skippingReason';
+        subtitleText = meal.skippingReason;
       else
         subtitleText = meal.mealDescription;
     }

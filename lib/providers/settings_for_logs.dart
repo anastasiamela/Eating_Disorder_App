@@ -64,7 +64,7 @@ class SettingsForLogs with ChangeNotifier {
   Future<void> fetchAndSetSettingsForLogs(String userId) async {
     try {
       final response = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('settingsForLogs')
           .doc(userId)
@@ -89,7 +89,7 @@ class SettingsForLogs with ChangeNotifier {
       List<String> feelingsInput, String userId) async {
     try {
       await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('settingsForLogs')
           .doc(userId)

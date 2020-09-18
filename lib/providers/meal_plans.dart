@@ -36,7 +36,7 @@ class MealPlan with ChangeNotifier {
     notifyListeners();
     try {
       await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('mealPlans')
           .doc(id)
@@ -85,7 +85,7 @@ class MealPlans with ChangeNotifier {
   Future<void> fetchAndSetMealPlans(String userId) async {
     try {
       final response = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('mealPlans')
           .orderBy("createdAt", descending: true)
@@ -121,7 +121,7 @@ class MealPlans with ChangeNotifier {
   Future<void> addMealPlan(MealPlan planInput, String userId) async {
     try {
       final response = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('mealPlans')
           .add({
@@ -156,7 +156,7 @@ class MealPlans with ChangeNotifier {
     final planIndex = _mealPlans.indexWhere((plan) => plan.id == id);
     if (planIndex >= 0) {
       await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('mealPlans')
           .doc(id)
@@ -182,7 +182,7 @@ class MealPlans with ChangeNotifier {
     notifyListeners();
     try {
       await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('mealPlans')
           .doc(id)

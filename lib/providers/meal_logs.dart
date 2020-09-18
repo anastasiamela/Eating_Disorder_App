@@ -47,7 +47,7 @@ class MealLogs with ChangeNotifier {
   Future<void> fetchAndSetMealLogs(String userId) async {
     try {
       final response = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('mealLogs')
           .orderBy("createdAt", descending: true)
@@ -92,7 +92,7 @@ class MealLogs with ChangeNotifier {
     final timestamp = DateTime.now();
     try {
       final response = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('mealLogs')
           .add({
@@ -146,7 +146,7 @@ class MealLogs with ChangeNotifier {
     if (mealIndex >= 0) {
       final timestamp = DateTime.now();
       await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('mealLogs')
           .doc(id)
@@ -183,7 +183,7 @@ class MealLogs with ChangeNotifier {
     notifyListeners();
     try {
       await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('mealLogs')
           .doc(id)

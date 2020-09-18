@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -28,18 +29,31 @@ class Auth with ChangeNotifier {
         _userId = firebaseUser.uid;
         try {
           final response = await FirebaseFirestore.instance
-              .collection('users')
+              .collection('patients')
               .doc(_userId)
               .get();
           if (response == null) {
-            return;
+            try {
+              final response = await FirebaseFirestore.instance
+                  .collection('clinicians')
+                  .doc(_userId)
+                  .get();
+              if (response == null) {
+                return;
+              }
+              _userRole = 'clinician';
+              notifyListeners();
+              return;
+            } catch (error) {
+              print(error);
+            }
           }
-          final responseData = response.data();
-          _userRole = responseData['role'];
+          _userRole = 'patient';
+          notifyListeners();
+          return;
         } catch (error) {
           print(error);
         }
-        notifyListeners();
       }
     }
   }
@@ -57,16 +71,30 @@ class Auth with ChangeNotifier {
           User currentUser = FirebaseAuth.instance.currentUser;
           _user = currentUser;
           _userId = currentUser.uid;
-          try {
-            await FirebaseFirestore.instance
-                .collection('users')
-                .doc(_userId)
-                .set({
-              'role': role,
-            });
-            _userRole = '';
-          } catch (error) {
-            print(error);
+          if (role == 'patient') {
+            try {
+              await FirebaseFirestore.instance
+                  .collection('patients')
+                  .doc(_userId)
+                  .set({
+                'role': role,
+              });
+              _userRole = role;
+            } catch (error) {
+              print(error);
+            }
+          } else {
+            try {
+              await FirebaseFirestore.instance
+                  .collection('clinicians')
+                  .doc(_userId)
+                  .set({
+                'role': role,
+              });
+              _userRole = role;
+            } catch (error) {
+              print(error);
+            }
           }
           notifyListeners();
         }

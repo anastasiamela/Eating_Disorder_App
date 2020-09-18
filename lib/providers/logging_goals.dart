@@ -23,7 +23,7 @@ class LoggingGoals with ChangeNotifier {
   Future<void> fetchAndSetLoggingGoalsSettings(String userId) async {
     try {
       final response = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('loggingGoalsSettings')
           .doc(userId)
@@ -47,7 +47,7 @@ class LoggingGoals with ChangeNotifier {
       int mainMealsWeekendInput, int snacksWeekendInput, String userId) async {
     try {
       await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('loggingGoalsSettings')
           .doc(userId)

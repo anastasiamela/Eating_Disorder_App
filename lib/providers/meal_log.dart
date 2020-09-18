@@ -52,7 +52,7 @@ class MealLog with ChangeNotifier {
     notifyListeners();
     try {
       await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('mealLogs')
           .doc(id)

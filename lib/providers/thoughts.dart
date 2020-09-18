@@ -34,7 +34,7 @@ class Thought with ChangeNotifier {
     notifyListeners();
     try {
       await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('thoughts')
           .doc(id)
@@ -78,7 +78,7 @@ class Thoughts with ChangeNotifier {
   Future<void> fetchAndSetThoughts(String userId) async {
     try {
       final response = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('thoughts')
           .orderBy("createdAt", descending: true)
@@ -114,7 +114,7 @@ class Thoughts with ChangeNotifier {
     final timestamp = DateTime.now();
     try {
       final response = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('thoughts')
           .add({
@@ -151,7 +151,7 @@ class Thoughts with ChangeNotifier {
     notifyListeners();
     try {
       await FirebaseFirestore.instance
-          .collection('users')
+          .collection('patients')
           .doc(userId)
           .collection('thoughts')
           .doc(id)
