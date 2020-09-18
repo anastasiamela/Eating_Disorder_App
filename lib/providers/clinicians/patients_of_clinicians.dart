@@ -22,7 +22,7 @@ class PatientsOfClinician with ChangeNotifier {
       final response = await FirebaseFirestore.instance
           .collection('clinicians')
           .doc(clinicianId)
-          .collection('patients')
+          .collection('myPatients')
           .orderBy("createdAt", descending: true)
           .get();
       final extractedData = response.docs;
@@ -53,7 +53,7 @@ class PatientsOfClinician with ChangeNotifier {
       await FirebaseFirestore.instance
           .collection('clinicians')
           .doc(clinicianId)
-          .collection('patients')
+          .collection('myPatients')
           .doc(patientInput.patientId)
           .set({
         'patientId': patientInput.patientId,
@@ -80,7 +80,7 @@ class PatientsOfClinician with ChangeNotifier {
       await FirebaseFirestore.instance
           .collection('clinicians')
           .doc(clinicianId)
-          .collection('patients')
+          .collection('myPatients')
           .doc(id)
           .delete();
       existingPatient = null;

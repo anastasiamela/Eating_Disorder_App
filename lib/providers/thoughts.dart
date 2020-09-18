@@ -163,4 +163,38 @@ class Thoughts with ChangeNotifier {
       throw HttpException('Could not delete the thought log.');
     }
   }
+
+  Future<void> fetchAndSetThoughtsOfPatients(List<String> patients) async {
+    try {
+      final response = await FirebaseFirestore.instance
+          .collectionGroup('thoughts')
+          .where('userId', whereIn: patients)
+          .orderBy("createdAt", descending: true)
+          .get();
+      final extractedData = response.docs;
+
+      if (extractedData == null) {
+        return;
+      }
+      final List<Thought> loadedThoughts = [];
+      extractedData.forEach((thought) {
+        var thoughtData = thought.data();
+        loadedThoughts.add(
+          Thought(
+            id: thought.id,
+            userId: thoughtData['userId'],
+            date: DateTime.parse(thoughtData['date']),
+            thought: thoughtData['thought'],
+            isFavorite: thoughtData['isFavorite'],
+            isBackLog: thoughtData['isBackLog'],
+            dateTimeOfLog: DateTime.parse(thoughtData['dateTimeOfLog']),
+          ),
+        );
+      });
+      _thoughts = loadedThoughts;
+      notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
+  }
 }

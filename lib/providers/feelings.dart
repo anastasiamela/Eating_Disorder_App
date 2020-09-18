@@ -178,4 +178,40 @@ class Feelings with ChangeNotifier {
       throw HttpException('Could not delete the feeling log.');
     }
   }
+
+  Future<void> fetchAndSetFeelingsOfPatients(List<String> patients) async {
+    try {
+      final response = await FirebaseFirestore.instance
+          .collectionGroup('feelings')
+          .where('userId', whereIn: patients)
+          .orderBy("createdAt", descending: true)
+          .get();
+      final extractedData = response.docs;
+      print(extractedData);
+      if (extractedData == null) {
+        return;
+      }
+      final List<Feeling> loadedFeelings = [];
+      extractedData.forEach((feeling) {
+        var feelingData = feeling.data();
+        loadedFeelings.add(
+          Feeling(
+            id: feeling.id,
+            userId: feelingData['userId'],
+            date: DateTime.parse(feelingData['date']),
+            overallFeeling: feelingData['overallFeeling'],
+            moods: new List<String>.from(feelingData['moods']),
+            thoughts: feelingData['thoughts'],
+            isFavorite: feelingData['isFavorite'],
+            isBackLog: feelingData['isBackLog'],
+            dateTimeOfLog: DateTime.parse(feelingData['dateTimeOfLog']),
+          ),
+        );
+      });
+      _feelings = loadedFeelings;
+      notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
+  }
 }

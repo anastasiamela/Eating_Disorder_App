@@ -195,4 +195,48 @@ class MealLogs with ChangeNotifier {
       throw HttpException('Could not delete the meal log.');
     }
   }
+
+  Future<void> fetchAndSetMealLogsOfPatients(List<String> patients) async{
+    try {
+      final response = await FirebaseFirestore.instance
+          .collectionGroup('mealLogs')
+          .where('userId', whereIn: patients)
+          .orderBy("createdAt", descending: true)
+          .get();
+      final extractedData = response.docs;
+
+      if (extractedData == null) {
+        return;
+      }
+      final List<MealLog> loadedMealLogs = [];
+      extractedData.forEach((mealLog) {
+        var mealData = mealLog.data();
+        loadedMealLogs.add(MealLog(
+          id: mealLog.id,
+          userId: mealData['userId'],
+          date: DateTime.parse(mealData['date']),
+          skip: mealData['skip'],
+          feelingOverall: mealData['feelingOverall'],
+          mealType: mealData['mealType'],
+          mealCompany: mealData['mealCompany'],
+          mealLocation: mealData['mealLocation'],
+          mealPhoto: mealData['mealPhoto'],
+          mealDescription: mealData['mealDescription'],
+          mealPortion: mealData['mealPortion'],
+          thoughts: mealData['thoughts'],
+          skippingReason: mealData['skippingReason'],
+          isBackLog: mealData['isBackLog'],
+          dateTimeOfLog: DateTime.parse(mealData['dateTimeOfLog']),
+          dateTimeOfLastUpdate:
+              DateTime.parse(mealData['dateTimeOfLastUpdate']),
+          isFavorite: mealData['isFavorite'],
+        ));
+      });
+      _meals = loadedMealLogs;
+      notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
+
+  }
 }

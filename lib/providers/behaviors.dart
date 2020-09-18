@@ -221,4 +221,47 @@ class Behaviors with ChangeNotifier {
       throw HttpException('Could not delete the behavior log.');
     }
   }
+
+  Future<void> fetchAndSetBehaviorsOfPatients(List<String> patients) async {
+    try {
+      final response = await FirebaseFirestore.instance
+          .collectionGroup('behaviors')
+          .where('userId', whereIn: patients)
+          .orderBy("createdAt", descending: true)
+          .get();
+      final extractedData = response.docs;
+      if (extractedData == null) {
+        return;
+      }
+      final List<Behavior> loadedBehaviors = [];
+      extractedData.forEach((behavior) {
+        var behaviorData = behavior.data();
+        loadedBehaviors.add(
+          Behavior(
+            id: behavior.id,
+            userId: behaviorData['userId'],
+            date: DateTime.parse(behaviorData['date']),
+            behaviorsList: new List<String>.from(behaviorData['behaviorsList']),
+            restrictGrade: behaviorData['restrictGrade'],
+            bingeGrade: behaviorData['bingeGrade'],
+            purgeGrade: behaviorData['purgeGrade'],
+            exerciseGrade: behaviorData['exerciseGrade'],
+            laxativesNumber: behaviorData['laxativesNumber'],
+            dietPillsNumber: behaviorData['dietPillsNumber'],
+            drinksNumber: behaviorData['drinksNumber'],
+            bodyCheckType: new List<String>.from(behaviorData['bodyCheckType']),
+            bodyAvoidType: new List<String>.from(behaviorData['bodyAvoidType']),
+            thoughts: behaviorData['thoughts'],
+            isFavorite: behaviorData['isFavorite'],
+            isBackLog: behaviorData['isBackLog'],
+            dateTimeOfLog: DateTime.parse(behaviorData['dateTimeOfLog']),
+          ),
+        );
+      });
+      _behaviors = loadedBehaviors;
+      notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
+  }
 }

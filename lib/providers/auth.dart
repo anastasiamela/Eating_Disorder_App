@@ -32,13 +32,13 @@ class Auth with ChangeNotifier {
               .collection('patients')
               .doc(_userId)
               .get();
-          if (response == null) {
+          if (response.data() == null) {
             try {
               final response = await FirebaseFirestore.instance
                   .collection('clinicians')
                   .doc(_userId)
                   .get();
-              if (response == null) {
+              if (response.data() == null) {
                 return;
               }
               _userRole = 'clinician';
