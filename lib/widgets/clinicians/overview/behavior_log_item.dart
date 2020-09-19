@@ -36,7 +36,15 @@ class BehaviorLogItem extends StatelessWidget {
           child: Column(
             children: [
               ListTile(
-                title: Text(patient.patientId),
+                leading: CircleAvatar(
+                  radius: 20.0,
+                  backgroundImage: NetworkImage(
+                    patient.patientPhoto,
+                  ),
+                  backgroundColor: Colors.transparent,
+                ),
+                title: Text(patient.patientName),
+                subtitle: Text(patient.patientEmail),
               ),
               ListTile(
                 title: Text('$time  Behaviors'),

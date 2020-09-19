@@ -37,9 +37,18 @@ class MealLogItem extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                title: Text(patient.patientId),
+                leading: CircleAvatar(
+                  radius: 20.0,
+                  backgroundImage: NetworkImage(
+                    patient.patientPhoto,
+                  ),
+                  backgroundColor: Colors.transparent,
+                ),
+                title: Text(patient.patientName),
+                subtitle: Text(patient.patientEmail),
               ),
               ListTile(
                 title: (meal.skip)

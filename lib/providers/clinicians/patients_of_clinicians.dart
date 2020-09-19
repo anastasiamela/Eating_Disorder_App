@@ -5,7 +5,15 @@ import '../../models/http_exception.dart';
 
 class PatientOfClinician with ChangeNotifier {
   final String patientId;
-  PatientOfClinician({this.patientId});
+  final String patientName;
+  final String patientPhoto;
+  final String patientEmail;
+  PatientOfClinician({
+    @required this.patientId,
+    @required this.patientName,
+    @required this.patientPhoto,
+    @required this.patientEmail,
+  });
 }
 
 class PatientsOfClinician with ChangeNotifier {
@@ -48,6 +56,9 @@ class PatientsOfClinician with ChangeNotifier {
         loadedPatients.add(
           PatientOfClinician(
             patientId: patientData['patientId'],
+            patientName: patientData['patientName'],
+            patientPhoto: patientData['patientPhoto'],
+            patientEmail: patientData['patientEmail'],
           ),
         );
       });
@@ -71,10 +82,16 @@ class PatientsOfClinician with ChangeNotifier {
           .doc(patientInput.patientId)
           .set({
         'patientId': patientInput.patientId,
+        'patientName': patientInput.patientName,
+        'patientPhoto': patientInput.patientPhoto,
         'createdAt': Timestamp.fromDate(timestamp),
+        'patientEmail': patientInput.patientEmail,
       });
       final newPatient = PatientOfClinician(
         patientId: patientInput.patientId,
+        patientName: patientInput.patientName,
+        patientPhoto: patientInput.patientPhoto,
+        patientEmail: patientInput.patientEmail,
       );
       _patients.add(newPatient);
       notifyListeners();

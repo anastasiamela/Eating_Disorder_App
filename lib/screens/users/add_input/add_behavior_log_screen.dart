@@ -85,10 +85,10 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
   DateTime _selectedDate;
 
   var _isInit = true;
-  
+
   @override
   void didChangeDependencies() {
-    if (_isInit) { 
+    if (_isInit) {
       _behaviorTypes
           .forEach((behavior) => _behaviorsSelected[behavior] = false);
       _inputBehaviors = [];
@@ -204,81 +204,80 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
         ],
       ),
       body: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Form(
-                key: _form,
-                child: ListView(
-                  children: [
-                    _buildIsBacklogIinput(),
-                    if (_isBackLog) _buildDateBackLogInput(),
-                    _buildTimeInput(),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Divider(
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                        Text(
-                          ' Behaviors ',
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w600,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                        Expanded(
-                          child: Divider(
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    ...(_behaviorTypes
-                        .map((behaviorType) =>
-                            _buildBehaviorTypeWidget(behaviorType))
-                        .toList()),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Divider(
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                        Text(
-                          ' Thoughts ',
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w600,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                        Expanded(
-                          child: Divider(
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    _buildThoughtsInput(),
-                  ],
-                ),
+        padding: const EdgeInsets.all(8),
+        child: Form(
+          key: _form,
+          child: ListView(
+            children: [
+              _buildIsBacklogIinput(),
+              if (_isBackLog) _buildDateBackLogInput(),
+              _buildTimeInput(),
+              SizedBox(
+                height: 5,
               ),
-            ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Divider(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  Text(
+                    ' Behaviors ',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  Expanded(
+                    child: Divider(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              ...(_behaviorTypes
+                  .map((behaviorType) => _buildBehaviorTypeWidget(behaviorType))
+                  .toList()),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Divider(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  Text(
+                    ' Thoughts ',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  Expanded(
+                    child: Divider(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              _buildThoughtsInput(),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -514,17 +513,10 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
       initialTime: TimeOfDay.now(),
     );
     if (t != null) {
-      if (!_isBackLog) {
-        setState(() {
-          _selectedTime = t;
-          _hasSelectedTime = false;
-        });
-      } else {
-        setState(() {
-          _selectedTime = t;
-          _hasSelectedTime = true;
-        });
-      }
+      setState(() {
+        _selectedTime = t;
+        _hasSelectedTime = true;
+      });
     }
   }
 
