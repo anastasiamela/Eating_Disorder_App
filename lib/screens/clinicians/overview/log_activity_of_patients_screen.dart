@@ -55,6 +55,30 @@ class _LogActivityOfPatientsScreenState
     super.dispose();
   }
 
+  Future<void> _refreshScreen(BuildContext context) async {
+    print('aaaaaaaaaaa');
+    setState(() {
+      _isLoading = true;
+    });
+    final clinicianId = Provider.of<Auth>(context, listen: false).userId;
+    await Provider.of<PatientsOfClinician>(context, listen: false)
+        .fetchAndSetPatients(clinicianId);
+    List<String> patients =
+        Provider.of<PatientsOfClinician>(context, listen: false)
+            .getPatientsIds();
+    await Provider.of<Thoughts>(context, listen: false)
+        .fetchAndSetThoughtsOfPatients(patients);
+    await Provider.of<Feelings>(context, listen: false)
+        .fetchAndSetFeelingsOfPatients(patients);
+    await Provider.of<Behaviors>(context, listen: false)
+        .fetchAndSetBehaviorsOfPatients(patients);
+    await Provider.of<MealLogs>(context, listen: false)
+        .fetchAndSetMealLogsOfPatients(patients);
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   void didChangeDependencies() {
     if (_isInit) {
@@ -66,11 +90,14 @@ class _LogActivityOfPatientsScreenState
           .fetchAndSetPatients(clinicianId)
           .then((_) {
         List<String> patients =
-            Provider.of<PatientsOfClinician>(context, listen: false).getPatientsIds();
+            Provider.of<PatientsOfClinician>(context, listen: false)
+                .getPatientsIds();
         print('then');
         print(patients);
-        Provider.of<Thoughts>(context, listen: false).fetchAndSetThoughtsOfPatients(patients);
-        Provider.of<Feelings>(context, listen: false).fetchAndSetFeelingsOfPatients(patients);
+        Provider.of<Thoughts>(context, listen: false)
+            .fetchAndSetThoughtsOfPatients(patients);
+        Provider.of<Feelings>(context, listen: false)
+            .fetchAndSetFeelingsOfPatients(patients);
         Provider.of<Behaviors>(context, listen: false)
             .fetchAndSetBehaviorsOfPatients(patients);
         Provider.of<MealLogs>(context, listen: false)
@@ -81,21 +108,6 @@ class _LogActivityOfPatientsScreenState
           });
         });
       });
-
-      // List<String> patients =
-      //     Provider.of<PatientsOfClinician>(context).getPatientsIds();
-      // print('then');
-      // print(patients);
-      // Provider.of<Thoughts>(context).fetchAndSetThoughtsOfPatients(patients);
-      // Provider.of<Feelings>(context).fetchAndSetFeelingsOfPatients(patients);
-      // Provider.of<Behaviors>(context).fetchAndSetBehaviorsOfPatients(patients);
-      // Provider.of<MealLogs>(context)
-      //     .fetchAndSetMealLogsOfPatients(patients)
-      //     .then((_) {
-      //   setState(() {
-      //     _isLoading = false;
-      //   });
-      // });
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -108,28 +120,34 @@ class _LogActivityOfPatientsScreenState
         title: (selectedIndex == 0)
             ? Text('${tabsList[selectedIndex].text} logs')
             : Text('${tabsList[selectedIndex].text}'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: () => _refreshScreen(context),
+          ),
+        ],
         bottom: TabBar(
           tabs: tabsList,
           controller: _tabController,
           isScrollable: true,
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: <Widget>[
-          _isLoading
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : LogActivityList(selectedIndex, tabsList[selectedIndex].text),
-          LogActivityList(selectedIndex, tabsList[selectedIndex].text),
-          LogActivityList(selectedIndex, tabsList[selectedIndex].text),
-          LogActivityList(selectedIndex, tabsList[selectedIndex].text),
-          LogActivityList(selectedIndex, tabsList[selectedIndex].text),
-          LogActivityList(selectedIndex, tabsList[selectedIndex].text),
-          LogActivityList(selectedIndex, tabsList[selectedIndex].text),
-        ],
-      ),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : TabBarView(
+              controller: _tabController,
+              children: <Widget>[
+                LogActivityList(selectedIndex, tabsList[selectedIndex].text),
+                LogActivityList(selectedIndex, tabsList[selectedIndex].text),
+                LogActivityList(selectedIndex, tabsList[selectedIndex].text),
+                LogActivityList(selectedIndex, tabsList[selectedIndex].text),
+                LogActivityList(selectedIndex, tabsList[selectedIndex].text),
+                LogActivityList(selectedIndex, tabsList[selectedIndex].text),
+                LogActivityList(selectedIndex, tabsList[selectedIndex].text),
+              ],
+            ),
       drawer: AppDrawerClinicians(),
     );
   }
