@@ -10,8 +10,9 @@ import '../../../providers/clinicians/patients_of_clinicians.dart';
 
 class MealLogItem extends StatelessWidget {
   final String subtitleType;
+  final bool showPatientInfo;
 
-  MealLogItem(this.subtitleType);
+  MealLogItem(this.subtitleType, this.showPatientInfo);
 
   @override
   Widget build(BuildContext context) {
@@ -38,17 +39,18 @@ class MealLogItem extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              ListTile(
-                leading: CircleAvatar(
-                  radius: 20.0,
-                  backgroundImage: NetworkImage(
-                    patient.patientPhoto,
+              if (showPatientInfo)
+                ListTile(
+                  leading: CircleAvatar(
+                    radius: 20.0,
+                    backgroundImage: NetworkImage(
+                      patient.patientPhoto,
+                    ),
+                    backgroundColor: Colors.transparent,
                   ),
-                  backgroundColor: Colors.transparent,
+                  title: Text(patient.patientName),
+                  subtitle: Text(patient.patientEmail),
                 ),
-                title: Text(patient.patientName),
-                subtitle: Text(patient.patientEmail),
-              ),
               ListTile(
                 title: (meal.skip)
                     ? Text('SKIP  ${meal.mealType}')

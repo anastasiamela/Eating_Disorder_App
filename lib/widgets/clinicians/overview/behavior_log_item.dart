@@ -7,8 +7,9 @@ import '../../../providers/clinicians/patients_of_clinicians.dart';
 
 class BehaviorLogItem extends StatelessWidget {
   final String subtitleType;
+  final bool showPatientInfo;
 
-  BehaviorLogItem(this.subtitleType);
+  BehaviorLogItem(this.subtitleType, this.showPatientInfo);
 
   @override
   Widget build(BuildContext context) {
@@ -35,17 +36,18 @@ class BehaviorLogItem extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              ListTile(
-                leading: CircleAvatar(
-                  radius: 20.0,
-                  backgroundImage: NetworkImage(
-                    patient.patientPhoto,
+              if (showPatientInfo)
+                ListTile(
+                  leading: CircleAvatar(
+                    radius: 20.0,
+                    backgroundImage: NetworkImage(
+                      patient.patientPhoto,
+                    ),
+                    backgroundColor: Colors.transparent,
                   ),
-                  backgroundColor: Colors.transparent,
+                  title: Text(patient.patientName),
+                  subtitle: Text(patient.patientEmail),
                 ),
-                title: Text(patient.patientName),
-                subtitle: Text(patient.patientEmail),
-              ),
               ListTile(
                 title: Text('$time  Behaviors'),
                 subtitle: Text(subtitleText),

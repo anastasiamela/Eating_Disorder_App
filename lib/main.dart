@@ -20,6 +20,8 @@ import './screens/users/settings_users/settings_for_logs_screen.dart';
 import './screens/users/settings_users/general_settings_users_screen.dart';
 import './screens/clinicians/overview/log_activity_of_patients_screen.dart';
 import './screens/clinicians/overview/my_patients_screen.dart';
+import './screens/clinicians/overview/one_patient_logs_tabs_screen.dart';
+
 
 import './providers/meal_logs.dart';
 import './providers/logging_goals.dart';
@@ -103,6 +105,8 @@ class MyApp extends StatelessWidget {
                   GeneralSettingsUsersScreen.routeName: (ctx) => GeneralSettingsUsersScreen(),
                   LogActivityOfPatientsScreen.routeName: (ctx) => LogActivityOfPatientsScreen(),
                   MyPatientsScreen.routeName: (ctx) => MyPatientsScreen(),
+                  //OnePatientLogsScreen.routeName: (ctx) => OnePatientLogsScreen(),
+                  OnePatientLogsTabsScreen.routeName: (ctx) => OnePatientLogsTabsScreen()
                 },
               ),
             ),

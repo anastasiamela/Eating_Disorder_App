@@ -17,8 +17,9 @@ import '../../clinicians/overview/behavior_log_item.dart';
 class LogActivityList extends StatelessWidget {
   final int selectedCategoryIndex;
   final String selectedCategory;
+  final bool showPatientInfo;
 
-  LogActivityList(this.selectedCategoryIndex, this.selectedCategory);
+  LogActivityList(this.selectedCategoryIndex, this.selectedCategory, this.showPatientInfo);
 
   List<dynamic> sort(List<dynamic> list) {
     list.sort(
@@ -129,22 +130,22 @@ class LogActivityList extends StatelessWidget {
               if (obj is MealLog)
                 return ChangeNotifierProvider.value(
                   value: obj,
-                  child: MealLogItem(selectedCategory),
+                  child: MealLogItem(selectedCategory, showPatientInfo),
                 );
               if (obj is Thought)
                 return ChangeNotifierProvider.value(
                   value: obj,
-                  child: ThoughtItem(),
+                  child: ThoughtItem(showPatientInfo),
                 );
               if (obj is Feeling)
                 return ChangeNotifierProvider.value(
                   value: obj,
-                  child: FeelingLogItem(selectedCategory),
+                  child: FeelingLogItem(selectedCategory, showPatientInfo),
                 );
               if (obj is Behavior)
                 return ChangeNotifierProvider.value(
                   value: obj,
-                  child: BehaviorLogItem(selectedCategory),
+                  child: BehaviorLogItem(selectedCategory, showPatientInfo),
                 );
               return null;
             },

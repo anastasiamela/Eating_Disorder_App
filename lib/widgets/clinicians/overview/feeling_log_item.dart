@@ -9,8 +9,9 @@ import '../../../models/emoji_view.dart';
 
 class FeelingLogItem extends StatelessWidget {
   final String subtitleType;
+  final bool showPatientInfo;
 
-  FeelingLogItem(this.subtitleType);
+  FeelingLogItem(this.subtitleType, this.showPatientInfo);
   @override
   Widget build(BuildContext context) {
     final feeling = Provider.of<Feeling>(context, listen: false);
@@ -32,17 +33,18 @@ class FeelingLogItem extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              ListTile(
-                leading: CircleAvatar(
-                  radius: 20.0,
-                  backgroundImage: NetworkImage(
-                    patient.patientPhoto,
+              if (showPatientInfo)
+                ListTile(
+                  leading: CircleAvatar(
+                    radius: 20.0,
+                    backgroundImage: NetworkImage(
+                      patient.patientPhoto,
+                    ),
+                    backgroundColor: Colors.transparent,
                   ),
-                  backgroundColor: Colors.transparent,
+                  title: Text(patient.patientName),
+                  subtitle: Text(patient.patientEmail),
                 ),
-                title: Text(patient.patientName),
-                subtitle: Text(patient.patientEmail),
-              ),
               ListTile(
                 title: Text('$time  Feelings'),
                 subtitle: (subtitleType == 'Thoughts')

@@ -6,6 +6,8 @@ import '../../../providers/thoughts.dart';
 import '../../../providers/clinicians/patients_of_clinicians.dart';
 
 class ThoughtItem extends StatelessWidget {
+  final bool showPatientInfo;
+  ThoughtItem(this.showPatientInfo);
   @override
   Widget build(BuildContext context) {
     final thought = Provider.of<Thought>(context, listen: false);
@@ -19,17 +21,18 @@ class ThoughtItem extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              ListTile(
-                leading: CircleAvatar(
-                  radius: 20.0,
-                  backgroundImage: NetworkImage(
-                    patient.patientPhoto,
+              if (showPatientInfo)
+                ListTile(
+                  leading: CircleAvatar(
+                    radius: 20.0,
+                    backgroundImage: NetworkImage(
+                      patient.patientPhoto,
+                    ),
+                    backgroundColor: Colors.transparent,
                   ),
-                  backgroundColor: Colors.transparent,
+                  title: Text(patient.patientName),
+                  subtitle: Text(patient.patientEmail),
                 ),
-                title: Text(patient.patientName),
-                subtitle: Text(patient.patientEmail),
-              ),
               ListTile(
                 title: Text('$time  Thoughts'),
                 subtitle: Text(thought.thought),
