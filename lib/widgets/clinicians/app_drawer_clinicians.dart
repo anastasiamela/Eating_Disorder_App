@@ -6,11 +6,12 @@ import '../../providers/auth.dart';
 class AppDrawerClinicians extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final displayName = Provider.of<Auth>(context).userName;
     return Drawer(
       child: ListView(
         children: [
           AppBar(
-            title: Text('Hello Friend!'),
+            title: Text('Hello $displayName!'),
             automaticallyImplyLeading: false,
           ),
           Divider(),

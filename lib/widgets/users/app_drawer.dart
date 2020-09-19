@@ -14,11 +14,12 @@ import '../../providers/auth.dart';
 class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final displayName = Provider.of<Auth>(context).userName;
     return Drawer(
       child: ListView(
         children: <Widget>[
           AppBar(
-            title: Text('Hello Friend!'),
+            title: Text('Hello $displayName!'),
             automaticallyImplyLeading: false,
           ),
           Divider(),
@@ -90,7 +91,8 @@ class AppDrawer extends StatelessWidget {
             title: Text('Settings'),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pushNamed(GeneralSettingsUsersScreen.routeName);
+              Navigator.of(context)
+                  .pushNamed(GeneralSettingsUsersScreen.routeName);
             },
           ),
           Divider(),
