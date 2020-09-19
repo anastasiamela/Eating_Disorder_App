@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../widgets/curved_list_item.dart';
+import './overview/log_activity_of_patients_screen.dart';
 
 class FirstScreenClinician extends StatelessWidget {
   @override
@@ -51,7 +52,9 @@ class FirstScreenClinician extends StatelessWidget {
             child: Column(
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(ctx).pushReplacementNamed(LogActivityOfPatientsScreen.routeName);
+                  },
                   child: CurvedListItem(
                     title: 'Log Activity',
                     color: Colors.teal[100],

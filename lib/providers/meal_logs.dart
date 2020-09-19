@@ -233,6 +233,7 @@ class MealLogs with ChangeNotifier {
         ));
       });
       _meals = loadedMealLogs;
+      print(_meals);
       notifyListeners();
     } catch (error) {
       throw (error);

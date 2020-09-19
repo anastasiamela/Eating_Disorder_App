@@ -36,33 +36,34 @@ class CurvedListItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Icon(
-                  icon,
-                  color: Colors.teal[900],
-                  size: 30,
-                ),
-                SizedBox(
-                  width: 70,
-                ),
-                Text(
-                  title,
-                  style: TextStyle(
-                      color: Colors.teal[900],
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Icon(
-                  Icons.navigate_next,
-                  color: Colors.teal[900],
-                  size: 40,
-                ),
-              ],
+            Container(
+              width: MediaQuery.of(context).size.width - 150,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Icon(
+                    icon,
+                    color: Colors.teal[900],
+                    size: 30,
+                  ),
+                  Expanded(child: SizedBox()),
+                  Text(
+                    title,
+                    style: TextStyle(
+                        color: Colors.teal[900],
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Icon(
+                    Icons.navigate_next,
+                    color: Colors.teal[900],
+                    size: 40,
+                  ),
+                ],
+              ),
             ),
           ],
         ),
