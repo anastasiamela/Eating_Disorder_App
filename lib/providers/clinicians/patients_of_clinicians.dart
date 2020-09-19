@@ -17,6 +17,10 @@ class PatientsOfClinician with ChangeNotifier {
     return [..._patients];
   }
 
+  PatientOfClinician findPatientById(String id) {
+    return _patients.firstWhere((patient) => patient.patientId == id);
+  }
+
   List<String> getPatientsIds() {
     List<String> list = [];
     _patients.forEach((patient) => list.add(patient.patientId));

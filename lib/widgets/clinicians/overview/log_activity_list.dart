@@ -9,10 +9,10 @@ import '../../../providers/thoughts.dart';
 import '../../../providers/feelings.dart';
 import '../../../providers/behaviors.dart';
 
-import '../../users/overview/meal_log_item.dart';
-import '../../users/overview/thought_item.dart';
-import '../../users/overview/feeling_log_item.dart';
-import '../../users/overview/behavior_log_item.dart';
+import '../../clinicians/overview/meal_log_item.dart';
+import '../../clinicians/overview/thought_item.dart';
+import '../../clinicians/overview/feeling_log_item.dart';
+import '../../clinicians/overview/behavior_log_item.dart';
 
 class LogActivityList extends StatelessWidget {
   final int selectedCategoryIndex;
@@ -49,7 +49,7 @@ class LogActivityList extends StatelessWidget {
       displayList = sort([...meals, ...thoughts, ...feelings, ...behaviors]);
       messageEmpty = 'There are no logs of your patients.';
     } else if (selectedCategoryIndex == 1) {
-      meals = mealsData.favoriteMeals;
+      meals = mealsData.meals;
       displayList = sort([...meals]);
       messageEmpty = 'There are no meal logs of your patients.';
     } else if (selectedCategoryIndex == 2) {
