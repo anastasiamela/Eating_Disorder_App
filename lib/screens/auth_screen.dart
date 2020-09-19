@@ -71,13 +71,39 @@ class _AuthCardState extends State<AuthCard> {
     'password': '',
   };
   String _roleType = 'patient';
+  String _displayName = '';
+  String _photoUrl = '';
+  final _imageUrlController = TextEditingController();
+  final _imageUrlFocusNode = FocusNode();
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
   @override
   void initState() {
+    _imageUrlFocusNode.addListener(_updateImageUrl);
     Provider.of<Auth>(context, listen: false).initializeCurrentUser();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _imageUrlFocusNode.removeListener(_updateImageUrl);
+    _imageUrlController.dispose();
+    _imageUrlFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _updateImageUrl() {
+    if (!_imageUrlFocusNode.hasFocus) {
+      if ((!_imageUrlController.text.startsWith('http') &&
+              !_imageUrlController.text.startsWith('https')) ||
+          (!_imageUrlController.text.endsWith('.png') &&
+              !_imageUrlController.text.endsWith('.jpg') &&
+              !_imageUrlController.text.endsWith('.jpeg'))) {
+        return;
+      }
+      setState(() {});
+    }
   }
 
   void _showErrorDialog(String message) {
@@ -119,10 +145,7 @@ class _AuthCardState extends State<AuthCard> {
         // Sign user up
         print('0');
         await Provider.of<Auth>(context, listen: false).signup(
-          _authData['email'],
-          _authData['password'],
-          _roleType,
-        );
+            _authData['email'], _authData['password'], _roleType, _displayName, _photoUrl);
       }
     } on HttpException catch (error) {
       var errorMessage = 'Authentication failed';
@@ -171,7 +194,7 @@ class _AuthCardState extends State<AuthCard> {
       ),
       elevation: 8.0,
       child: Container(
-        height: _authMode == AuthMode.Signup ? 350 : 260,
+        height: _authMode == AuthMode.Signup ? 500 : 260,
         constraints:
             BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 320 : 260),
         width: deviceSize.width * 0.75,
@@ -221,6 +244,49 @@ class _AuthCardState extends State<AuthCard> {
                             return null;
                           }
                         : null,
+                  ),
+                if (_authMode == AuthMode.Signup)
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Display Name'),
+                    keyboardType: TextInputType.name,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter a name';
+                      }
+                      if (value.length < 3) {
+                        return 'Your name should be at least 3 characters long.';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _displayName = value;
+                    },
+                  ),
+                if (_authMode == AuthMode.Signup)
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Image URL'),
+                    keyboardType: TextInputType.url,
+                    textInputAction: TextInputAction.done,
+                    controller: _imageUrlController,
+                    focusNode: _imageUrlFocusNode,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter an image URL.';
+                      }
+                      if (!value.startsWith('http') &&
+                          !value.startsWith('https')) {
+                        return 'Please enter a valid URL.';
+                      }
+                      if (!value.endsWith('.png') &&
+                          !value.endsWith('.jpg') &&
+                          !value.endsWith('.jpeg')) {
+                        return 'Please enter a valid image URL.';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _photoUrl = value;
+                    },
                   ),
                 if (_authMode == AuthMode.Signup)
                   Row(

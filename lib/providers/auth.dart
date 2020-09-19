@@ -8,12 +8,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Auth with ChangeNotifier {
   String _userId;
   String _userRole;
+  String _userName;
+  String _userPhoto;
+  String _userEmail;
 
   User _user;
 
   User get user => _user;
 
   String get userRole => _userRole;
+
+  String get userName => _userName;
+
+  String get userPhoto => _userPhoto;
+
+  String get userEmail => _userEmail;
+
+  String get userId => _userId;
 
   login(String email, String password) async {
     UserCredential authResult = await FirebaseAuth.instance
@@ -27,6 +38,7 @@ class Auth with ChangeNotifier {
         print("Log In: $firebaseUser");
         _user = firebaseUser;
         _userId = firebaseUser.uid;
+        _userEmail = email;
         try {
           final response = await FirebaseFirestore.instance
               .collection('patients')
@@ -42,6 +54,8 @@ class Auth with ChangeNotifier {
                 return;
               }
               _userRole = 'clinician';
+              _userName = response.data()['displayName'];
+              _userPhoto = response.data()['photo'];
               notifyListeners();
               return;
             } catch (error) {
@@ -49,6 +63,8 @@ class Auth with ChangeNotifier {
             }
           }
           _userRole = 'patient';
+          _userName = response.data()['displayName'];
+          _userPhoto = response.data()['photo'];
           notifyListeners();
           return;
         } catch (error) {
@@ -58,7 +74,8 @@ class Auth with ChangeNotifier {
     }
   }
 
-  signup(String email, String password, String role) async {
+  signup(String email, String password, String role, String displayName,
+      String photoUrl) async {
     try {
       UserCredential authResult = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password)
@@ -71,6 +88,9 @@ class Auth with ChangeNotifier {
           User currentUser = FirebaseAuth.instance.currentUser;
           _user = currentUser;
           _userId = currentUser.uid;
+          _userPhoto = photoUrl;
+          _userName = displayName;
+          _userEmail = email;
           if (role == 'patient') {
             try {
               await FirebaseFirestore.instance
@@ -78,6 +98,9 @@ class Auth with ChangeNotifier {
                   .doc(_userId)
                   .set({
                 'role': role,
+                'displayName': displayName,
+                'photo': photoUrl,
+                'email': email
               });
               _userRole = role;
             } catch (error) {
@@ -90,6 +113,9 @@ class Auth with ChangeNotifier {
                   .doc(_userId)
                   .set({
                 'role': role,
+                'displayName': displayName,
+                'photo': photoUrl,
+                'email': email
               });
               _userRole = role;
             } catch (error) {
@@ -122,9 +148,5 @@ class Auth with ChangeNotifier {
       _userId = firebaseUser.uid;
       notifyListeners();
     }
-  }
-
-  String get userId {
-    return _userId;
   }
 }
