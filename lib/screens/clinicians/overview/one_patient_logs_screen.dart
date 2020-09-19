@@ -1,4 +1,3 @@
-import 'package:disorder_app/providers/clinicians/patients_of_clinicians.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,6 +5,7 @@ import '../../../providers/meal_logs.dart';
 import '../../../providers/thoughts.dart';
 import '../../../providers/feelings.dart';
 import '../../../providers/behaviors.dart';
+import '../../../providers/clinicians/patients_of_clinicians.dart';
 
 import '../../../widgets/clinicians/overview/log_activity_list.dart';
 
