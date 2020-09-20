@@ -37,7 +37,7 @@ class CurvedListItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Container(
-              width: MediaQuery.of(context).size.width - 150,
+              width: MediaQuery.of(context).size.width - 100,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -46,13 +46,17 @@ class CurvedListItem extends StatelessWidget {
                     color: Colors.teal[900],
                     size: 30,
                   ),
-                  Expanded(child: SizedBox()),
-                  Text(
-                    title,
-                    style: TextStyle(
-                        color: Colors.teal[900],
-                        fontSize: 22,
-                        fontWeight: FontWeight.w800),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                          color: Colors.teal[900],
+                          fontSize: 22,
+                          fontWeight: FontWeight.w800),
+                    ),
                   ),
                   SizedBox(
                     width: 20,

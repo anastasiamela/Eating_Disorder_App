@@ -57,7 +57,7 @@ class FirstScreenClinician extends StatelessWidget {
                     Navigator.of(ctx).pushReplacementNamed(LogActivityOfPatientsScreen.routeName);
                   },
                   child: CurvedListItem(
-                    title: 'Log Activity',
+                    title: 'Patients\' Activity',
                     color: Colors.teal[100],
                     nextColor: Colors.teal[200],
                     icon: Icons.note,
