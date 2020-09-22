@@ -45,7 +45,7 @@ class CopingSkills with ChangeNotifier {
       final response = await FirebaseFirestore.instance
           .collection('patients')
           .doc(patientId)
-          .collection('copingSkils')
+          .collection('copingSkills')
           .orderBy("createdAt", descending: true)
           .get();
       final extractedData = response.docs;

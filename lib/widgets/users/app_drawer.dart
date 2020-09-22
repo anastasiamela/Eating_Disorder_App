@@ -9,6 +9,7 @@ import '../../screens/users/logs_screens/general_logs_overview_screen.dart';
 import '../../screens/users/meal_plans.dart/meal_plans_overview_screen.dart';
 import '../../screens/users/settings_users/general_settings_users_screen.dart';
 import '../../screens/users/add_input/add_coping_skill_screen.dart';
+import '../../screens/users/coping_skills/my_coping_skills_screen.dart';
 
 import '../../providers/auth.dart';
 
@@ -59,15 +60,15 @@ class AppDrawer extends StatelessWidget {
               Navigator.of(context).pushNamed(AddCopingSkillScreen.routeName);
             },
           ),
-          // Divider(),
-          // ListTile(
-          //   leading: Icon(Icons.add_comment),
-          //   title: Text('Add thoughts'),
-          //   onTap: () {
-          //     Navigator.of(context).pop();
-          //     Navigator.of(context).pushNamed(AddThoughtScreen.routeName);
-          //   },
-          // ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.add_comment),
+            title: Text('My coping skills'),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(MyCopingSkillsScreen.routeName);
+            },
+          ),
           // Divider(),
           // ListTile(
           //   leading: Icon(Icons.headset),
