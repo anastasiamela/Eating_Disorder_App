@@ -23,6 +23,7 @@ import './screens/clinicians/overview/one_patient_logs_tabs_screen.dart';
 import './screens/users/connect_with_clinician.dart/connect_with_clinician_screen.dart';
 import './screens/users/connect_with_clinician.dart/add_clinician_screen.dart';
 import './screens/clinicians/overview/my_patients_tabs_screen.dart';
+import './screens/users/add_input/add_coping_skill_screen.dart';
 
 import './providers/meal_logs.dart';
 import './providers/logging_goals.dart';
@@ -34,6 +35,7 @@ import './providers/meal_plans.dart';
 import './providers/settings_for_logs.dart';
 import './providers/clinicians/patients_of_clinicians.dart';
 import './providers/requests.dart';
+import './providers/coping_skills.dart';
 
 void main() {
   runApp(MyApp());
@@ -80,6 +82,9 @@ class MyApp extends StatelessWidget {
               ChangeNotifierProvider(
                 create: (_) => Requests(),
               ),
+              ChangeNotifierProvider(
+                create: (_) => CopingSkills(),
+              ),
             ],
             child: Consumer<Auth>(
               builder: (ctx, auth, _) => MaterialApp(
@@ -119,6 +124,8 @@ class MyApp extends StatelessWidget {
                   AddClinicianScreen.routename: (ctx) => AddClinicianScreen(),
                   MyPatientsTabsScreen.routeName: (ctx) =>
                       MyPatientsTabsScreen(),
+                  AddCopingSkillScreen.routeName: (ctx) =>
+                      AddCopingSkillScreen(),
                 },
               ),
             ),
