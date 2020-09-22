@@ -8,6 +8,7 @@ class Request with ChangeNotifier {
   final String patientId;
   final String patientName;
   final String patientEmail;
+  final String patientPhoto;
   final String messageFromPatient;
   final DateTime date;
 
@@ -16,13 +17,14 @@ class Request with ChangeNotifier {
     @required this.patientId,
     @required this.patientName,
     @required this.patientEmail,
+    @required this.patientPhoto,
     @required this.messageFromPatient,
     @required this.date,
   });
 }
 
 class Requests with ChangeNotifier {
-  List<Request> _requests;
+  List<Request> _requests = [];
 
   Requests();
 
@@ -33,6 +35,8 @@ class Requests with ChangeNotifier {
   Request findById(String id) {
     return _requests.firstWhere((request) => request.patientId == id);
   }
+
+  int get requestsLength => _requests.length;
 
   Future<void> fetchAndSetRequestsFromPatients(String clinicianId) async {
     try {
@@ -55,6 +59,7 @@ class Requests with ChangeNotifier {
             patientId: requestData['patientId'],
             patientName: requestData['patientName'],
             patientEmail: requestData['patientEmail'],
+            patientPhoto: requestData['patientPhoto'],
             messageFromPatient: requestData['messageFromPatient'],
             date: DateTime.parse(requestData['date']),
           ),
@@ -83,10 +88,11 @@ class Requests with ChangeNotifier {
         patientId: extractedData['patientId'],
         patientName: extractedData['patientName'],
         patientEmail: extractedData['patientEmail'],
+        patientPhoto: extractedData['patientPhoto'],
         messageFromPatient: extractedData['messageFromPatient'],
         date: DateTime.parse(extractedData['date']),
       );
-      _requests.add(loadedRequest);
+      _requests = [loadedRequest];
       notifyListeners();
     } catch (error) {
       throw (error);
@@ -106,6 +112,7 @@ class Requests with ChangeNotifier {
         'date': requestInput.date.toIso8601String(),
         'patientName': requestInput.patientName,
         'patientEmail': requestInput.patientEmail,
+        'patientPhoto': requestInput.patientPhoto,
         'createdAt': Timestamp.fromDate(timestamp),
       });
       final Request newRequest = Request(
@@ -113,6 +120,7 @@ class Requests with ChangeNotifier {
         patientId: requestInput.patientId,
         patientName: requestInput.patientName,
         patientEmail: requestInput.patientEmail,
+        patientPhoto: requestInput.patientPhoto,
         messageFromPatient: requestInput.messageFromPatient,
         date: requestInput.date,
       );
@@ -124,8 +132,7 @@ class Requests with ChangeNotifier {
     }
   }
 
-  Future<void> deleteRequestFromPatient(
-      String clinicianId, String patientId) async {
+  Future<void> deleteRequestFromPatient(String patientId) async {
     final existingRequestIndex =
         _requests.indexWhere((request) => request.patientId == patientId);
     var existingRequest = _requests[existingRequestIndex];
@@ -140,12 +147,16 @@ class Requests with ChangeNotifier {
     } catch (error) {
       requests.insert(existingRequestIndex, existingRequest);
       notifyListeners();
-      throw HttpException('Could not delete the patient.');
+      throw HttpException('Could not delete the request.');
     }
   }
 
   Future<void> acceptRequestFromPatient(
-      String clinicianId, String patientId) async {
+      {String clinicianId,
+      String patientId,
+      String clinicianEmail,
+      String clinicianName,
+      String clinicianPhoto}) async {
     final timestamp = DateTime.now();
     final existingRequestIndex =
         _requests.indexWhere((request) => request.patientId == patientId);
@@ -158,9 +169,12 @@ class Requests with ChangeNotifier {
           .set({
         'patientId': patientId,
         'clinicianId': clinicianId,
+        'clinicianName': clinicianName,
+        'clinicianEmail': clinicianEmail,
+        'clinicianPhoto': clinicianPhoto,
         'createdAt': Timestamp.fromDate(timestamp),
       });
-      deleteRequestFromPatient(clinicianId, patientId);
+      deleteRequestFromPatient(patientId);
       //then add the patient to my patients
       notifyListeners();
     } catch (error) {

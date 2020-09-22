@@ -9,6 +9,7 @@ import '../../screens/users/add_input/add_thought_screen.dart';
 import '../../screens/users/add_input/add_behavior_log_screen.dart';
 import '../../screens/users/add_input/add_feeling_log_screen.dart';
 import '../../screens/users/settings_users/general_settings_users_screen.dart';
+import '../../screens/users/connect_with_clinician.dart/connect_with_clinician_screen.dart';
 
 class FirstScreenUser extends StatelessWidget {
   @override
@@ -195,11 +196,17 @@ class FirstScreenUser extends StatelessWidget {
                     icon: Icons.note_add,
                   ),
                 ),
-                CurvedListItem(
-                  title: 'Connect',
-                  color: Colors.teal[500],
-                  nextColor: Colors.teal[200],
-                  icon: Icons.people,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(ctx)
+                        .pushReplacementNamed(ConnectWithClinicianScreen.routeName);
+                  },
+                  child: CurvedListItem(
+                    title: 'Connect',
+                    color: Colors.teal[500],
+                    nextColor: Colors.teal[200],
+                    icon: Icons.people,
+                  ),
                 ),
               ],
             ),

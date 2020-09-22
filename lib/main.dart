@@ -21,7 +21,8 @@ import './screens/users/settings_users/general_settings_users_screen.dart';
 import './screens/clinicians/overview/log_activity_of_patients_screen.dart';
 import './screens/clinicians/overview/my_patients_screen.dart';
 import './screens/clinicians/overview/one_patient_logs_tabs_screen.dart';
-
+import './screens/users/connect_with_clinician.dart/connect_with_clinician_screen.dart';
+import './screens/users/connect_with_clinician.dart/add_clinician_screen.dart';
 
 import './providers/meal_logs.dart';
 import './providers/logging_goals.dart';
@@ -32,6 +33,7 @@ import './providers/auth.dart';
 import './providers/meal_plans.dart';
 import './providers/settings_for_logs.dart';
 import './providers/clinicians/patients_of_clinicians.dart';
+import './providers/requests.dart';
 
 void main() {
   runApp(MyApp());
@@ -75,6 +77,9 @@ class MyApp extends StatelessWidget {
               ChangeNotifierProvider(
                 create: (_) => PatientsOfClinician(),
               ),
+              ChangeNotifierProvider(
+                create: (_) => Requests(),
+              ),
             ],
             child: Consumer<Auth>(
               builder: (ctx, auth, _) => MaterialApp(
@@ -105,8 +110,9 @@ class MyApp extends StatelessWidget {
                   GeneralSettingsUsersScreen.routeName: (ctx) => GeneralSettingsUsersScreen(),
                   LogActivityOfPatientsScreen.routeName: (ctx) => LogActivityOfPatientsScreen(),
                   MyPatientsScreen.routeName: (ctx) => MyPatientsScreen(),
-                  //OnePatientLogsScreen.routeName: (ctx) => OnePatientLogsScreen(),
-                  OnePatientLogsTabsScreen.routeName: (ctx) => OnePatientLogsTabsScreen()
+                  OnePatientLogsTabsScreen.routeName: (ctx) => OnePatientLogsTabsScreen(),
+                  ConnectWithClinicianScreen.routeName: (ctx) => ConnectWithClinicianScreen(),
+                  AddClinicianScreen.routename: (ctx) => AddClinicianScreen(),
                 },
               ),
             ),
