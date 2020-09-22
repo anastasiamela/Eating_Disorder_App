@@ -31,26 +31,30 @@ class MyPatientsScreen extends StatelessWidget {
       drawer: AppDrawerClinicians(),
       body: FutureBuilder(
         future: _refreshScreen(context, clinicianId),
-        builder: (ctx, snapshot) =>
-            snapshot.connectionState == ConnectionState.waiting
-                ? Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : RefreshIndicator(
-                    onRefresh: () => _refreshScreen(context, clinicianId),
-                    child: Consumer<PatientsOfClinician>(
-                      builder: (ctx, patientsData, _) => Padding(
-                        padding: EdgeInsets.all(8),
-                        child: ListView.builder(
-                          itemCount: patientsData.patients.length,
-                          itemBuilder: (_, i) => ChangeNotifierProvider.value(
-                            value: patientsData.patients[i],
-                            child: PatientItem()
+        builder: (ctx, snapshot) => snapshot.connectionState ==
+                ConnectionState.waiting
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : RefreshIndicator(
+                onRefresh: () => _refreshScreen(context, clinicianId),
+                child: Consumer<PatientsOfClinician>(
+                  builder: (ctx, patientsData, _) => Padding(
+                    padding: EdgeInsets.all(8),
+                    child: (patientsData.patients.isEmpty)
+                        ? Center(
+                            child:
+                                Text('There are not patients.'),
+                          )
+                        : ListView.builder(
+                            itemCount: patientsData.patients.length,
+                            itemBuilder: (_, i) => ChangeNotifierProvider.value(
+                                value: patientsData.patients[i],
+                                child: PatientItem()),
                           ),
-                        ),
-                      ),
-                    ),
                   ),
+                ),
+              ),
       ),
     );
   }

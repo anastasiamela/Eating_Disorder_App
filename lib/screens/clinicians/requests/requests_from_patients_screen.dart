@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/auth.dart';
 import '../../../providers/requests.dart';
-//import '../../../providers/clinicians/patients_of_clinicians.dart';
 
 import '../../../widgets/clinicians/app_drawer_clinicians.dart';
 import '../../../widgets/clinicians/requests_from_patients/request_item.dart';
@@ -52,16 +51,20 @@ class _RequestsFromPatientsScreenState
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListView.builder(
-                itemCount: requests.length,
-                itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
-                  value: requests[i],
-                  child: RequestItem(),
+          : (requests.isEmpty)
+              ? Center(
+                  child: Text('There are not requests from patients.'),
+                )
+              : Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView.builder(
+                    itemCount: requests.length,
+                    itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
+                      value: requests[i],
+                      child: RequestItem(),
+                    ),
+                  ),
                 ),
-              ),
-            ),
     );
   }
 }

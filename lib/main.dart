@@ -19,11 +19,10 @@ import './screens/users/add_input/add_meal_plan.dart';
 import './screens/users/settings_users/settings_for_logs_screen.dart';
 import './screens/users/settings_users/general_settings_users_screen.dart';
 import './screens/clinicians/overview/log_activity_of_patients_screen.dart';
-import './screens/clinicians/overview/my_patients_screen.dart';
 import './screens/clinicians/overview/one_patient_logs_tabs_screen.dart';
 import './screens/users/connect_with_clinician.dart/connect_with_clinician_screen.dart';
 import './screens/users/connect_with_clinician.dart/add_clinician_screen.dart';
-import './screens/clinicians/requests/requests_from_patients_screen.dart';
+import './screens/clinicians/overview/my_patients_tabs_screen.dart';
 
 import './providers/meal_logs.dart';
 import './providers/logging_goals.dart';
@@ -107,14 +106,19 @@ class MyApp extends StatelessWidget {
                   MealPlansOverviewScreen.routeName: (ctx) =>
                       MealPlansOverviewScreen(),
                   AddMealPlan.routeName: (ctx) => AddMealPlan(),
-                  SettingsForLogsScreen.routeName: (ctx) => SettingsForLogsScreen(),
-                  GeneralSettingsUsersScreen.routeName: (ctx) => GeneralSettingsUsersScreen(),
-                  LogActivityOfPatientsScreen.routeName: (ctx) => LogActivityOfPatientsScreen(),
-                  MyPatientsScreen.routeName: (ctx) => MyPatientsScreen(),
-                  OnePatientLogsTabsScreen.routeName: (ctx) => OnePatientLogsTabsScreen(),
-                  ConnectWithClinicianScreen.routeName: (ctx) => ConnectWithClinicianScreen(),
+                  SettingsForLogsScreen.routeName: (ctx) =>
+                      SettingsForLogsScreen(),
+                  GeneralSettingsUsersScreen.routeName: (ctx) =>
+                      GeneralSettingsUsersScreen(),
+                  LogActivityOfPatientsScreen.routeName: (ctx) =>
+                      LogActivityOfPatientsScreen(),
+                  OnePatientLogsTabsScreen.routeName: (ctx) =>
+                      OnePatientLogsTabsScreen(),
+                  ConnectWithClinicianScreen.routeName: (ctx) =>
+                      ConnectWithClinicianScreen(),
                   AddClinicianScreen.routename: (ctx) => AddClinicianScreen(),
-                  RequestsFromPatientsScreen.routeName: (ctx) => RequestsFromPatientsScreen(),
+                  MyPatientsTabsScreen.routeName: (ctx) =>
+                      MyPatientsTabsScreen(),
                 },
               ),
             ),
