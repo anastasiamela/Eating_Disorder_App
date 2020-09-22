@@ -108,7 +108,7 @@ class Requests with ChangeNotifier {
           .set({
         'patientId': requestInput.patientId,
         'clinicianId': requestInput.clinicianId,
-        'message': requestInput.messageFromPatient,
+        'messageFromPatient': requestInput.messageFromPatient,
         'date': requestInput.date.toIso8601String(),
         'patientName': requestInput.patientName,
         'patientEmail': requestInput.patientEmail,
@@ -143,8 +143,10 @@ class Requests with ChangeNotifier {
           .collection('requests')
           .doc(patientId)
           .delete();
+      print('1');
       existingRequest = null;
     } catch (error) {
+      print('2');
       requests.insert(existingRequestIndex, existingRequest);
       notifyListeners();
       throw HttpException('Could not delete the request.');
@@ -158,10 +160,6 @@ class Requests with ChangeNotifier {
       String clinicianName,
       String clinicianPhoto}) async {
     final timestamp = DateTime.now();
-    final existingRequestIndex =
-        _requests.indexWhere((request) => request.patientId == patientId);
-    var existingRequest = _requests[existingRequestIndex];
-    _requests.removeAt(existingRequestIndex);
     try {
       await FirebaseFirestore.instance
           .collection('connectedClinician')
@@ -174,12 +172,7 @@ class Requests with ChangeNotifier {
         'clinicianPhoto': clinicianPhoto,
         'createdAt': Timestamp.fromDate(timestamp),
       });
-      deleteRequestFromPatient(patientId);
-      //then add the patient to my patients
-      notifyListeners();
     } catch (error) {
-      requests.insert(existingRequestIndex, existingRequest);
-      notifyListeners();
       throw HttpException('Could not accept the request.');
     }
   }

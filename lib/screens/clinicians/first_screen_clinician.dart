@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../widgets/curved_list_item.dart';
+
 import './overview/log_activity_of_patients_screen.dart';
 import './overview/my_patients_screen.dart';
+import './requests/requests_from_patients_screen.dart';
 
 class FirstScreenClinician extends StatelessWidget {
   @override
@@ -84,9 +86,11 @@ class FirstScreenClinician extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(ctx).pushNamed(RequestsFromPatientsScreen.routeName);
+                  },
                   child: CurvedListItem(
-                    title: 'Meal Plans',
+                    title: 'Requests',
                     color: Colors.teal[400],
                     nextColor: Colors.teal[500],
                     icon: Icons.note_add,

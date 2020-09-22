@@ -23,6 +23,7 @@ import './screens/clinicians/overview/my_patients_screen.dart';
 import './screens/clinicians/overview/one_patient_logs_tabs_screen.dart';
 import './screens/users/connect_with_clinician.dart/connect_with_clinician_screen.dart';
 import './screens/users/connect_with_clinician.dart/add_clinician_screen.dart';
+import './screens/clinicians/requests/requests_from_patients_screen.dart';
 
 import './providers/meal_logs.dart';
 import './providers/logging_goals.dart';
@@ -113,6 +114,7 @@ class MyApp extends StatelessWidget {
                   OnePatientLogsTabsScreen.routeName: (ctx) => OnePatientLogsTabsScreen(),
                   ConnectWithClinicianScreen.routeName: (ctx) => ConnectWithClinicianScreen(),
                   AddClinicianScreen.routename: (ctx) => AddClinicianScreen(),
+                  RequestsFromPatientsScreen.routeName: (ctx) => RequestsFromPatientsScreen(),
                 },
               ),
             ),
