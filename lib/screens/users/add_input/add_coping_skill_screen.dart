@@ -18,8 +18,10 @@ class _AddCopingSkillScreenState extends State<AddCopingSkillScreen> {
   String _inputDescription;
   List<String> _inputFeelings;
   Map<String, bool> _feelingsSelected = new Map();
+  List<String> _feelingsInitiallySelected = [];
   List<String> _inputBehaviors;
   Map<String, bool> _behaviorsSelected = new Map();
+  List<String> _behaviorsInitiallySelected = [];
   List<String> _examples;
 
   List<String> _behaviors = [
@@ -40,16 +42,35 @@ class _AddCopingSkillScreenState extends State<AddCopingSkillScreen> {
   ];
 
   var _isInit = true;
+  var _isEdit = false;
+  CopingSkill entry;
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      _inputName = '';
-      _inputDescription = '';
+      entry = ModalRoute.of(context).settings.arguments as CopingSkill;
       _feelings.forEach((feeling) => _feelingsSelected[feeling] = false);
-      _inputFeelings = [];
       _behaviors.forEach((behavior) => _behaviorsSelected[behavior] = false);
-      _inputBehaviors = [];
-      _examples = [];
+      if (entry == null) {
+        _inputName = '';
+        _inputDescription = '';
+        _inputFeelings = [];
+        _inputBehaviors = [];
+        _examples = [];
+        _isEdit = false;
+      } else {
+        _inputName = entry.name;
+        _inputDescription = entry.description;
+        _feelingsInitiallySelected = entry.autoShowConditionsFeelings;
+        _behaviorsInitiallySelected = entry.autoShowConditionsBehaviors;
+        _behaviorsInitiallySelected
+            .forEach((behavior) => _behaviorsSelected[behavior] = true);
+        _feelingsInitiallySelected
+            .forEach((feeling) => _feelingsSelected[feeling] = true);
+        _inputFeelings = [];
+        _inputBehaviors = [];
+        _examples = entry.examples;
+        _isEdit = true;
+      }
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -68,28 +89,82 @@ class _AddCopingSkillScreenState extends State<AddCopingSkillScreen> {
         .forEach((key, value) => {if (value) _inputFeelings.add(key)});
     final date = DateTime.now();
 
-    CopingSkill input = CopingSkill(
-      id: '',
-      name: _inputName,
-      description: _inputDescription,
-      autoShowConditionsBehaviors: _inputBehaviors,
-      autoShowConditionsFeelings: _inputFeelings,
-      examples: _examples,
-      patientId: patientId,
-      createdBy: patientId,
-      date: date,
-    );
+    if (!_isEdit) {
+      CopingSkill input = CopingSkill(
+        id: '',
+        name: _inputName,
+        description: _inputDescription,
+        autoShowConditionsBehaviors: _inputBehaviors,
+        autoShowConditionsFeelings: _inputFeelings,
+        examples: _examples,
+        patientId: patientId,
+        createdBy: patientId,
+        date: date,
+      );
+      Provider.of<CopingSkills>(context, listen: false).addCopingSkill(input);
+    } else {
+      CopingSkill input = CopingSkill(
+        id: entry.id,
+        name: _inputName,
+        description: _inputDescription,
+        autoShowConditionsBehaviors: _inputBehaviors,
+        autoShowConditionsFeelings: _inputFeelings,
+        examples: _examples,
+        patientId: entry.patientId,
+        createdBy: entry.createdBy,
+        date: date,
+      );
+      Provider.of<CopingSkills>(context, listen: false)
+          .updateCopingSkill(entry.id, input);
+    }
 
-    Provider.of<CopingSkills>(context, listen: false).addCopingSkill(input);
     Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
+    final patientId = Provider.of<Auth>(context, listen: false).userId;
     return Scaffold(
       appBar: AppBar(
         title: Text('Add coping skill'),
         actions: <Widget>[
+          if (_isEdit)
+            IconButton(
+              icon: Icon(
+                Icons.delete,
+                color: Colors.white,
+              ),
+              onPressed: () async {
+                bool response = await showDialog(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: Text('Are you sure?'),
+                    content: Text(
+                      'Do you want to remove the coping skill?',
+                    ),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('No'),
+                        onPressed: () {
+                          Navigator.of(ctx).pop(true);
+                        },
+                      ),
+                      FlatButton(
+                        child: Text('Yes'),
+                        onPressed: () {
+                          Navigator.of(ctx).pop(false);
+                        },
+                      ),
+                    ],
+                  ),
+                );
+                if (!response) {
+                  Provider.of<CopingSkills>(context, listen: false)
+                      .deleteCopingSkill(entry.id, patientId);
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
           IconButton(
             icon: Icon(
               Icons.save,
@@ -119,7 +194,9 @@ class _AddCopingSkillScreenState extends State<AddCopingSkillScreen> {
                           const SizedBox(
                             width: 8.0,
                           ),
-                          (_examples.isEmpty) ? Text('Add an example.') : Text('Add another example.'),
+                          (_examples.isEmpty)
+                              ? Text('Add an example.')
+                              : Text('Add another example.'),
                         ],
                       ),
                       onTap: _add,
@@ -335,6 +412,7 @@ class _AddCopingSkillScreenState extends State<AddCopingSkillScreen> {
     return Card(
       child: ListTile(
         title: TextFormField(
+          initialValue: _inputName,
           decoration: InputDecoration(
               labelText: 'Name',
               labelStyle: TextStyle(fontStyle: FontStyle.italic)),
@@ -354,6 +432,7 @@ class _AddCopingSkillScreenState extends State<AddCopingSkillScreen> {
     return Card(
       child: ListTile(
         title: TextFormField(
+          initialValue: _inputDescription,
           keyboardType: TextInputType.multiline,
           decoration: InputDecoration(
               labelText: 'Description',

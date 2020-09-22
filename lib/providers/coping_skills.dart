@@ -117,6 +117,37 @@ class CopingSkills with ChangeNotifier {
     }
   }
 
+  Future<void> updateCopingSkill(
+      String id, CopingSkill newSkill) async {
+    final skillIndex = _skills.indexWhere((skill) => skill.id == id);
+    if (skillIndex >= 0) {
+      final timestamp = DateTime.now();
+      await FirebaseFirestore.instance
+          .collection('patients')
+          .doc(newSkill.patientId)
+          .collection('copingSkills')
+          .doc(id)
+          .set({
+        'patientId': newSkill.patientId,
+        'createdBy': newSkill.createdBy,
+        'date': newSkill.date.toIso8601String(),
+        'autoShowConditionsBehaviors':
+            FieldValue.arrayUnion(newSkill.autoShowConditionsBehaviors),
+        'autoShowConditionsFeelings':
+            FieldValue.arrayUnion(newSkill.autoShowConditionsFeelings),
+        'examples': FieldValue.arrayUnion(newSkill.examples),
+        'name': newSkill.name,
+        'description': newSkill.description,
+        'createdAt': Timestamp.fromDate(timestamp),
+      });
+      skills[skillIndex] = newSkill;
+      print(newSkill.name);
+      notifyListeners();
+    } else {
+      print('...');
+    }
+  }
+
   Future<void> deleteCopingSkill(String id, String patientId) async {
     final existingSkillIndex = _skills.indexWhere((skill) => skill.id == id);
     var existingSkill = _skills[existingSkillIndex];
