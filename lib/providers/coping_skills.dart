@@ -9,6 +9,7 @@ class CopingSkill with ChangeNotifier {
   final String description;
   final List<String> autoShowConditionsBehaviors;
   final List<String> autoShowConditionsFeelings;
+  final List<String> examples;
   final String patientId;
   final String createdBy;
   final DateTime date;
@@ -19,6 +20,7 @@ class CopingSkill with ChangeNotifier {
     @required this.description,
     @required this.autoShowConditionsBehaviors,
     @required this.autoShowConditionsFeelings,
+    @required this.examples,
     @required this.patientId,
     @required this.createdBy,
     @required this.date,
@@ -63,6 +65,7 @@ class CopingSkills with ChangeNotifier {
                 new List<String>.from(skillData['autoShowConditionsBehaviors']),
             autoShowConditionsFeelings:
                 new List<String>.from(skillData['autoShowConditionsFeelings']),
+            examples: new List<String>.from(skillData['examples']),
             name: skillData['name'],
             description: skillData['description'],
           ),
@@ -83,16 +86,17 @@ class CopingSkills with ChangeNotifier {
           .doc(skillInput.patientId)
           .collection('copingSkills')
           .add({
-            'patientId': skillInput.patientId,
-            'createdBy': skillInput.createdBy,
-            'date': skillInput.date.toIso8601String(),
-            'autoShowConditionsBehaviors':
-                FieldValue.arrayUnion(skillInput.autoShowConditionsBehaviors),
-            'autoShowConditionsFeelings':
-                FieldValue.arrayUnion(skillInput.autoShowConditionsFeelings),
-            'name': skillInput.name,
-            'description': skillInput.description,
-            'createdAt': Timestamp.fromDate(timestamp),
+        'patientId': skillInput.patientId,
+        'createdBy': skillInput.createdBy,
+        'date': skillInput.date.toIso8601String(),
+        'autoShowConditionsBehaviors':
+            FieldValue.arrayUnion(skillInput.autoShowConditionsBehaviors),
+        'autoShowConditionsFeelings':
+            FieldValue.arrayUnion(skillInput.autoShowConditionsFeelings),
+        'examples': FieldValue.arrayUnion(skillInput.examples),
+        'name': skillInput.name,
+        'description': skillInput.description,
+        'createdAt': Timestamp.fromDate(timestamp),
       });
       final newSkill = CopingSkill(
         id: response.id,
@@ -100,6 +104,7 @@ class CopingSkills with ChangeNotifier {
         createdBy: skillInput.createdBy,
         autoShowConditionsBehaviors: skillInput.autoShowConditionsBehaviors,
         autoShowConditionsFeelings: skillInput.autoShowConditionsFeelings,
+        examples: skillInput.examples,
         date: skillInput.date,
         name: skillInput.name,
         description: skillInput.description,
@@ -113,8 +118,7 @@ class CopingSkills with ChangeNotifier {
   }
 
   Future<void> deleteCopingSkill(String id, String patientId) async {
-    final existingSkillIndex =
-        _skills.indexWhere((skill) => skill.id == id);
+    final existingSkillIndex = _skills.indexWhere((skill) => skill.id == id);
     var existingSkill = _skills[existingSkillIndex];
     _skills.removeAt(existingSkillIndex);
     notifyListeners();

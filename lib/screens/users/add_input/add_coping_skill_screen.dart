@@ -20,6 +20,7 @@ class _AddCopingSkillScreenState extends State<AddCopingSkillScreen> {
   Map<String, bool> _feelingsSelected = new Map();
   List<String> _inputBehaviors;
   Map<String, bool> _behaviorsSelected = new Map();
+  List<String> _examples;
 
   List<String> _behaviors = [
     'restrict',
@@ -48,6 +49,7 @@ class _AddCopingSkillScreenState extends State<AddCopingSkillScreen> {
       _inputFeelings = [];
       _behaviors.forEach((behavior) => _behaviorsSelected[behavior] = false);
       _inputBehaviors = [];
+      _examples = [];
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -72,6 +74,7 @@ class _AddCopingSkillScreenState extends State<AddCopingSkillScreen> {
       description: _inputDescription,
       autoShowConditionsBehaviors: _inputBehaviors,
       autoShowConditionsFeelings: _inputFeelings,
+      examples: _examples,
       patientId: patientId,
       createdBy: patientId,
       date: date,
@@ -104,9 +107,96 @@ class _AddCopingSkillScreenState extends State<AddCopingSkillScreen> {
             children: [
               _buildNameInput(),
               _buildDescriptionInput(),
+              Card(
+                shadowColor: Theme.of(context).primaryColor,
+                child: Column(
+                  children: [
+                    ..._getExamples(),
+                    ListTile(
+                      title: Row(
+                        children: [
+                          const Icon(Icons.add_circle),
+                          const SizedBox(
+                            width: 8.0,
+                          ),
+                          (_examples.isEmpty) ? Text('Add an example.') : Text('Add another example.'),
+                        ],
+                      ),
+                      onTap: _add,
+                    ),
+                  ],
+                ),
+              ),
               _buildAutoShowConditions(),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  void _add() {
+    setState(() {
+      _examples.add('');
+    });
+  }
+
+  void _delete(int index) {
+    setState(() {
+      _examples.removeAt(index);
+    });
+  }
+
+  List<Widget> _getExamples() {
+    List<Widget> examplesTextFormFieldsList = [];
+    for (int i = 0; i < _examples.length; i++) {
+      examplesTextFormFieldsList.add(_buildExampleInput(i));
+    }
+    return examplesTextFormFieldsList;
+  }
+
+  Widget _buildExampleInput(int index) {
+    return Dismissible(
+      key: UniqueKey(),
+      background: Container(
+        color: Theme.of(context).errorColor,
+        child: Icon(
+          Icons.delete,
+          color: Colors.white,
+          size: 40,
+        ),
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.only(right: 20),
+        margin: EdgeInsets.symmetric(
+          horizontal: 15,
+          vertical: 4,
+        ),
+      ),
+      direction: DismissDirection.endToStart,
+      onDismissed: (direction) {
+        _delete(index);
+      },
+      child: ListTile(
+        title: TextFormField(
+          initialValue: _examples[index],
+          decoration: InputDecoration(
+            hintText: 'Add an example',
+            hintStyle: TextStyle(fontStyle: FontStyle.italic),
+          ),
+          validator: (value) {
+            if (value.length < 3) {
+              return 'Should be at least 3 characters long.';
+            }
+            if (value.trim().isEmpty) {
+              return 'Please enter something or remove the meal item.';
+            }
+            return null;
+          },
+          onChanged: (value) => {_examples[index] = value},
+        ),
+        trailing: InkWell(
+          child: Icon(Icons.delete),
+          onTap: () => _delete(index),
         ),
       ),
     );
@@ -243,9 +333,8 @@ class _AddCopingSkillScreenState extends State<AddCopingSkillScreen> {
 
   Widget _buildNameInput() {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TextFormField(
+      child: ListTile(
+        title: TextFormField(
           decoration: InputDecoration(
               labelText: 'Name',
               labelStyle: TextStyle(fontStyle: FontStyle.italic)),
@@ -263,9 +352,8 @@ class _AddCopingSkillScreenState extends State<AddCopingSkillScreen> {
 
   Widget _buildDescriptionInput() {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TextFormField(
+      child: ListTile(
+        title: TextFormField(
           keyboardType: TextInputType.multiline,
           decoration: InputDecoration(
               labelText: 'Description',
