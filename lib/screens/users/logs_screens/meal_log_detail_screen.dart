@@ -64,6 +64,15 @@ class MealLogDetailScreen extends StatelessWidget {
                             ),
                             SizedBox(height: 8),
                             Text(
+                              'Logged at: ${DateFormat.yMEd().add_jm().format(loadedmeal.dateTimeOfLog)}',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  fontStyle: FontStyle.italic,
+                                  color: Colors.black45),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
                               loadedmeal.mealType,
                               style: TextStyle(
                                 color: Theme.of(context).primaryColor,
@@ -263,6 +272,15 @@ class MealLogDetailScreen extends StatelessWidget {
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            'Logged at: ${DateFormat.yMEd().add_jm().format(loadedmeal.dateTimeOfLog)}',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                fontStyle: FontStyle.italic,
+                                color: Colors.black45),
                           ),
                           SizedBox(height: 8),
                           Text(

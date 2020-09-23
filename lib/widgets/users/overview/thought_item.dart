@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import '../../../providers/thoughts.dart';
 import '../../../providers/auth.dart';
 
+import '../../../screens/users/logs_screens/thought_log_detail_screen.dart';
+
 class ThoughtItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -95,6 +97,12 @@ class ThoughtItem extends StatelessWidget {
               },
             ),
           ),
+          onTap: () {
+            Navigator.of(context).pushNamed(
+              ThoughtLogDetailScreen.routeName,
+              arguments: thought.id,
+            );
+          },
         ),
       ),
     );
