@@ -6,15 +6,69 @@ import '../../../providers/auth.dart';
 import '../../../providers/clinicians/patients_of_clinicians.dart';
 
 import '../../../widgets/clinicians/app_drawer_clinicians.dart';
-import '../../../widgets/clinicians/coping_skills/coping_skill_of_patient_item.dart';
+import '../../../widgets/clinicians/coping_skills/coping_skills_list.dart';
 
 import './add_coping_skill_for_patient_screen.dart';
 
-class CopingSkillsOfPatientsScreen extends StatelessWidget {
+class CopingSkillsOfPatientsScreen extends StatefulWidget {
   static const routeName = '/coping-skills-of-patients';
 
+  @override
+  _CopingSkillsOfPatientsScreenState createState() =>
+      _CopingSkillsOfPatientsScreenState();
+}
+
+class _CopingSkillsOfPatientsScreenState
+    extends State<CopingSkillsOfPatientsScreen>
+    with SingleTickerProviderStateMixin {
+  TabController _tabController;
+
+  List<Tab> tabsList = [
+    Tab(text: 'All'),
+    Tab(text: 'By You'),
+    Tab(text: 'By Patient'),
+  ];
+
+  var selectedIndex = 0;
+
+  @override
+  void initState() {
+    _tabController = new TabController(length: tabsList.length, vsync: this);
+    _tabController.addListener(() {
+      setState(() {
+        selectedIndex = _tabController.index;
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  var _isInit = true;
+  var _isLoading = false;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      final clinicianId = Provider.of<Auth>(context, listen: false).userId;
+      _refreshScreen(context, clinicianId).then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
   Future<void> _refreshScreen(BuildContext context, String clinicianId) async {
-    
     await Provider.of<PatientsOfClinician>(context, listen: false)
         .fetchAndSetPatients(clinicianId);
     List<String> patients =
@@ -34,43 +88,38 @@ class CopingSkillsOfPatientsScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
-              Navigator.of(context).pushNamed(AddCopingSkillForPatientScreen.routeName);
+              Navigator.of(context)
+                  .pushNamed(AddCopingSkillForPatientScreen.routeName);
             },
           ),
         ],
+        bottom: TabBar(
+          tabs: tabsList,
+          controller: _tabController,
+          //isScrollable: true,
+        ),
       ),
       drawer: AppDrawerClinicians(),
-      body: FutureBuilder(
-        future: _refreshScreen(context, clinicianId),
-        builder: (ctx, snapshot) => snapshot.connectionState ==
-                ConnectionState.waiting
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : RefreshIndicator(
-                onRefresh: () => _refreshScreen(context, clinicianId),
-                child: Consumer<CopingSkills>(
-                  builder: (ctx, copingSkillsData, _) => Padding(
-                    padding: EdgeInsets.all(8),
-                    child: (copingSkillsData.skills.isEmpty)
-                        ? Center(
-                            child:
-                                Text('Your patients have not coping skills.'),
-                          )
-                        : ListView.builder(
-                            itemCount: copingSkillsData.skills.length,
-                            itemBuilder: (_, i) {
-                              // print(
-                              //     '--------------${copingSkillsData.skills[i].name}');
-                              return ChangeNotifierProvider.value(
-                                value: copingSkillsData.skills[i],
-                                child: CopingSkillOfPatientItem(),
-                              );
-                            }),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : RefreshIndicator(
+              onRefresh: () => _refreshScreen(context, clinicianId),
+              child: Stack(
+                children: <Widget>[
+                  TabBarView(
+                    controller: _tabController,
+                    children: [
+                      CopingSkillsList(selectedIndex, tabsList[selectedIndex].text),
+                      CopingSkillsList(selectedIndex, tabsList[selectedIndex].text),
+                      CopingSkillsList(selectedIndex, tabsList[selectedIndex].text),
+                    ],
                   ),
-                ),
+                  ListView()
+                ],
               ),
-      ),
+            ),
     );
   }
 }

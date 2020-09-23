@@ -36,6 +36,14 @@ class CopingSkills with ChangeNotifier {
     return [..._skills];
   }
 
+  List<CopingSkill> get copingSkillsByPatient {
+    return _skills.where((skill) => skill.patientId == skill.createdBy ?? () => null).toList();
+  }
+
+  List<CopingSkill> get copingSkillsByClinician {
+    return _skills.where((skill) => skill.patientId != skill.createdBy ?? () => null).toList();
+  }
+
   CopingSkill findById(String id) {
     return _skills.firstWhere((skill) => skill.id == id);
   }
