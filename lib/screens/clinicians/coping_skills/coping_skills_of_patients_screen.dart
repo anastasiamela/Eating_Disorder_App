@@ -8,6 +8,8 @@ import '../../../providers/clinicians/patients_of_clinicians.dart';
 import '../../../widgets/clinicians/app_drawer_clinicians.dart';
 import '../../../widgets/clinicians/coping_skills/coping_skill_of_patient_item.dart';
 
+import './add_coping_skill_for_patient_screen.dart';
+
 class CopingSkillsOfPatientsScreen extends StatelessWidget {
   static const routeName = '/coping-skills-of-patients';
 
@@ -32,7 +34,7 @@ class CopingSkillsOfPatientsScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () {
-              //Navigator.of(context).pushNamed(AddCopingSkillScreen.routeName);
+              Navigator.of(context).pushNamed(AddCopingSkillForPatientScreen.routeName);
             },
           ),
         ],
@@ -58,8 +60,8 @@ class CopingSkillsOfPatientsScreen extends StatelessWidget {
                         : ListView.builder(
                             itemCount: copingSkillsData.skills.length,
                             itemBuilder: (_, i) {
-                              print(
-                                  '--------------${copingSkillsData.skills[i].name}');
+                              // print(
+                              //     '--------------${copingSkillsData.skills[i].name}');
                               return ChangeNotifierProvider.value(
                                 value: copingSkillsData.skills[i],
                                 child: CopingSkillOfPatientItem(),

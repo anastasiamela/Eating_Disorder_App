@@ -4,12 +4,13 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/coping_skills.dart';
 import '../../../providers/clinicians/patients_of_clinicians.dart';
+import 'package:intl/intl.dart';
 
 class CopingSkillOfPatientItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final skill = Provider.of<CopingSkill>(context);
-    print('....${skill.name}');
+    final date = DateFormat.yMd().add_jm().format(skill.date);
     final autoConditionsLength = skill.autoShowConditionsFeelings.length +
         skill.autoShowConditionsBehaviors.length;
     PatientOfClinician patient = Provider.of<PatientsOfClinician>(context)
@@ -34,7 +35,13 @@ class CopingSkillOfPatientItem extends StatelessWidget {
                   ),
                   backgroundColor: Colors.transparent,
                 ),
-                title: Text(patient.patientName),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(patient.patientName),
+                    Text(date),
+                  ],
+                ),
                 subtitle: Text(patient.patientEmail),
               ),
               Padding(
