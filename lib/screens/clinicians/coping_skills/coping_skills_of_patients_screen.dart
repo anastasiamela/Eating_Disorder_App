@@ -104,22 +104,26 @@ class _CopingSkillsOfPatientsScreenState
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : RefreshIndicator(
-              onRefresh: () => _refreshScreen(context, clinicianId),
-              child: Stack(
-                children: <Widget>[
-                  TabBarView(
-                    controller: _tabController,
-                    children: [
-                      CopingSkillsList(selectedIndex, tabsList[selectedIndex].text),
-                      CopingSkillsList(selectedIndex, tabsList[selectedIndex].text),
-                      CopingSkillsList(selectedIndex, tabsList[selectedIndex].text),
-                    ],
-                  ),
-                  ListView()
-                ],
+          : TabBarView(
+            controller: _tabController,
+            children: [
+              RefreshIndicator(
+                onRefresh: () => _refreshScreen(context, clinicianId),
+                child: CopingSkillsList(
+                    selectedIndex, tabsList[selectedIndex].text),
               ),
-            ),
+              RefreshIndicator(
+                onRefresh: () => _refreshScreen(context, clinicianId),
+                child: CopingSkillsList(
+                    selectedIndex, tabsList[selectedIndex].text),
+              ),
+              RefreshIndicator(
+                onRefresh: () => _refreshScreen(context, clinicianId),
+                child: CopingSkillsList(
+                    selectedIndex, tabsList[selectedIndex].text),
+              ),
+            ],
+          ),
     );
   }
 }

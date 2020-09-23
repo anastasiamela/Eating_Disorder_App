@@ -1,4 +1,3 @@
-import 'package:disorder_app/screens/users/add_input/add_coping_skill_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,9 +15,9 @@ class CopingSkillOfPatientItem extends StatelessWidget {
     PatientOfClinician patient = Provider.of<PatientsOfClinician>(context)
         .findPatientById(skill.patientId);
     return GestureDetector(
+      //behavior: HitTestBehavior.translucent,
       onTap: () {
-        Navigator.of(context)
-            .pushNamed(AddCopingSkillScreen.routeName, arguments: skill);
+        print('jjjjjjjjjjjjjjjjjj');
       },
       child: Card(
         shadowColor: Theme.of(context).primaryColor,
@@ -35,13 +34,7 @@ class CopingSkillOfPatientItem extends StatelessWidget {
                   ),
                   backgroundColor: Colors.transparent,
                 ),
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(patient.patientName),
-                    Text(date),
-                  ],
-                ),
+                title: Text(patient.patientName),
                 subtitle: Text(patient.patientEmail),
               ),
               Padding(
@@ -93,6 +86,44 @@ class CopingSkillOfPatientItem extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                     '$autoConditionsLength condition(s) chosen for auto showing.'),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: (skill.patientId == skill.createdBy)
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            date,
+                            style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                          Text(
+                            '  Created by patient.',
+                            style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            date,
+                            style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                          Text(
+                            '  Created by you.',
+                            style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
+                      ),
               ),
             ],
           ),
