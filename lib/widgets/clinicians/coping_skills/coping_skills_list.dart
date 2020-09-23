@@ -10,6 +10,14 @@ class CopingSkillsList extends StatelessWidget {
   final String selectedCategory;
 
   CopingSkillsList(this.selectedCategoryIndex, this.selectedCategory);
+
+  List<dynamic> sort(List<dynamic> list) {
+    list.sort(
+      (a, b) => b.date.compareTo(a.date),
+    );
+    return list;
+  }
+
   @override
   Widget build(BuildContext context) {
     final skillsData = Provider.of<CopingSkills>(context);
@@ -21,6 +29,7 @@ class CopingSkillsList extends StatelessWidget {
     } else if (selectedCategoryIndex == 2) {
       skills = skillsData.copingSkillsByPatient;
     }
+    skills = sort(skills);
 
     return (skills.isEmpty)
         ? Center(
