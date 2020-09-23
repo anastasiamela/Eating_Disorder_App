@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 import '../../../providers/coping_skills.dart';
 import '../../../providers/clinicians/patients_of_clinicians.dart';
-import 'package:intl/intl.dart';
+
+import '../../../screens/clinicians/coping_skills/add_coping_skill_for_patient_screen.dart';
 
 class CopingSkillOfPatientItem extends StatelessWidget {
   @override
@@ -15,10 +17,7 @@ class CopingSkillOfPatientItem extends StatelessWidget {
     PatientOfClinician patient = Provider.of<PatientsOfClinician>(context)
         .findPatientById(skill.patientId);
     return GestureDetector(
-      //behavior: HitTestBehavior.translucent,
-      onTap: () {
-        print('jjjjjjjjjjjjjjjjjj');
-      },
+      onTap: () {},
       child: Card(
         shadowColor: Theme.of(context).primaryColor,
         child: Padding(
@@ -36,6 +35,20 @@ class CopingSkillOfPatientItem extends StatelessWidget {
                 ),
                 title: Text(patient.patientName),
                 subtitle: Text(patient.patientEmail),
+                trailing: (skill.patientId == skill.createdBy)
+                    ? null
+                    : IconButton(
+                        icon: Icon(
+                          Icons.edit,
+                          size: 28,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(
+                              AddCopingSkillForPatientScreen.routeName,
+                              arguments: skill);
+                        },
+                      ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),

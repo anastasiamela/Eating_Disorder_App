@@ -28,6 +28,7 @@ class _AddCopingSkillForPatientScreenState
   List<String> _behaviorsInitiallySelected = [];
   List<String> _examples;
   String _inputPatientId;
+  PatientOfClinician selectedPatientForEdit;
 
   List<String> _behaviors = [
     'restrict',
@@ -59,16 +60,6 @@ class _AddCopingSkillForPatientScreenState
       setState(() {
         _isLoading = true;
       });
-      final clinicianId = Provider.of<Auth>(context, listen: false).userId;
-      Provider.of<PatientsOfClinician>(context, listen: false)
-          .fetchAndSetPatients(clinicianId)
-          .then((value) {
-        _myPatients =
-            Provider.of<PatientsOfClinician>(context, listen: false).patients;
-        setState(() {
-          _isLoading = false;
-        });
-      });
       entry = ModalRoute.of(context).settings.arguments as CopingSkill;
       _feelings.forEach((feeling) => _feelingsSelected[feeling] = false);
       _behaviors.forEach((behavior) => _behaviorsSelected[behavior] = false);
@@ -92,7 +83,24 @@ class _AddCopingSkillForPatientScreenState
         _inputFeelings = [];
         _inputBehaviors = [];
         _examples = entry.examples;
+        _inputPatientId = entry.patientId;
         _isEdit = true;
+      }
+      if (!_isEdit) {
+        final clinicianId = Provider.of<Auth>(context, listen: false).userId;
+        Provider.of<PatientsOfClinician>(context, listen: false)
+            .fetchAndSetPatients(clinicianId)
+            .then((value) {
+          _myPatients =
+              Provider.of<PatientsOfClinician>(context, listen: false).patients;
+          setState(() {
+            _isLoading = false;
+          });
+        });
+      } else {
+        selectedPatientForEdit =
+            Provider.of<PatientsOfClinician>(context, listen: false)
+                .findPatientById(entry.patientId);
       }
     }
     _isInit = false;
@@ -111,8 +119,7 @@ class _AddCopingSkillForPatientScreenState
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            content: Text(
-                'You have to select one patient.'),
+            content: Text('You have to select one patient.'),
             actions: [
               FlatButton(
                 onPressed: () => Navigator.of(context).pop(),
@@ -168,7 +175,8 @@ class _AddCopingSkillForPatientScreenState
     //final clinicianId = Provider.of<Auth>(context, listen: false).userId;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add coping skill for patient'),
+        title:
+            (!_isEdit) ? Text('Add coping skill') : Text('Edit coping skill'),
         actions: <Widget>[
           if (_isEdit)
             IconButton(
@@ -228,6 +236,16 @@ class _AddCopingSkillForPatientScreenState
                 shadowColor: Theme.of(context).primaryColor,
                 child: Column(
                   children: [
+                    ListTile(
+                      title: Text(
+                        'Examples:',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
                     ..._getExamples(),
                     ListTile(
                       title: Row(
@@ -276,113 +294,125 @@ class _AddCopingSkillForPatientScreenState
   }
 
   Widget _buildExampleInput(int index) {
-    return Dismissible(
-      key: UniqueKey(),
-      background: Container(
-        color: Theme.of(context).errorColor,
-        child: Icon(
-          Icons.delete,
-          color: Colors.white,
-          size: 40,
+    return ListTile(
+      title: TextFormField(
+        initialValue: _examples[index],
+        decoration: InputDecoration(
+          hintText: 'Add an example',
+          hintStyle: TextStyle(fontStyle: FontStyle.italic),
         ),
-        alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: 20),
-        margin: EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 4,
-        ),
+        validator: (value) {
+          if (value.length < 3) {
+            return 'Should be at least 3 characters long.';
+          }
+          if (value.trim().isEmpty) {
+            return 'Please enter something or remove the meal item.';
+          }
+          return null;
+        },
+        onChanged: (value) => {_examples[index] = value},
       ),
-      direction: DismissDirection.endToStart,
-      onDismissed: (direction) {
-        _delete(index);
-      },
-      child: ListTile(
-        title: TextFormField(
-          initialValue: _examples[index],
-          decoration: InputDecoration(
-            hintText: 'Add an example',
-            hintStyle: TextStyle(fontStyle: FontStyle.italic),
-          ),
-          validator: (value) {
-            if (value.length < 3) {
-              return 'Should be at least 3 characters long.';
-            }
-            if (value.trim().isEmpty) {
-              return 'Please enter something or remove the meal item.';
-            }
-            return null;
-          },
-          onChanged: (value) => {_examples[index] = value},
-        ),
-        trailing: InkWell(
-          child: Icon(Icons.delete),
-          onTap: () => _delete(index),
-        ),
+      trailing: InkWell(
+        child: Icon(Icons.delete),
+        onTap: () => _delete(index),
       ),
     );
   }
 
   Widget _buildPatientIdInput() {
-    return Card(
-      child: Container(
-        height: 300,
-        child: _isLoading
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ListTile(
-                    title: Text(
-                      'For which patient?',
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
+    return (_isEdit)
+        ? Card(
+            shadowColor: Theme.of(context).primaryColor,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ListTile(
+                  title: Text(
+                    'For which patient?',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
                     ),
                   ),
-                  Expanded(
-                    child: ListView(
-                      children: _myPatients
-                          .map((patient) => Column(
-                                children: [
-                                  ListTile(
-                                    leading: CircleAvatar(
-                                      radius: 20.0,
-                                      backgroundImage: NetworkImage(
-                                        patient.patientPhoto,
-                                      ),
-                                      backgroundColor: Colors.transparent,
-                                    ),
-                                    title: Text(patient.patientName),
-                                    subtitle: Text(patient.patientEmail),
-                                    trailing: Checkbox(
-                                      value: _inputPatientId == patient.patientId,
-                                      onChanged: (value) {
-                                        if (value) {
-                                          setState(() {
-                                            _inputPatientId = patient.patientId;
-                                          });
-                                        } else {
-                                          setState(() {
-                                            _inputPatientId = '';
-                                          });
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                  Divider(),
-                                ],
-                              ))
-                          .toList(),
+                ),
+                ListTile(
+                  leading: CircleAvatar(
+                    radius: 20.0,
+                    backgroundImage: NetworkImage(
+                      selectedPatientForEdit.patientPhoto,
                     ),
+                    backgroundColor: Colors.transparent,
                   ),
-                ],
-              ),
-      ),
-    );
+                  title: Text(selectedPatientForEdit.patientName),
+                  subtitle: Text(selectedPatientForEdit.patientEmail),
+                )
+              ],
+            ),
+          )
+        : Card(
+            shadowColor: Theme.of(context).primaryColor,
+            child: Container(
+              height: 300,
+              child: _isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ListTile(
+                          title: Text(
+                            'For which patient?',
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: ListView(
+                            children: _myPatients
+                                .map((patient) => Column(
+                                      children: [
+                                        ListTile(
+                                          leading: CircleAvatar(
+                                            radius: 20.0,
+                                            backgroundImage: NetworkImage(
+                                              patient.patientPhoto,
+                                            ),
+                                            backgroundColor: Colors.transparent,
+                                          ),
+                                          title: Text(patient.patientName),
+                                          subtitle: Text(patient.patientEmail),
+                                          trailing: Checkbox(
+                                            value: _inputPatientId ==
+                                                patient.patientId,
+                                            onChanged: (value) {
+                                              if (value) {
+                                                setState(() {
+                                                  _inputPatientId =
+                                                      patient.patientId;
+                                                });
+                                              } else {
+                                                setState(() {
+                                                  _inputPatientId = '';
+                                                });
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                        Divider(),
+                                      ],
+                                    ))
+                                .toList(),
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
+          );
   }
 
   Widget _buildAutoShowConditions() {
@@ -516,41 +546,69 @@ class _AddCopingSkillForPatientScreenState
 
   Widget _buildNameInput() {
     return Card(
-      child: ListTile(
-        title: TextFormField(
-          initialValue: _inputName,
-          decoration: InputDecoration(
-              labelText: 'Name',
-              labelStyle: TextStyle(fontStyle: FontStyle.italic)),
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Please enter a name.';
-            }
-            return null;
-          },
-          onSaved: (value) => _inputName = value,
-        ),
+      child: Column(
+        children: [
+          ListTile(
+            title: Text(
+              'Name:',
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          ListTile(
+            title: TextFormField(
+              initialValue: _inputName,
+              decoration: InputDecoration(
+                  hintText: 'Name',
+                  hintStyle: TextStyle(fontStyle: FontStyle.italic)),
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Please enter a name.';
+                }
+                return null;
+              },
+              onSaved: (value) => _inputName = value,
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildDescriptionInput() {
     return Card(
-      child: ListTile(
-        title: TextFormField(
-          initialValue: _inputDescription,
-          keyboardType: TextInputType.multiline,
-          decoration: InputDecoration(
-              labelText: 'Description',
-              labelStyle: TextStyle(fontStyle: FontStyle.italic)),
-          validator: (value) {
-            if (value.isEmpty) {
-              return 'Please enter a description.';
-            }
-            return null;
-          },
-          onChanged: (value) => _inputDescription = value,
-        ),
+      child: Column(
+        children: [
+          ListTile(
+            title: Text(
+              'Description:',
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          ListTile(
+            title: TextFormField(
+              initialValue: _inputDescription,
+              keyboardType: TextInputType.multiline,
+              decoration: InputDecoration(
+                  hintText: 'Description',
+                  hintStyle: TextStyle(fontStyle: FontStyle.italic)),
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Please enter a description.';
+                }
+                return null;
+              },
+              onChanged: (value) => _inputDescription = value,
+            ),
+          ),
+        ],
       ),
     );
   }
