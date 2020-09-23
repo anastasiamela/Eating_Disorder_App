@@ -141,7 +141,7 @@ class CopingSkills with ChangeNotifier {
         'createdAt': Timestamp.fromDate(timestamp),
       });
       skills[skillIndex] = newSkill;
-      print(newSkill.name);
+      print(skills[skillIndex].name);
       notifyListeners();
     } else {
       print('...');
@@ -165,6 +165,43 @@ class CopingSkills with ChangeNotifier {
       _skills.insert(existingSkillIndex, existingSkill);
       notifyListeners();
       throw HttpException('Could not delete the coping skill.');
+    }
+  }
+
+  Future<void> fetchAndSetCopingSkillsOfPatients(List<String> patients) async {
+    try {
+      final response = await FirebaseFirestore.instance
+          .collectionGroup('copingSkills')
+          .where('patientId', whereIn: patients)
+          .orderBy("createdAt", descending: true)
+          .get();
+      final extractedData = response.docs;
+      if (extractedData == null) {
+        return;
+      }
+      final List<CopingSkill> loadedSkills = [];
+      extractedData.forEach((skill) {
+        var skillData = skill.data();
+        loadedSkills.add(
+          CopingSkill(
+            id: skill.id,
+            patientId: skillData['patientId'],
+            createdBy: skillData['createdBy'],
+            date: DateTime.parse(skillData['date']),
+            autoShowConditionsBehaviors:
+                new List<String>.from(skillData['autoShowConditionsBehaviors']),
+            autoShowConditionsFeelings:
+                new List<String>.from(skillData['autoShowConditionsFeelings']),
+            examples: new List<String>.from(skillData['examples']),
+            name: skillData['name'],
+            description: skillData['description'],
+          ),
+        );
+      });
+      _skills = loadedSkills;
+      notifyListeners();
+    } catch (error) {
+      throw (error);
     }
   }
 }

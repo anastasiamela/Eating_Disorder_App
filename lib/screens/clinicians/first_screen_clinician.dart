@@ -4,6 +4,7 @@ import '../../widgets/curved_list_item.dart';
 
 import './overview/log_activity_of_patients_screen.dart';
 import './overview/my_patients_tabs_screen.dart';
+import './coping_skills/coping_skills_of_patients_screen.dart';
 
 class FirstScreenClinician extends StatelessWidget {
   @override
@@ -87,9 +88,10 @@ class FirstScreenClinician extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
+                    Navigator.of(ctx).pushNamed(CopingSkillsOfPatientsScreen.routeName);
                   },
                   child: CurvedListItem(
-                    title: 'nothing',
+                    title: 'Coping Skills',
                     color: Colors.teal[400],
                     nextColor: Colors.teal[500],
                     icon: Icons.note_add,

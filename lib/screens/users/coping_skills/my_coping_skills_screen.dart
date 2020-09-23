@@ -51,11 +51,13 @@ class MyCopingSkillsScreen extends StatelessWidget {
                               )
                             : ListView.builder(
                                 itemCount: copingSkillsData.skills.length,
-                                itemBuilder: (_, i) =>
-                                    ChangeNotifierProvider.value(
-                                        value: copingSkillsData.skills[i],
-                                        child: CopingSkillItem()),
-                              ),
+                                itemBuilder: (_, i) {
+                                  print('--------------${copingSkillsData.skills[i].name}');
+                                  return ChangeNotifierProvider.value(
+                                    value: copingSkillsData.skills[i],
+                                    child: CopingSkillItem(),
+                                  );
+                                }),
                       ),
                     ),
                   ),
