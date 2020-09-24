@@ -6,6 +6,7 @@ import '../../../providers/coping_skills.dart';
 import '../../../providers/clinicians/patients_of_clinicians.dart';
 
 import '../../../screens/clinicians/coping_skills/add_coping_skill_for_patient_screen.dart';
+import '../../../screens/clinicians/coping_skills/coping_skill_detail_screen.dart';
 
 class CopingSkillOfPatientItem extends StatelessWidget {
   @override
@@ -17,7 +18,12 @@ class CopingSkillOfPatientItem extends StatelessWidget {
     PatientOfClinician patient = Provider.of<PatientsOfClinician>(context)
         .findPatientById(skill.patientId);
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).pushNamed(
+          CopingSkillDetailScreen.routeName,
+          arguments: skill.id,
+        );
+      },
       child: Card(
         shadowColor: Theme.of(context).primaryColor,
         child: Padding(
