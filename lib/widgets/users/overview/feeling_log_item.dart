@@ -7,6 +7,8 @@ import '../../../providers/auth.dart';
 
 import '../../../models/emoji_view.dart';
 
+import '../../../screens/users/logs_screens/feeling_log_detail_screen.dart';
+
 class FeelingLogItem extends StatelessWidget {
   final String subtitleType;
 
@@ -111,6 +113,12 @@ class FeelingLogItem extends StatelessWidget {
               },
             ),
           ),
+          onTap: () {
+            Navigator.of(context).pushNamed(
+              FeelingLogDetailScreen.routeName,
+              arguments: feeling.id,
+            );
+          },
         ),
       ),
     );
