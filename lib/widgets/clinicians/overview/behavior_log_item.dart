@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import '../../../providers/behaviors.dart';
 import '../../../providers/clinicians/patients_of_clinicians.dart';
 
+import '../../../screens/clinicians/detail_screens/behavior_log_of_patient_detail_screen.dart';
+
 class BehaviorLogItem extends StatelessWidget {
   final String subtitleType;
   final bool showPatientInfo;
@@ -31,45 +33,53 @@ class BehaviorLogItem extends StatelessWidget {
         .findPatientById(behavior.userId);
     return ChangeNotifierProvider.value(
       value: patient,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              if (showPatientInfo)
-                ListTile(
-                  leading: CircleAvatar(
-                    radius: 20.0,
-                    backgroundImage: NetworkImage(
-                      patient.patientPhoto,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).pushNamed(
+            BehaviorLogOfPatientDetailScreen.routeName,
+            arguments: behavior.id,
+          );
+        },
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                if (showPatientInfo)
+                  ListTile(
+                    leading: CircleAvatar(
+                      radius: 20.0,
+                      backgroundImage: NetworkImage(
+                        patient.patientPhoto,
+                      ),
+                      backgroundColor: Colors.transparent,
                     ),
-                    backgroundColor: Colors.transparent,
+                    title: Text(patient.patientName),
+                    subtitle: Text(patient.patientEmail),
                   ),
-                  title: Text(patient.patientName),
-                  subtitle: Text(patient.patientEmail),
+                ListTile(
+                  title: Text('$time  Behaviors'),
+                  subtitle: Text(subtitleText),
                 ),
-              ListTile(
-                title: Text('$time  Behaviors'),
-                subtitle: Text(subtitleText),
-              ),
-              Row(
-                children: [
-                  Icon(
-                    behavior.isFavorite
-                        ? Icons.favorite
-                        : Icons.favorite_border,
-                    size: 30.0,
-                    color: Theme.of(context).accentColor,
-                  ),
-                  if (behavior.isBackLog)
+                Row(
+                  children: [
                     Icon(
-                      Icons.arrow_back,
+                      behavior.isFavorite
+                          ? Icons.favorite
+                          : Icons.favorite_border,
                       size: 30.0,
                       color: Theme.of(context).accentColor,
                     ),
-                ],
-              ),
-            ],
+                    if (behavior.isBackLog)
+                      Icon(
+                        Icons.arrow_back,
+                        size: 30.0,
+                        color: Theme.of(context).accentColor,
+                      ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
