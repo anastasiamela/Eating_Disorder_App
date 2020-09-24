@@ -1,9 +1,11 @@
-import 'package:disorder_app/screens/users/add_input/add_coping_skill_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../../../providers/coping_skills.dart';
+
+import '../../../screens/users/coping_skills/my_coping_skill_detail_screen.dart';
+import '../../../screens/users/add_input/add_coping_skill_screen.dart';
 
 class CopingSkillItem extends StatelessWidget {
   @override
@@ -13,7 +15,12 @@ class CopingSkillItem extends StatelessWidget {
     final autoConditionsLength = skill.autoShowConditionsFeelings.length +
         skill.autoShowConditionsBehaviors.length;
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).pushNamed(
+          MyCopingSkillDetailScreen.routeName,
+          arguments: skill.id,
+        );
+      },
       child: Card(
         shadowColor: Theme.of(context).primaryColor,
         child: Padding(
@@ -34,23 +41,22 @@ class CopingSkillItem extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    IconButton(
-                      splashColor: Colors.transparent,
-                      icon: Icon(
-                        Icons.edit,
-                        size: 28,
-                        color: (skill.patientId == skill.createdBy)
-                            ? Theme.of(context).primaryColor
-                            : Colors.transparent,
-                      ),
-                      onPressed: () {
-                        if (skill.patientId == skill.createdBy) {
+                    if (skill.patientId == skill.createdBy)
+                      IconButton(
+                        splashColor: Colors.transparent,
+                        icon: Icon(
+                          Icons.edit,
+                          size: 28,
+                          color: (skill.patientId == skill.createdBy)
+                              ? Theme.of(context).primaryColor
+                              : Colors.transparent,
+                        ),
+                        onPressed: () {
                           Navigator.of(context).pushNamed(
                               AddCopingSkillScreen.routeName,
                               arguments: skill);
-                        }
-                      },
-                    ),
+                        },
+                      ),
                   ],
                 ),
               ),
