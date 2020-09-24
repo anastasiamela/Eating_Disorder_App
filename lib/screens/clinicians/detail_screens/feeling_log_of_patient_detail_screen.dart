@@ -7,6 +7,8 @@ import '../../../providers/clinicians/patients_of_clinicians.dart';
 
 import '../../../models/emoji_view.dart';
 
+import '../../comments_of_logs_screen.dart';
+
 class FeelingLogOfPatientDetailScreen extends StatelessWidget {
   static const routeName = '/feeling-log-of-patient-detail';
   @override
@@ -21,6 +23,15 @@ class FeelingLogOfPatientDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Details of the feelings log'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.comment),
+            onPressed: () {
+              Navigator.of(context).pushNamed(CommentsOfLogsScreen.routeName,
+                  arguments: feeling.id);
+            },
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -148,6 +159,31 @@ class FeelingLogOfPatientDetailScreen extends StatelessWidget {
                   ),
                 ),
               ),
+            Card(
+              shadowColor: Theme.of(context).primaryColor,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  title: Text(
+                    'Comments:',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  trailing: Icon(
+                    Icons.navigate_next,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pushNamed(
+                        CommentsOfLogsScreen.routeName,
+                        arguments: feeling.id);
+                  },
+                ),
+              ),
+            ),
           ],
         ),
       ),

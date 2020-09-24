@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import '../../../providers/thoughts.dart';
 import '../../../providers/clinicians/patients_of_clinicians.dart';
 
+import '../../comments_of_logs_screen.dart';
+
 class ThoughtLogOfPatientDetailScreen extends StatelessWidget {
   static const routeName = '/thought-log-of-patient-detail';
   @override
@@ -19,6 +21,15 @@ class ThoughtLogOfPatientDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Details of the thought log'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.comment),
+            onPressed: () {
+              Navigator.of(context).pushNamed(CommentsOfLogsScreen.routeName,
+                  arguments: thought.id);
+            },
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -77,6 +88,31 @@ class ThoughtLogOfPatientDetailScreen extends StatelessWidget {
                           Text(thought.thought),
                           Divider(),
                         ],
+                      ),
+                    ),
+                  ),
+                  Card(
+                    shadowColor: Theme.of(context).primaryColor,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        title: Text(
+                          'Comments:',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                        trailing: Icon(
+                          Icons.navigate_next,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        onTap: () {
+                          Navigator.of(context).pushNamed(
+                              CommentsOfLogsScreen.routeName,
+                              arguments: thought.id);
+                        },
                       ),
                     ),
                   ),

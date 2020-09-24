@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import '../../../providers/meal_logs.dart';
 import '../../../providers/clinicians/patients_of_clinicians.dart';
 
+import '../../comments_of_logs_screen.dart';
+
 class MealLogOfPatientDetailScreen extends StatelessWidget {
   static const routeName = '/mealLog-of-patient-detail';
 
@@ -22,6 +24,15 @@ class MealLogOfPatientDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Details of the meal'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.comment),
+            onPressed: () {
+              Navigator.of(context).pushNamed(CommentsOfLogsScreen.routeName,
+                  arguments: loadedmeal.id);
+            },
+          )
+        ],
       ),
       body: !loadedmeal.skip
           ? SingleChildScrollView(
@@ -259,6 +270,31 @@ class MealLogOfPatientDetailScreen extends StatelessWidget {
                           ),
                         ),
                       ),
+                    Card(
+                      shadowColor: Theme.of(context).primaryColor,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                          title: Text(
+                            'Comments:',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                          trailing: Icon(
+                            Icons.navigate_next,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                                CommentsOfLogsScreen.routeName,
+                                arguments: loadedmeal.id);
+                          },
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -404,6 +440,31 @@ class MealLogOfPatientDetailScreen extends StatelessWidget {
                               ),
                             Divider(),
                           ],
+                        ),
+                      ),
+                    ),
+                    Card(
+                      shadowColor: Theme.of(context).primaryColor,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                          title: Text(
+                            'Comments:',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                          trailing: Icon(
+                            Icons.navigate_next,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                                CommentsOfLogsScreen.routeName,
+                                arguments: loadedmeal.id);
+                          },
                         ),
                       ),
                     ),

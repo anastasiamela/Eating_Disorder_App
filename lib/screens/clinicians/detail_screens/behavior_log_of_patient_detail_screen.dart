@@ -7,6 +7,8 @@ import '../../../providers/clinicians/patients_of_clinicians.dart';
 
 import '../../../models/behaviors_messages.dart';
 
+import '../../comments_of_logs_screen.dart';
+
 class BehaviorLogOfPatientDetailScreen extends StatelessWidget {
   static const routeName = '/behavior-log-of-patient-detail';
   @override
@@ -21,6 +23,15 @@ class BehaviorLogOfPatientDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Details of the behavior log'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.comment),
+            onPressed: () {
+              Navigator.of(context).pushNamed(CommentsOfLogsScreen.routeName,
+                  arguments: behavior.id);
+            },
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -260,6 +271,31 @@ class BehaviorLogOfPatientDetailScreen extends StatelessWidget {
                   ),
                 ),
               ),
+            Card(
+              shadowColor: Theme.of(context).primaryColor,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  title: Text(
+                    'Comments:',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  trailing: Icon(
+                    Icons.navigate_next,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pushNamed(
+                        CommentsOfLogsScreen.routeName,
+                        arguments: behavior.id);
+                  },
+                ),
+              ),
+            ),
           ],
         ),
       ),
