@@ -5,8 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../providers/meal_log.dart';
 import '../../../providers/clinicians/patients_of_clinicians.dart';
 
-// import '../../../screens/users/logs_screens/meal_log_detail_screen.dart';
-// import '../../../screens/users/add_input/edit_meal_log_screen.dart';
+import '../../../screens/clinicians/detail_screens/meal_log__of_patient_detail.dart';
 
 class MealLogItem extends StatelessWidget {
   final String subtitleType;
@@ -34,45 +33,53 @@ class MealLogItem extends StatelessWidget {
         Provider.of<PatientsOfClinician>(context).findPatientById(meal.userId);
     return ChangeNotifierProvider.value(
       value: patient,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              if (showPatientInfo)
-                ListTile(
-                  leading: CircleAvatar(
-                    radius: 20.0,
-                    backgroundImage: NetworkImage(
-                      patient.patientPhoto,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).pushNamed(
+            MealLogOfPatientDetailScreen.routeName,
+            arguments: meal.id,
+          );
+        },
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                if (showPatientInfo)
+                  ListTile(
+                    leading: CircleAvatar(
+                      radius: 20.0,
+                      backgroundImage: NetworkImage(
+                        patient.patientPhoto,
+                      ),
+                      backgroundColor: Colors.transparent,
                     ),
-                    backgroundColor: Colors.transparent,
+                    title: Text(patient.patientName),
+                    subtitle: Text(patient.patientEmail),
                   ),
-                  title: Text(patient.patientName),
-                  subtitle: Text(patient.patientEmail),
+                ListTile(
+                  title: (meal.skip)
+                      ? Text('SKIP  ${meal.mealType}')
+                      : Text('$time  ${meal.mealType}'),
+                  subtitle: Text(subtitleText),
                 ),
-              ListTile(
-                title: (meal.skip)
-                    ? Text('SKIP  ${meal.mealType}')
-                    : Text('$time  ${meal.mealType}'),
-                subtitle: Text(subtitleText),
-              ),
-              Row(
-                children: [
-                  Icon(
-                    meal.isFavorite ? Icons.favorite : Icons.favorite_border,
-                    size: 30.0,
-                    color: Theme.of(context).accentColor,
-                  ),
-                  if (meal.isBackLog)
+                Row(
+                  children: [
                     Icon(
-                      Icons.arrow_back,
+                      meal.isFavorite ? Icons.favorite : Icons.favorite_border,
                       size: 30.0,
                       color: Theme.of(context).accentColor,
                     ),
-                ],
-              ),
-            ],
+                    if (meal.isBackLog)
+                      Icon(
+                        Icons.arrow_back,
+                        size: 30.0,
+                        color: Theme.of(context).accentColor,
+                      ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

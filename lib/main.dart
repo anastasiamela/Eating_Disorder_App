@@ -32,6 +32,7 @@ import './screens/users/logs_screens/feeling_log_detail_screen.dart';
 import './screens/users/logs_screens/behavior_log_detail_screen.dart';
 import './screens/users/coping_skills/my_coping_skill_detail_screen.dart';
 import './screens/clinicians/coping_skills/coping_skill_detail_screen.dart';
+import './screens/clinicians/detail_screens/meal_log__of_patient_detail.dart';
 
 import './providers/meal_logs.dart';
 import './providers/logging_goals.dart';
@@ -134,14 +135,24 @@ class MyApp extends StatelessWidget {
                       MyPatientsTabsScreen(),
                   AddCopingSkillScreen.routeName: (ctx) =>
                       AddCopingSkillScreen(),
-                  MyCopingSkillsScreen.routeName: (ctx) => MyCopingSkillsScreen(),
-                  CopingSkillsOfPatientsScreen.routeName: (ctx) => CopingSkillsOfPatientsScreen(),
-                  AddCopingSkillForPatientScreen.routeName: (ctx) => AddCopingSkillForPatientScreen(),
-                  ThoughtLogDetailScreen.routeName: (ctx) => ThoughtLogDetailScreen(),
-                  FeelingLogDetailScreen.routeName: (ctx) => FeelingLogDetailScreen(),
-                  BehaviorLogDetailScreen.routeName: (ctx) => BehaviorLogDetailScreen(),
-                  MyCopingSkillDetailScreen.routeName: (ctx) => MyCopingSkillDetailScreen(),
-                  CopingSkillDetailScreen.routeName: (ctx) => CopingSkillDetailScreen(),
+                  MyCopingSkillsScreen.routeName: (ctx) =>
+                      MyCopingSkillsScreen(),
+                  CopingSkillsOfPatientsScreen.routeName: (ctx) =>
+                      CopingSkillsOfPatientsScreen(),
+                  AddCopingSkillForPatientScreen.routeName: (ctx) =>
+                      AddCopingSkillForPatientScreen(),
+                  ThoughtLogDetailScreen.routeName: (ctx) =>
+                      ThoughtLogDetailScreen(),
+                  FeelingLogDetailScreen.routeName: (ctx) =>
+                      FeelingLogDetailScreen(),
+                  BehaviorLogDetailScreen.routeName: (ctx) =>
+                      BehaviorLogDetailScreen(),
+                  MyCopingSkillDetailScreen.routeName: (ctx) =>
+                      MyCopingSkillDetailScreen(),
+                  CopingSkillDetailScreen.routeName: (ctx) =>
+                      CopingSkillDetailScreen(),
+                  MealLogOfPatientDetailScreen.routeName: (ctx) =>
+                      MealLogOfPatientDetailScreen(),
                 },
               ),
             ),
