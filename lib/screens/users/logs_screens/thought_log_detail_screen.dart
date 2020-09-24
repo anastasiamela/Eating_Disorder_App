@@ -84,7 +84,9 @@ class ThoughtLogDetailScreen extends StatelessWidget {
                           color: Theme.of(context).primaryColor,
                         ),
                         onTap: () {
-                          Navigator.of(context).pushNamed(CommentsOfLogsScreen.routeName, arguments: thought.id);
+                          Navigator.of(context).pushNamed(
+                              CommentsOfLogsScreen.routeName,
+                              arguments: thought.id);
                         },
                       ),
                     ),

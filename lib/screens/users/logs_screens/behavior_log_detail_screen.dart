@@ -3,7 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../../../providers/behaviors.dart';
+
 import '../../../models/behaviors_messages.dart';
+
+import '../../comments_of_logs_screen.dart';
 
 class BehaviorLogDetailScreen extends StatelessWidget {
   static const routeName = '/behavior-log-detail';
@@ -169,7 +172,7 @@ class BehaviorLogDetailScreen extends StatelessWidget {
                       ),
                       ...behavior.bodyAvoidType
                           .map((item) => Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
                                     padding:
@@ -243,6 +246,31 @@ class BehaviorLogDetailScreen extends StatelessWidget {
                   ),
                 ),
               ),
+            Card(
+              shadowColor: Theme.of(context).primaryColor,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  title: Text(
+                    'Comments:',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  trailing: Icon(
+                    Icons.navigate_next,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pushNamed(
+                        CommentsOfLogsScreen.routeName,
+                        arguments: behavior.id);
+                  },
+                ),
+              ),
+            ),
           ],
         ),
       ),

@@ -35,8 +35,9 @@ class CommentsOfLogsList extends StatelessWidget {
                         SizedBox(width: 5),
                         Container(
                           decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).accentColor.withOpacity(0.4),
+                            color: (comments[i].userId == myId)
+                                ? Theme.of(context).accentColor.withOpacity(0.3)
+                                : Theme.of(context).accentColor,
                             borderRadius: BorderRadius.all(
                               Radius.circular(12),
                             ),
@@ -57,7 +58,10 @@ class CommentsOfLogsList extends StatelessWidget {
                                         ? Text(
                                             'Me: ',
                                             style: TextStyle(
-                                              color: Colors.black54,
+                                              color:
+                                                  (comments[i].userId == myId)
+                                                      ? Colors.black54
+                                                      : Colors.white54,
                                               fontStyle: FontStyle.italic,
                                               fontSize: 16,
                                             ),
@@ -65,7 +69,10 @@ class CommentsOfLogsList extends StatelessWidget {
                                         : Text(
                                             '${comments[i].userName}: ',
                                             style: TextStyle(
-                                              color: Colors.black45,
+                                              color:
+                                                  (comments[i].userId == myId)
+                                                      ? Colors.black54
+                                                      : Colors.white54,
                                               fontStyle: FontStyle.italic,
                                               fontSize: 16,
                                             ),
@@ -74,6 +81,9 @@ class CommentsOfLogsList extends StatelessWidget {
                                       child: Text(
                                         comments[i].comment,
                                         style: TextStyle(
+                                          color: (comments[i].userId == myId)
+                                              ? Colors.black
+                                              : Colors.white,
                                           fontSize: 16,
                                         ),
                                       ),
@@ -88,7 +98,9 @@ class CommentsOfLogsList extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontStyle: FontStyle.italic,
-                                  color: Colors.black54
+                                  color: (comments[i].userId == myId)
+                                      ? Colors.black54
+                                      : Colors.white54,
                                 ),
                               ),
                             ],

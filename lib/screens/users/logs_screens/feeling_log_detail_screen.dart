@@ -6,6 +6,8 @@ import '../../../providers/feelings.dart';
 
 import '../../../models/emoji_view.dart';
 
+import '../../comments_of_logs_screen.dart';
+
 class FeelingLogDetailScreen extends StatelessWidget {
   static const routeName = '/feeling-log-detail';
   @override
@@ -132,6 +134,31 @@ class FeelingLogDetailScreen extends StatelessWidget {
                   ),
                 ),
               ),
+            Card(
+              shadowColor: Theme.of(context).primaryColor,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  title: Text(
+                    'Comments:',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  trailing: Icon(
+                    Icons.navigate_next,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pushNamed(
+                        CommentsOfLogsScreen.routeName,
+                        arguments: feeling.id);
+                  },
+                ),
+              ),
+            ),
           ],
         ),
       ),

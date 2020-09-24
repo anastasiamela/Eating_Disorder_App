@@ -3,7 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../../../providers/meal_logs.dart';
+
 import '../add_input/edit_meal_log_screen.dart';
+
+import '../../comments_of_logs_screen.dart';
 
 class MealLogDetailScreen extends StatelessWidget {
   static const routeName = '/mealLog-detail';
@@ -253,6 +256,31 @@ class MealLogDetailScreen extends StatelessWidget {
                           ),
                         ),
                       ),
+                    Card(
+                      shadowColor: Theme.of(context).primaryColor,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                          title: Text(
+                            'Comments:',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                          trailing: Icon(
+                            Icons.navigate_next,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                                CommentsOfLogsScreen.routeName,
+                                arguments: loadedmeal.id);
+                          },
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -385,6 +413,31 @@ class MealLogDetailScreen extends StatelessWidget {
                               ),
                             Divider(),
                           ],
+                        ),
+                      ),
+                    ),
+                    Card(
+                      shadowColor: Theme.of(context).primaryColor,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                          title: Text(
+                            'Comments:',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                          trailing: Icon(
+                            Icons.navigate_next,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                                CommentsOfLogsScreen.routeName,
+                                arguments: loadedmeal.id);
+                          },
                         ),
                       ),
                     ),
