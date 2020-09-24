@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../../../providers/community_coping_skills.dart';
+import '../../../providers/coping_skills.dart';
 import '../../../providers/auth.dart';
 
 import '../../../screens/users/add_input/add_coping_skill_screen.dart';
@@ -58,7 +59,22 @@ class CommunitySkillItem extends StatelessWidget {
                     ],
                   ),
                   OutlineButton.icon(
-                    onPressed: null,
+                    textColor: Theme.of(context).primaryColor,
+                    onPressed: () {
+                      final entry = CopingSkill(
+                          id: '',
+                          name: '',
+                          description: skill.description,
+                          autoShowConditionsBehaviors: [],
+                          autoShowConditionsFeelings: [],
+                          examples: [],
+                          patientId: '',
+                          createdBy: '',
+                          date: null);
+                      Navigator.of(context).pushNamed(
+                          AddCopingSkillScreen.routeName,
+                          arguments: entry);
+                    },
                     icon: Icon(Icons.near_me),
                     label: Text('Add to coping skill'),
                   ),

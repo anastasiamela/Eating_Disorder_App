@@ -57,7 +57,7 @@ class _AddCopingSkillScreenState extends State<AddCopingSkillScreen> {
         _inputBehaviors = [];
         _examples = [];
         _isEdit = false;
-      } else {
+      } else if (entry.id.isNotEmpty) {
         _inputName = entry.name;
         _inputDescription = entry.description;
         _feelingsInitiallySelected = entry.autoShowConditionsFeelings;
@@ -70,6 +70,13 @@ class _AddCopingSkillScreenState extends State<AddCopingSkillScreen> {
         _inputBehaviors = [];
         _examples = entry.examples;
         _isEdit = true;
+      } else {
+        _inputName = '';
+        _inputDescription = entry.description;
+        _inputFeelings = [];
+        _inputBehaviors = [];
+        _examples = [];
+        _isEdit = false;
       }
     }
     _isInit = false;
