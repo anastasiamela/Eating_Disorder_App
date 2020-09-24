@@ -7,6 +7,8 @@ import '../../../providers/clinicians/patients_of_clinicians.dart';
 
 import '../../../models/emoji_view.dart';
 
+import '../../../screens/clinicians/detail_screens/feeling_log_of_patient_detail_screen.dart';
+
 class FeelingLogItem extends StatelessWidget {
   final String subtitleType;
   final bool showPatientInfo;
@@ -28,48 +30,59 @@ class FeelingLogItem extends StatelessWidget {
         .findPatientById(feeling.userId);
     return ChangeNotifierProvider.value(
       value: patient,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              if (showPatientInfo)
-                ListTile(
-                  leading: CircleAvatar(
-                    radius: 20.0,
-                    backgroundImage: NetworkImage(
-                      patient.patientPhoto,
-                    ),
-                    backgroundColor: Colors.transparent,
-                  ),
-                  title: Text(patient.patientName),
-                  subtitle: Text(patient.patientEmail),
-                ),
-              ListTile(
-                title: Text('$time  Feelings'),
-                subtitle: (subtitleType == 'Thoughts')
-                    ? Text(subtitleText)
-                    : Row(
-                        children:
-                            moodsEmojis.map((mood) => Text('$mood ')).toList(),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).pushNamed(
+            FeelingLogOfPatientDetailScreen.routeName,
+            arguments: feeling.id,
+          );
+        },
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                if (showPatientInfo)
+                  ListTile(
+                    leading: CircleAvatar(
+                      radius: 20.0,
+                      backgroundImage: NetworkImage(
+                        patient.patientPhoto,
                       ),
-              ),
-              Row(
-                children: [
-                  Icon(
-                    feeling.isFavorite ? Icons.favorite : Icons.favorite_border,
-                    size: 30.0,
-                    color: Theme.of(context).accentColor,
+                      backgroundColor: Colors.transparent,
+                    ),
+                    title: Text(patient.patientName),
+                    subtitle: Text(patient.patientEmail),
                   ),
-                  if (feeling.isBackLog)
+                ListTile(
+                  title: Text('$time  Feelings'),
+                  subtitle: (subtitleType == 'Thoughts')
+                      ? Text(subtitleText)
+                      : Row(
+                          children: moodsEmojis
+                              .map((mood) => Text('$mood '))
+                              .toList(),
+                        ),
+                ),
+                Row(
+                  children: [
                     Icon(
-                      Icons.arrow_back,
+                      feeling.isFavorite
+                          ? Icons.favorite
+                          : Icons.favorite_border,
                       size: 30.0,
                       color: Theme.of(context).accentColor,
                     ),
-                ],
-              ),
-            ],
+                    if (feeling.isBackLog)
+                      Icon(
+                        Icons.arrow_back,
+                        size: 30.0,
+                        color: Theme.of(context).accentColor,
+                      ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

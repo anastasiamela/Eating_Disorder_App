@@ -301,6 +301,19 @@ class MealLogOfPatientDetailScreen extends StatelessWidget {
                       ),
                     ),
                     Card(
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          radius: 20.0,
+                          backgroundImage: NetworkImage(
+                            patient.patientPhoto,
+                          ),
+                          backgroundColor: Colors.transparent,
+                        ),
+                        title: Text(patient.patientName),
+                        subtitle: Text(patient.patientEmail),
+                      ),
+                    ),
+                    Card(
                       shadowColor: Theme.of(context).primaryColor,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
