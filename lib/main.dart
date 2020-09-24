@@ -29,6 +29,7 @@ import './screens/clinicians/coping_skills/coping_skills_of_patients_screen.dart
 import './screens/clinicians/coping_skills/add_coping_skill_for_patient_screen.dart';
 import './screens/users/logs_screens/thought_log_detail_screen.dart';
 import './screens/users/logs_screens/feeling_log_detail_screen.dart';
+import './screens/users/logs_screens/behavior_log_detail_screen.dart';
 
 import './providers/meal_logs.dart';
 import './providers/logging_goals.dart';
@@ -136,6 +137,7 @@ class MyApp extends StatelessWidget {
                   AddCopingSkillForPatientScreen.routeName: (ctx) => AddCopingSkillForPatientScreen(),
                   ThoughtLogDetailScreen.routeName: (ctx) => ThoughtLogDetailScreen(),
                   FeelingLogDetailScreen.routeName: (ctx) => FeelingLogDetailScreen(),
+                  BehaviorLogDetailScreen.routeName: (ctx) => BehaviorLogDetailScreen(),
                 },
               ),
             ),

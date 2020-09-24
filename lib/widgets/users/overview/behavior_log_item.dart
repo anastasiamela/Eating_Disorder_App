@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import '../../../providers/behaviors.dart';
 import '../../../providers/auth.dart';
 
+import '../../../screens/users/logs_screens/behavior_log_detail_screen.dart';
+
 class BehaviorLogItem extends StatelessWidget {
   final String subtitleType;
 
@@ -97,19 +99,25 @@ class BehaviorLogItem extends StatelessWidget {
           title: Text('$time  Behaviors'),
           subtitle: Text(subtitleText),
           trailing: Consumer<Behavior>(
-            builder: (ctx, feeling, _) => IconButton(
+            builder: (ctx, behavior, _) => IconButton(
               icon: Icon(
-                feeling.isFavorite ? Icons.favorite : Icons.favorite_border,
+                behavior.isFavorite ? Icons.favorite : Icons.favorite_border,
                 size: 30.0,
               ),
               color: Theme.of(context).accentColor,
               onPressed: () {
-                feeling.toggleFavoriteStatus(
+                behavior.toggleFavoriteStatus(
                   authData.userId,
                 );
               },
             ),
           ),
+          onTap: () {
+            Navigator.of(context).pushNamed(
+              BehaviorLogDetailScreen.routeName,
+              arguments: behavior.id,
+            );
+          },
         ),
       ),
     );
