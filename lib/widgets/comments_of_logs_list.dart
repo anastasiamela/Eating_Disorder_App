@@ -12,7 +12,15 @@ class CommentsOfLogsList extends StatelessWidget {
     String myId = Provider.of<Auth>(context).userId;
     return (comments == null || comments.isEmpty)
         ? Center(
-            child: Text('There are no comments.'),
+            child: Text(
+              'There are no comments.',
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+            ),
           )
         : Expanded(
             child: Padding(

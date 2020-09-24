@@ -16,7 +16,7 @@ class CommentsOfLogsScreen extends StatelessWidget {
         title: Text('Comments of log'),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           StreamProvider(
             create: (BuildContext context) => getCommentsList(logId),
