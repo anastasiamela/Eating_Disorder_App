@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/thoughts.dart';
 import '../../../providers/clinicians/patients_of_clinicians.dart';
+import '../../../screens/clinicians/detail_screens/thought_log_of_patient_detail_screen.dart';
 
 class ThoughtItem extends StatelessWidget {
   final bool showPatientInfo;
@@ -16,43 +17,53 @@ class ThoughtItem extends StatelessWidget {
         .findPatientById(thought.userId);
     return ChangeNotifierProvider.value(
       value: patient,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              if (showPatientInfo)
-                ListTile(
-                  leading: CircleAvatar(
-                    radius: 20.0,
-                    backgroundImage: NetworkImage(
-                      patient.patientPhoto,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).pushNamed(
+            ThoughtLogOfPatientDetailScreen.routeName,
+            arguments: thought.id,
+          );
+        },
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                if (showPatientInfo)
+                  ListTile(
+                    leading: CircleAvatar(
+                      radius: 20.0,
+                      backgroundImage: NetworkImage(
+                        patient.patientPhoto,
+                      ),
+                      backgroundColor: Colors.transparent,
                     ),
-                    backgroundColor: Colors.transparent,
+                    title: Text(patient.patientName),
+                    subtitle: Text(patient.patientEmail),
                   ),
-                  title: Text(patient.patientName),
-                  subtitle: Text(patient.patientEmail),
+                ListTile(
+                  title: Text('$time  Thoughts'),
+                  subtitle: Text(thought.thought),
                 ),
-              ListTile(
-                title: Text('$time  Thoughts'),
-                subtitle: Text(thought.thought),
-              ),
-              Row(
-                children: [
-                  Icon(
-                    thought.isFavorite ? Icons.favorite : Icons.favorite_border,
-                    size: 30.0,
-                    color: Theme.of(context).accentColor,
-                  ),
-                  if (thought.isBackLog)
+                Row(
+                  children: [
                     Icon(
-                      Icons.arrow_back,
+                      thought.isFavorite
+                          ? Icons.favorite
+                          : Icons.favorite_border,
                       size: 30.0,
                       color: Theme.of(context).accentColor,
                     ),
-                ],
-              ),
-            ],
+                    if (thought.isBackLog)
+                      Icon(
+                        Icons.arrow_back,
+                        size: 30.0,
+                        color: Theme.of(context).accentColor,
+                      ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
