@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 
 import '../../../providers/thoughts.dart';
 
+import '../../comments_of_logs_screen.dart';
+
 class ThoughtLogDetailScreen extends StatelessWidget {
   static const routeName = '/thought-log-detail';
   @override
@@ -61,6 +63,29 @@ class ThoughtLogDetailScreen extends StatelessWidget {
                           Text(thought.thought),
                           Divider(),
                         ],
+                      ),
+                    ),
+                  ),
+                  Card(
+                    shadowColor: Theme.of(context).primaryColor,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        title: Text(
+                          'Comments:',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                        trailing: Icon(
+                          Icons.navigate_next,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        onTap: () {
+                          Navigator.of(context).pushNamed(CommentsOfLogsScreen.routeName, arguments: thought.id);
+                        },
                       ),
                     ),
                   ),
