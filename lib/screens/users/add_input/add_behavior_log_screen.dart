@@ -192,7 +192,7 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add your behaviors'),
+        title: Text('Add behaviors\' log'),
         actions: <Widget>[
           IconButton(
             icon: Icon(

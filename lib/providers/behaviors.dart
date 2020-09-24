@@ -201,6 +201,42 @@ class Behaviors with ChangeNotifier {
     }
   }
 
+  Future<void> updateBehavior(
+      String id, Behavior newBehavior, String userId) async {
+    final behaviorIndex = _behaviors.indexWhere((behavior) => behavior.id == id);
+    if (behaviorIndex >= 0) {
+      final timestamp = DateTime.now();
+      await FirebaseFirestore.instance
+          .collection('patients')
+          .doc(userId)
+          .collection('behaviors')
+          .doc(id)
+          .set({
+        'userId': userId,
+        'date': newBehavior.date.toIso8601String(),
+        'behaviorsList': FieldValue.arrayUnion(newBehavior.behaviorsList),
+        'restrictGrade': newBehavior.restrictGrade,
+        'bingeGrade': newBehavior.bingeGrade,
+        'purgeGrade': newBehavior.purgeGrade,
+        'exerciseGrade': newBehavior.exerciseGrade,
+        'laxativesNumber': newBehavior.laxativesNumber,
+        'dietPillsNumber': newBehavior.dietPillsNumber,
+        'drinksNumber': newBehavior.drinksNumber,
+        'bodyCheckType': FieldValue.arrayUnion(newBehavior.bodyCheckType),
+        'bodyAvoidType': FieldValue.arrayUnion(newBehavior.bodyAvoidType),
+        'thoughts': newBehavior.thoughts,
+        'isFavorite': false,
+        'createdAt': Timestamp.fromDate(newBehavior.date),
+        'isBackLog': newBehavior.isBackLog,
+        'dateTimeOfLog': newBehavior.dateTimeOfLog.toIso8601String(),
+      });
+      _behaviors[behaviorIndex] = newBehavior;
+      notifyListeners();
+    } else {
+      print('...');
+    }
+  }
+
   Future<void> deleteBehavior(String id, String userId) async {
     final existingBehaviorIndex =
         _behaviors.indexWhere((behavior) => behavior.id == id);
