@@ -8,6 +8,9 @@ import '../add_input/edit_meal_log_screen.dart';
 
 import '../../comments_of_logs_screen.dart';
 
+import '../../../models/behaviors_messages.dart';
+import '../../../models/emoji_view.dart';
+
 class MealLogDetailScreen extends StatelessWidget {
   static const routeName = '/mealLog-detail';
 
@@ -184,7 +187,8 @@ class MealLogDetailScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                    if (loadedmeal.feelingOverall.isNotEmpty)
+                    if (loadedmeal.feelingOverall.isNotEmpty ||
+                        loadedmeal.feelingsList.isNotEmpty)
                       Card(
                         shadowColor: Theme.of(context).primaryColor,
                         child: Padding(
@@ -216,6 +220,60 @@ class MealLogDetailScreen extends StatelessWidget {
                                   ],
                                 ),
                               Divider(),
+                              if (loadedmeal.feelingsList.isNotEmpty)
+                                ...loadedmeal.feelingsList
+                                    .map((feeling) => Column(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 0, 0, 5),
+                                              child: Row(
+                                                children: [
+                                                  Text(getEmojiTextView(
+                                                      feeling)),
+                                                  SizedBox(width: 8),
+                                                  Text(feeling),
+                                                ],
+                                              ),
+                                            ),
+                                            Divider(),
+                                          ],
+                                        ))
+                                    .toList()
+                            ],
+                          ),
+                        ),
+                      ),
+                    if (loadedmeal.behaviorsList.isNotEmpty)
+                      Card(
+                        shadowColor: Theme.of(context).primaryColor,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ListTile(
+                                title: Text(
+                                  'Behaviors:',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                              ),
+                              ...loadedmeal.behaviorsList
+                                  .map((item) => Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                              getBehaviorTitleForMealLog(item)),
+                                          Divider(),
+                                        ],
+                                      ))
+                                  .toList()
                             ],
                           ),
                         ),
@@ -345,7 +403,8 @@ class MealLogDetailScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (loadedmeal.feelingOverall.isNotEmpty)
+                    if (loadedmeal.feelingOverall.isNotEmpty ||
+                        loadedmeal.feelingsList.isNotEmpty)
                       Card(
                         shadowColor: Theme.of(context).primaryColor,
                         child: Padding(
@@ -377,28 +436,82 @@ class MealLogDetailScreen extends StatelessWidget {
                                   ],
                                 ),
                               Divider(),
+                              if (loadedmeal.feelingsList.isNotEmpty)
+                                ...loadedmeal.feelingsList
+                                    .map((feeling) => Column(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 0, 0, 5),
+                                              child: Row(
+                                                children: [
+                                                  Text(getEmojiTextView(
+                                                      feeling)),
+                                                  SizedBox(width: 8),
+                                                  Text(feeling),
+                                                ],
+                                              ),
+                                            ),
+                                            Divider(),
+                                          ],
+                                        ))
+                                    .toList()
                             ],
                           ),
                         ),
                       ),
-                    Card(
-                      shadowColor: Theme.of(context).primaryColor,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ListTile(
-                              title: Text(
-                                'Thoughts:',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  fontStyle: FontStyle.italic,
+                    if (loadedmeal.behaviorsList.isNotEmpty)
+                      Card(
+                        shadowColor: Theme.of(context).primaryColor,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ListTile(
+                                title: Text(
+                                  'Behaviors:',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    fontStyle: FontStyle.italic,
+                                  ),
                                 ),
                               ),
-                            ),
-                            if (loadedmeal.thoughts.isNotEmpty)
+                              ...loadedmeal.behaviorsList
+                                  .map((item) => Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                              getBehaviorTitleForMealLog(item)),
+                                          Divider(),
+                                        ],
+                                      ))
+                                  .toList()
+                            ],
+                          ),
+                        ),
+                      ),
+                    if (loadedmeal.thoughts.isNotEmpty)
+                      Card(
+                        shadowColor: Theme.of(context).primaryColor,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ListTile(
+                                title: Text(
+                                  'Thoughts:',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                              ),
                               Row(
                                 children: [
                                   Text(
@@ -411,11 +524,11 @@ class MealLogDetailScreen extends StatelessWidget {
                                   Text(loadedmeal.thoughts),
                                 ],
                               ),
-                            Divider(),
-                          ],
+                              Divider(),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
                     Card(
                       shadowColor: Theme.of(context).primaryColor,
                       child: Padding(
