@@ -151,12 +151,16 @@ class Requests with ChangeNotifier {
     }
   }
 
-  Future<void> acceptRequestFromPatient(
-      {String clinicianId,
-      String patientId,
-      String clinicianEmail,
-      String clinicianName,
-      String clinicianPhoto}) async {
+  Future<void> acceptRequestFromPatient({
+    String clinicianId,
+    String patientId,
+    String patientName,
+    String patientEmail,
+    String patientPhoto,
+    String clinicianEmail,
+    String clinicianName,
+    String clinicianPhoto,
+  }) async {
     final timestamp = DateTime.now();
     try {
       await FirebaseFirestore.instance
@@ -168,6 +172,9 @@ class Requests with ChangeNotifier {
         'clinicianName': clinicianName,
         'clinicianEmail': clinicianEmail,
         'clinicianPhoto': clinicianPhoto,
+        'patientName': patientName,
+        'patientEmail': patientEmail,
+        'patientPhoto': patientPhoto,
         'createdAt': Timestamp.fromDate(timestamp),
       });
     } catch (error) {

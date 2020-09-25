@@ -32,17 +32,14 @@ class PatientsOfClinician with ChangeNotifier {
   List<String> getPatientsIds() {
     List<String> list = [];
     _patients.forEach((patient) => list.add(patient.patientId));
-    print('2');
-    print(list);
     return list;
   }
 
   Future<void> fetchAndSetPatients(String clinicianId) async {
     try {
       final response = await FirebaseFirestore.instance
-          .collection('clinicians')
-          .doc(clinicianId)
-          .collection('myPatients')
+          .collection('connectedClinician')
+          .where('clinicianId', isEqualTo: clinicianId)
           .orderBy("createdAt", descending: true)
           .get();
       final extractedData = response.docs;
@@ -63,41 +60,10 @@ class PatientsOfClinician with ChangeNotifier {
         );
       });
       _patients = loadedPatients;
-      print('1');
       print(_patients);
       notifyListeners();
     } catch (error) {
       throw (error);
-    }
-  }
-
-  Future<void> addPatient(
-      PatientOfClinician patientInput, String clinicianId) async {
-    final timestamp = DateTime.now();
-    try {
-      await FirebaseFirestore.instance
-          .collection('clinicians')
-          .doc(clinicianId)
-          .collection('myPatients')
-          .doc(patientInput.patientId)
-          .set({
-        'patientId': patientInput.patientId,
-        'patientName': patientInput.patientName,
-        'patientPhoto': patientInput.patientPhoto,
-        'createdAt': Timestamp.fromDate(timestamp),
-        'patientEmail': patientInput.patientEmail,
-      });
-      final newPatient = PatientOfClinician(
-        patientId: patientInput.patientId,
-        patientName: patientInput.patientName,
-        patientPhoto: patientInput.patientPhoto,
-        patientEmail: patientInput.patientEmail,
-      );
-      _patients.add(newPatient);
-      notifyListeners();
-    } catch (error) {
-      print(error);
-      throw error;
     }
   }
 
@@ -109,9 +75,7 @@ class PatientsOfClinician with ChangeNotifier {
     notifyListeners();
     try {
       await FirebaseFirestore.instance
-          .collection('clinicians')
-          .doc(clinicianId)
-          .collection('myPatients')
+          .collection('connectedClinician')
           .doc(id)
           .delete();
       existingPatient = null;

@@ -4,10 +4,8 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/auth.dart';
 import '../../../providers/requests.dart';
-import '../../../providers/clinicians/patients_of_clinicians.dart';
 
 class RequestItem extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
     final request = Provider.of<Request>(context);
@@ -58,9 +56,12 @@ class RequestItem extends StatelessWidget {
                 ),
                 RaisedButton(
                   onPressed: () {
-                    final clinicianName = Provider.of<Auth>(context, listen: false).userName;
-                    final clinicianEmail = Provider.of<Auth>(context, listen: false).userEmail;
-                    final clinicianPhoto = Provider.of<Auth>(context, listen: false).userPhoto;
+                    final clinicianName =
+                        Provider.of<Auth>(context, listen: false).userName;
+                    final clinicianEmail =
+                        Provider.of<Auth>(context, listen: false).userEmail;
+                    final clinicianPhoto =
+                        Provider.of<Auth>(context, listen: false).userPhoto;
                     Provider.of<Requests>(context, listen: false)
                         .acceptRequestFromPatient(
                       clinicianId: request.clinicianId,
@@ -68,17 +69,12 @@ class RequestItem extends StatelessWidget {
                       clinicianName: clinicianName,
                       clinicianEmail: clinicianEmail,
                       clinicianPhoto: clinicianPhoto,
+                      patientEmail: request.patientEmail,
+                      patientName: request.patientName,
+                      patientPhoto: request.patientPhoto,
                     );
                     Provider.of<Requests>(context, listen: false)
                         .deleteRequestFromPatient(request.patientId);
-                    PatientOfClinician newPatient = PatientOfClinician(
-                      patientId: request.patientId,
-                      patientName: request.patientName,
-                      patientPhoto: request.patientPhoto,
-                      patientEmail: request.patientEmail,
-                    );
-                    Provider.of<PatientsOfClinician>(context, listen: false)
-                        .addPatient(newPatient, request.clinicianId);
                   },
                   color: Theme.of(context).primaryColor,
                   textColor: Colors.white,
