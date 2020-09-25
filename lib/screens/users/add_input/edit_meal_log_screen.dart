@@ -146,43 +146,37 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
         _initSkippingReason = _editedMealLog.skippingReason;
         _behaviorsInitiallySelected = _editedMealLog.behaviorsList;
         _feelingsInitiallySelected = _editedMealLog.feelingsList;
-        setState(() {
-          _isLoading = true;
-        });
-        final userId = Provider.of<Auth>(context, listen: false).userId;
-        Provider.of<SettingsForLogs>(context)
-            .fetchAndSetSettingsForLogs(userId)
-            .then((_) {
-          setState(() {
-            _isLoading = false;
-          });
-        });
-        if (Provider.of<SettingsForLogs>(context, listen: false)
-            .settingsExist) {
-          _behaviorTypesChoices =
-              Provider.of<SettingsForLogs>(context, listen: false)
-                  .behaviorTypesList;
-          _behaviorTypesChoices
-              .forEach((behavior) => _behaviorsSelected[behavior] = false);
-          _behaviorsInitiallySelected
-              .forEach((behavior) => _behaviorsSelected[behavior] = true);
-          _feelingTypesChoices =
-              Provider.of<SettingsForLogs>(context, listen: false)
-                  .feelingTypesList;
-          _feelingTypesChoices
-              .forEach((feeling) => _feelingsSelected[feeling] = false);
-          _feelingsInitiallySelected
-              .forEach((feeling) => _feelingsSelected[feeling] = true);
-        } else {
-          _behaviorTypesChoices = [];
-          _feelingTypesChoices = [];
-        }
-        _inputBehaviors = [];
-        _inputFeelings = [];
+        _initializeBehaviorsAndFeelings();
       }
     }
     _isInit = false;
     super.didChangeDependencies();
+  }
+
+  void _initializeBehaviorsAndFeelings() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final userId = Provider.of<Auth>(context, listen: false).userId;
+    await Provider.of<SettingsForLogs>(context)
+        .fetchAndSetSettingsForLogs(userId);
+    _behaviorTypesChoices =
+        Provider.of<SettingsForLogs>(context, listen: false).behaviorTypesList;
+    _behaviorTypesChoices
+        .forEach((behavior) => _behaviorsSelected[behavior] = false);
+    _behaviorsInitiallySelected
+        .forEach((behavior) => _behaviorsSelected[behavior] = true);
+    _feelingTypesChoices =
+        Provider.of<SettingsForLogs>(context, listen: false).feelingTypesList;
+    _feelingTypesChoices
+        .forEach((feeling) => _feelingsSelected[feeling] = false);
+    _feelingsInitiallySelected
+        .forEach((feeling) => _feelingsSelected[feeling] = true);
+    _inputBehaviors = [];
+    _inputFeelings = [];
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   void _saveForm() {

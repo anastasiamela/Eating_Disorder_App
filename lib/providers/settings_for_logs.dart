@@ -2,51 +2,54 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+List<String> behaviorsAll = [
+  'restrict',
+  'binge',
+  'purge',
+  'chewAndSpit',
+  'swallowAndRegurgitate',
+  'hideFood',
+  'eatInSecret',
+  'countCalories',
+  'useLaxatives',
+  'useDietPills',
+  'drinkAlcohol',
+  'weigh',
+  'bodyAvoid',
+  'bodyCheck',
+  'exercise',
+];
+List<String> feelingsAll = [
+  'Happy',
+  'Tired',
+  'Anxious',
+  'Sad',
+  'Lonely',
+  'Proud',
+  'Hopeful',
+  'Frustrated',
+  'Guilty',
+  'Disgust',
+  'Bored',
+  'Physical Pain',
+  'Intrusive Food Thoughts',
+  'Dizzy / Headache',
+  'Irritable',
+  'Angry',
+  'Depressed',
+  'Motivated',
+  'Excited',
+  'Grateful',
+  'Joy',
+  'Loved',
+  'Satisfied',
+  'Fearful',
+  'Dynamic',
+];
+
 class SettingsForLogs with ChangeNotifier {
-  List<String> _behaviorTypesList = [
-    'restrict',
-    'binge',
-    'purge',
-    'chewAndSpit',
-    'swallowAndRegurgitate',
-    'hideFood',
-    'eatInSecret',
-    'countCalories',
-    'useLaxatives',
-    'useDietPills',
-    'drinkAlcohol',
-    'weigh',
-    'bodyAvoid',
-    'bodyCheck',
-    'exercise',
-  ];
-  List<String> _feelingTypesList = [
-    'Happy',
-    'Tired',
-    'Anxious',
-    'Sad',
-    'Lonely',
-    'Proud',
-    'Hopeful',
-    'Frustrated',
-    'Guilty',
-    'Disgust',
-    'Bored',
-    'Physical Pain',
-    'Intrusive Food Thoughts',
-    'Dizzy / Headache',
-    'Irritable',
-    'Angry',
-    'Depressed',
-    'Motivated',
-    'Excited',
-    'Grateful',
-    'Joy',
-    'Loved',
-    'Satisfied',
-    'Fearful',
-    'Dynamic',
-  ];
+  List<String> _behaviorTypesList = [];
+  List<String> _feelingTypesList = [];
   bool _settingsExist = false;
 
   List<String> get behaviorTypesList {
@@ -70,6 +73,10 @@ class SettingsForLogs with ChangeNotifier {
           .doc(userId)
           .get();
       if (response.data() == null) {
+        _behaviorTypesList = behaviorsAll;
+        _feelingTypesList = feelingsAll;
+        _settingsExist = false;
+        notifyListeners();
         return;
       }
       var responseData = response.data();
@@ -79,7 +86,6 @@ class SettingsForLogs with ChangeNotifier {
           new List<String>.from(responseData['feelingTypesList']);
       _settingsExist = true;
       notifyListeners();
-    
     } catch (error) {
       throw (error);
     }
@@ -99,6 +105,7 @@ class SettingsForLogs with ChangeNotifier {
       });
       _behaviorTypesList = behaviorsInput;
       _feelingTypesList = feelingsInput;
+      _settingsExist = true;
       notifyListeners();
     } catch (error) {
       print(error);

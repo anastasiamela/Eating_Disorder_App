@@ -149,37 +149,32 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
       _initDescription = '';
       _initThoughts = '';
       _initSkippingReason = '';
-      setState(() {
-        _isLoading = true;
-      });
-      final userId = Provider.of<Auth>(context, listen: false).userId;
-      Provider.of<SettingsForLogs>(context)
-          .fetchAndSetSettingsForLogs(userId)
-          .then((_) {
-        setState(() {
-          _isLoading = false;
-        });
-      });
-      if (Provider.of<SettingsForLogs>(context, listen: false).settingsExist) {
-        _behaviorTypesChoices =
-            Provider.of<SettingsForLogs>(context, listen: false)
-                .behaviorTypesList;
-        _behaviorTypesChoices
-            .forEach((behavior) => _behaviorsSelected[behavior] = false);
-        _feelingTypesChoices =
-            Provider.of<SettingsForLogs>(context, listen: false)
-                .feelingTypesList;
-        _feelingTypesChoices
-            .forEach((feeling) => _feelingsSelected[feeling] = false);
-      } else {
-        _behaviorTypesChoices = [];
-        _feelingTypesChoices = [];
-      }
-      _inputBehaviors = [];
-      _inputFeelings = [];
+      _initializeBehaviorsAndFeelings();
     }
     _isInit = false;
     super.didChangeDependencies();
+  }
+
+  void _initializeBehaviorsAndFeelings() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final userId = Provider.of<Auth>(context, listen: false).userId;
+    await Provider.of<SettingsForLogs>(context)
+        .fetchAndSetSettingsForLogs(userId);
+    _behaviorTypesChoices =
+        Provider.of<SettingsForLogs>(context, listen: false).behaviorTypesList;
+    _behaviorTypesChoices
+        .forEach((behavior) => _behaviorsSelected[behavior] = false);
+    _feelingTypesChoices =
+        Provider.of<SettingsForLogs>(context, listen: false).feelingTypesList;
+    _feelingTypesChoices
+        .forEach((feeling) => _feelingsSelected[feeling] = false);
+    _inputBehaviors = [];
+    _inputFeelings = [];
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   void _saveForm() {

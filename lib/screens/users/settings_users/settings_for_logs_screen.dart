@@ -74,42 +74,39 @@ class _SettingsForLogsScreenState extends State<SettingsForLogsScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      setState(() {
-        _isLoading = true;
-      });
-      final userId = Provider.of<Auth>(context, listen: false).userId;
-      Provider.of<SettingsForLogs>(context)
-          .fetchAndSetSettingsForLogs(userId)
-          .then((_) {
-        setState(() {
-          _isLoading = false;
-        });
-      });
-      _behaviorTypesGeneral
-          .forEach((behavior) => _behaviorsSelected[behavior] = false);
-      _feelingTypesGeneral
-          .forEach((feeling) => _feelingsSelected[feeling] = false);
-
-      if (Provider.of<SettingsForLogs>(context, listen: false).settingsExist) {
-        _behaviorsInitiallySelected =
-            Provider.of<SettingsForLogs>(context, listen: false)
-                .behaviorTypesList;
-        _behaviorsInitiallySelected
-            .forEach((behavior) => _behaviorsSelected[behavior] = true);
-        _feelingsInitiallySelected =
-            Provider.of<SettingsForLogs>(context, listen: false)
-                .feelingTypesList;
-        _feelingsInitiallySelected
-            .forEach((feeling) => _feelingsSelected[feeling] = true);
-      } else {
-        _behaviorsInitiallySelected = [];
-        _feelingsInitiallySelected = [];
-      }
-      _inputBehaviors = [];
-      _inputFeelings = [];
+      _initializeSettings();
     }
     _isInit = false;
     super.didChangeDependencies();
+  }
+
+  void _initializeSettings() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final userId = Provider.of<Auth>(context, listen: false).userId;
+    await Provider.of<SettingsForLogs>(context)
+        .fetchAndSetSettingsForLogs(userId);
+
+    _behaviorTypesGeneral
+        .forEach((behavior) => _behaviorsSelected[behavior] = false);
+    _feelingTypesGeneral
+        .forEach((feeling) => _feelingsSelected[feeling] = false);
+
+    _behaviorsInitiallySelected =
+        Provider.of<SettingsForLogs>(context, listen: false).behaviorTypesList;
+    _behaviorsInitiallySelected
+        .forEach((behavior) => _behaviorsSelected[behavior] = true);
+    _feelingsInitiallySelected =
+        Provider.of<SettingsForLogs>(context, listen: false).feelingTypesList;
+    _feelingsInitiallySelected
+        .forEach((feeling) => _feelingsSelected[feeling] = true);
+
+    _inputBehaviors = [];
+    _inputFeelings = [];
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   void _save() {
