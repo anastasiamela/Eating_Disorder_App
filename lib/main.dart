@@ -51,6 +51,7 @@ import './providers/clinicians/patients_of_clinicians.dart';
 import './providers/requests.dart';
 import './providers/coping_skills.dart';
 import './providers/community_coping_skills.dart';
+import './providers/connected_clinician.dart';
 
 void main() {
   runApp(MyApp());
@@ -102,6 +103,9 @@ class MyApp extends StatelessWidget {
               ),
               ChangeNotifierProvider(
                 create: (_) => CommunityCopingSkills(),
+              ),
+              ChangeNotifierProvider(
+                create: (_) => ConnectedClinician(),
               ),
             ],
             child: Consumer<Auth>(

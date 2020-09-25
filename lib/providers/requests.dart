@@ -143,10 +143,8 @@ class Requests with ChangeNotifier {
           .collection('requests')
           .doc(patientId)
           .delete();
-      print('1');
       existingRequest = null;
     } catch (error) {
-      print('2');
       requests.insert(existingRequestIndex, existingRequest);
       notifyListeners();
       throw HttpException('Could not delete the request.');

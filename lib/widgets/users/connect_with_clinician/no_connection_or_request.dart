@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../screens/users/connect_with_clinician.dart/add_clinician_screen.dart'; 
+import '../../../screens/users/connect_with_clinician.dart/add_clinician_screen.dart';
 
 class NoConnectionOrRequest extends StatelessWidget {
   @override
@@ -14,6 +14,7 @@ class NoConnectionOrRequest extends StatelessWidget {
           ListTile(
             title: Text(
               'This app works better when you link with your treatment team.',
+              textAlign: TextAlign.center,
             ),
           ),
           RaisedButton(
