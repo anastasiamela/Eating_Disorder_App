@@ -56,7 +56,7 @@ class LogActivityList extends StatelessWidget {
     } else if (selectedCategoryIndex == 2) {
       meals = mealsData.skippedMeals;
       if (meals != null)
-        displayList = [...meals];
+        displayList = sort([...meals]);
       else
         displayList = [];
       messageEmpty = 'There are no skipped meals of your patients.';
@@ -65,24 +65,25 @@ class LogActivityList extends StatelessWidget {
       feelings = feelingsData.backLogFeelings;
       behaviors = behaviorsData.backLogBehaviors;
       meals = mealsData.backLogMeals;
-      displayList = [...meals, ...behaviors, ...feelings, ...thoughts];
+      displayList = sort([...meals, ...behaviors, ...feelings, ...thoughts]);
       messageEmpty = 'There are no back logs of your patients.';
     } else if (selectedCategoryIndex == 4) {
       feelings = feelingsData.feelingsWithThoughts;
       behaviors = behaviorsData.behaviorsWithThoughts;
       meals = mealsData.mealsWithThoughts;
       thoughts = thoughtsData.thoughts;
-      displayList = [...thoughts, ...meals, ...behaviors, ...feelings];
+      displayList = sort([...thoughts, ...meals, ...behaviors, ...feelings]);
       messageEmpty = 'There are no logs with thoughts of your patients.';
     } else if (selectedCategoryIndex == 5) {
       meals = mealsData.mealsWithFeelings;
       feelings = feelingsData.feelings;
-      displayList = [...feelings, ...meals];
+      displayList = sort([...feelings, ...meals]);
       messageEmpty = 'There are no logs with feelings of your patients.';
     } else if (selectedCategoryIndex == 6) {
       behaviors = behaviorsData.behaviors;
-      displayList = [...behaviors];
-      messageEmpty = 'There are no logs for behaviors of your patients.';
+      meals = mealsData.mealsWithBehaviors;
+      displayList = sort([...behaviors, ...meals]);
+      messageEmpty = 'There are no logs with behaviors of your patients.';
     }
     return (displayList == null || displayList.isEmpty)
         ? Center(
