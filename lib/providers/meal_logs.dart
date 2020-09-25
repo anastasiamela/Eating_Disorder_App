@@ -38,7 +38,13 @@ class MealLogs with ChangeNotifier {
 
   List<MealLog> get mealsWithFeelings {
     return _meals
-        .where((meal) => meal.feelingOverall != '' ?? () => null)
+        .where((meal) => (meal.feelingOverall != '' || meal.feelingsList.isNotEmpty) ?? () => null)
+        .toList();
+  }
+
+  List<MealLog> get mealsWithBehaviors {
+    return _meals
+        .where((meal) => (meal.behaviorsList.isNotEmpty) ?? () => null)
         .toList();
   }
 

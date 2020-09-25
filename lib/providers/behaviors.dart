@@ -205,7 +205,7 @@ class Behaviors with ChangeNotifier {
       String id, Behavior newBehavior, String userId) async {
     final behaviorIndex = _behaviors.indexWhere((behavior) => behavior.id == id);
     if (behaviorIndex >= 0) {
-      final timestamp = DateTime.now();
+      //final timestamp = DateTime.now();
       await FirebaseFirestore.instance
           .collection('patients')
           .doc(userId)

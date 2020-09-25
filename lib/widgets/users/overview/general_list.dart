@@ -17,6 +17,7 @@ import './behavior_log_item.dart';
 import '../../../screens/users/add_input/add_behavior_log_screen.dart';
 import '../../../screens/users/add_input/add_feeling_log_screen.dart';
 import '../../../screens/users/add_input/add_thought_screen.dart';
+import '../../../screens/users/add_input/add_meal_log_screen.dart';
 
 class GeneralList extends StatelessWidget {
   final int selectedCategoryIndex;
@@ -52,7 +53,6 @@ class GeneralList extends StatelessWidget {
       meals = mealsData.mealsSorted;
       thoughts = thoughtsData.thoughts;
       feelings = feelingsData.feelings;
-      //print(feelings);
       displayList = sort([...meals, ...thoughts, ...feelings, ...behaviors]);
       messageEmpty = 'There are no logs.';
     } else if (selectedCategoryIndex == 1) {
@@ -63,20 +63,26 @@ class GeneralList extends StatelessWidget {
       displayList = sort([...meals, ...thoughts, ...feelings, ...behaviors]);
       messageEmpty = 'There are no favorite logs.';
     } else if (selectedCategoryIndex == 2) {
+      meals = mealsData.meals;
+      displayList = sort([...meals]);
+      messageEmpty = 'There are no meal logs.';
+      buttonTitleAdd = 'Add a meal';
+      routeNextToAdd = AddMealLogScreen.routeName;
+    } else if (selectedCategoryIndex == 3) {
       meals = mealsData.skippedMeals;
       if (meals != null)
         displayList = [...meals];
       else
         displayList = [];
       messageEmpty = 'There are no skipped meals.';
-    } else if (selectedCategoryIndex == 3) {
+    } else if (selectedCategoryIndex == 4) {
       thoughts = thoughtsData.backLogThoughts;
       feelings = feelingsData.backLogFeelings;
       behaviors = behaviorsData.backLogBehaviors;
       meals = mealsData.backLogMeals;
       displayList = [...meals, ...behaviors, ...feelings, ...thoughts];
       messageEmpty = 'There are no back logs.';
-    } else if (selectedCategoryIndex == 5) {
+    } else if (selectedCategoryIndex == 6) {
       feelings = feelingsData.feelingsWithThoughts;
       behaviors = behaviorsData.behaviorsWithThoughts;
       meals = mealsData.mealsWithThoughts;
@@ -85,16 +91,17 @@ class GeneralList extends StatelessWidget {
       messageEmpty = 'There are no logs with thoughts.';
       buttonTitleAdd = 'Add a thought';
       routeNextToAdd = AddThoughtScreen.routeName;
-    } else if (selectedCategoryIndex == 6) {
+    } else if (selectedCategoryIndex == 7) {
       meals = mealsData.mealsWithFeelings;
       feelings = feelingsData.feelings;
       displayList = [...feelings, ...meals];
       messageEmpty = 'There are no logs with feelings.';
       buttonTitleAdd = 'Add feelings';
       routeNextToAdd = AddFeelingLogScreen.routeName;
-    } else if (selectedCategoryIndex == 7) {
+    } else if (selectedCategoryIndex == 8) {
       behaviors = behaviorsData.behaviors;
-      displayList = [...behaviors];
+      meals = mealsData.mealsWithBehaviors;
+      displayList = [...behaviors, ...meals];
       messageEmpty = 'There are no logs for behaviors.';
       buttonTitleAdd = 'Add behaviors';
       routeNextToAdd = AddBehaviorLogScreen.routeName;
@@ -115,11 +122,11 @@ class GeneralList extends StatelessWidget {
                     fontSize: 20.0,
                   ),
                 ),
-                if (selectedCategoryIndex >= 5)
+                if (selectedCategoryIndex >= 6 || selectedCategoryIndex == 2)
                   const SizedBox(
                     height: 8,
                   ),
-                if (selectedCategoryIndex >= 5)
+                if (selectedCategoryIndex >= 6 || selectedCategoryIndex == 2)
                   FlatButton(
                     textColor: Colors.yellow[700],
                     highlightColor: Theme.of(context).accentColor,

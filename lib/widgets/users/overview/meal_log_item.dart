@@ -21,6 +21,7 @@ class MealLogItem extends StatelessWidget {
     final time = DateFormat.jm().format(meal.date);
     final authData = Provider.of<Auth>(context, listen: false);
     String subtitleText = '';
+    String subtitleText2 = '';
     final emptyImage =
         'https://i1.pngguru.com/preview/658/470/455/krzp-dock-icons-v-1-2-empty-grey-empty-text-png-clipart.jpg';
 
@@ -28,6 +29,11 @@ class MealLogItem extends StatelessWidget {
       subtitleText = 'Thoughts: ${meal.thoughts}';
     } else if (subtitleType == 'Feelings') {
       subtitleText = 'Overall feeling: ${meal.feelingOverall}';
+      final feelingsNumber = meal.feelingsList.length;
+      subtitleText2 = 'Feelings:  $feelingsNumber';
+    } else if (subtitleType == 'Behaviors') {
+      final behaviorsNumber = meal.behaviorsList.length;
+      subtitleText = 'Disordered behaviors:  $behaviorsNumber';
     } else {
       if (meal.skip)
         subtitleText = meal.skippingReason;
@@ -103,7 +109,19 @@ class MealLogItem extends StatelessWidget {
           title: (meal.skip)
               ? Text('SKIP  ${meal.mealType}')
               : Text('$time  ${meal.mealType}'),
-          subtitle: Text(subtitleText),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (!(subtitleType == 'Feelings')) Text(subtitleText),
+              if (subtitleType == 'Feelings' && meal.feelingOverall.isNotEmpty)
+                Text(subtitleText),
+              if (subtitleType == 'Feelings' && meal.feelingsList.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 2, 0, 0),
+                  child: Text(subtitleText2),
+                ),
+            ],
+          ),
           trailing: Wrap(
             spacing: 12,
             children: <Widget>[

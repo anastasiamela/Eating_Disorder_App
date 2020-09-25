@@ -32,6 +32,7 @@ class _GeneralLogsOverviewScreenState extends State<GeneralLogsOverviewScreen>
   List<Tab> tabsList = [
     Tab(text: 'All'),
     Tab(text: 'Favorite'),
+    Tab(text: 'Meal logs'),
     Tab(text: 'Skipped meals'),
     Tab(text: 'Back logs'),
     Tab(text: 'Goals'),
@@ -201,6 +202,7 @@ class _GeneralLogsOverviewScreenState extends State<GeneralLogsOverviewScreen>
                   child: CircularProgressIndicator(),
                 )
               : GeneralList(selectedIndex, tabsList[selectedIndex].text),
+          GeneralList(selectedIndex, tabsList[selectedIndex].text),
           GeneralList(selectedIndex, tabsList[selectedIndex].text),
           GeneralList(selectedIndex, tabsList[selectedIndex].text),
           GeneralList(selectedIndex, tabsList[selectedIndex].text),
