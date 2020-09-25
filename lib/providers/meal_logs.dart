@@ -37,7 +37,9 @@ class MealLogs with ChangeNotifier {
   }
 
   List<MealLog> get mealsWithFeelings {
-    return _meals.where((meal) => meal.feelingOverall != '' ?? () => null).toList();
+    return _meals
+        .where((meal) => meal.feelingOverall != '' ?? () => null)
+        .toList();
   }
 
   MealLog findById(String id) {
@@ -79,6 +81,8 @@ class MealLogs with ChangeNotifier {
           dateTimeOfLastUpdate:
               DateTime.parse(mealData['dateTimeOfLastUpdate']),
           isFavorite: mealData['isFavorite'],
+          behaviorsList: new List<String>.from(mealData['behaviorsList']),
+          feelingsList: new List<String>.from(mealData['feelingsList']),
         ));
       });
       _meals = loadedMealLogs;
@@ -113,6 +117,8 @@ class MealLogs with ChangeNotifier {
         'dateTimeOfLastUpdate': timestamp.toIso8601String(),
         'isFavorite': false,
         'createdAt': Timestamp.fromDate(timestamp),
+        'behaviorsList': FieldValue.arrayUnion(meal.behaviorsList),
+        'feelingsList': FieldValue.arrayUnion(meal.feelingsList)
       });
       final newMealLog = MealLog(
         id: response.id,
@@ -131,6 +137,8 @@ class MealLogs with ChangeNotifier {
         isBackLog: meal.isBackLog,
         dateTimeOfLog: meal.dateTimeOfLog,
         dateTimeOfLastUpdate: timestamp,
+        behaviorsList: meal.behaviorsList,
+        feelingsList: meal.feelingsList,
       );
       _meals.insert(0, newMealLog); // at the start of the list
       notifyListeners();
@@ -150,7 +158,7 @@ class MealLogs with ChangeNotifier {
           .doc(userId)
           .collection('mealLogs')
           .doc(id)
-          .update({
+          .set({
         'userId': userId,
         'date': newMealLog.date.toIso8601String(),
         'skip': newMealLog.skip,
@@ -168,6 +176,8 @@ class MealLogs with ChangeNotifier {
         'dateTimeOfLastUpdate': timestamp.toIso8601String(),
         'isFavorite': newMealLog.isFavorite,
         'createdAt': Timestamp.fromDate(newMealLog.date),
+        'behaviorsList': FieldValue.arrayUnion(newMealLog.behaviorsList),
+        'feelingsList': FieldValue.arrayUnion(newMealLog.feelingsList)
       });
       _meals[mealIndex] = newMealLog;
       notifyListeners();
@@ -196,7 +206,7 @@ class MealLogs with ChangeNotifier {
     }
   }
 
-  Future<void> fetchAndSetMealLogsOfPatients(List<String> patients) async{
+  Future<void> fetchAndSetMealLogsOfPatients(List<String> patients) async {
     try {
       final response = await FirebaseFirestore.instance
           .collectionGroup('mealLogs')
@@ -230,6 +240,8 @@ class MealLogs with ChangeNotifier {
           dateTimeOfLastUpdate:
               DateTime.parse(mealData['dateTimeOfLastUpdate']),
           isFavorite: mealData['isFavorite'],
+          behaviorsList: new List<String>.from(mealData['behaviorsList']),
+          feelingsList: new List<String>.from(mealData['feelingsList']),
         ));
       });
       _meals = loadedMealLogs;
@@ -238,6 +250,5 @@ class MealLogs with ChangeNotifier {
     } catch (error) {
       throw (error);
     }
-
   }
 }

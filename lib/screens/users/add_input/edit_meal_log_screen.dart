@@ -5,7 +5,9 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../../../providers/meal_log.dart';
 import '../../../providers/meal_logs.dart';
 import '../../../providers/auth.dart';
-//import '../widgets/app_drawer.dart';
+import '../../../providers/settings_for_logs.dart';
+
+import '../../../models/behaviors_messages.dart';
 
 List<String> _overallFeelings = [
   'Depressed',
@@ -83,6 +85,16 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
   String _initSkippingReason;
   TimeOfDay _initTimeOfMeal;
 
+  List<String> _feelingTypesChoices = [];
+  List<String> _inputFeelings;
+  Map<String, bool> _feelingsSelected = new Map();
+  List<String> _feelingsInitiallySelected = [];
+
+  List<String> _behaviorTypesChoices = [];
+  List<String> _inputBehaviors;
+  Map<String, bool> _behaviorsSelected = new Map();
+  List<String> _behaviorsInitiallySelected = [];
+
   var _editedMealLog = MealLog(
     id: null,
     userId: 'anastasia',
@@ -99,9 +111,12 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
     skippingReason: '',
     isBackLog: false,
     dateTimeOfLog: null,
+    behaviorsList: [],
+    feelingsList: [],
   );
 
   var _isInit = true;
+  var _isLoading = false;
 
   @override
   void initState() {
@@ -129,6 +144,41 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
         _initDescription = _editedMealLog.mealDescription;
         _initThoughts = _editedMealLog.thoughts;
         _initSkippingReason = _editedMealLog.skippingReason;
+        _behaviorsInitiallySelected = _editedMealLog.behaviorsList;
+        _feelingsInitiallySelected = _editedMealLog.feelingsList;
+        setState(() {
+          _isLoading = true;
+        });
+        final userId = Provider.of<Auth>(context, listen: false).userId;
+        Provider.of<SettingsForLogs>(context)
+            .fetchAndSetSettingsForLogs(userId)
+            .then((_) {
+          setState(() {
+            _isLoading = false;
+          });
+        });
+        if (Provider.of<SettingsForLogs>(context, listen: false)
+            .settingsExist) {
+          _behaviorTypesChoices =
+              Provider.of<SettingsForLogs>(context, listen: false)
+                  .behaviorTypesList;
+          _behaviorTypesChoices
+              .forEach((behavior) => _behaviorsSelected[behavior] = false);
+          _behaviorsInitiallySelected
+              .forEach((behavior) => _behaviorsSelected[behavior] = true);
+          _feelingTypesChoices =
+              Provider.of<SettingsForLogs>(context, listen: false)
+                  .feelingTypesList;
+          _feelingTypesChoices
+              .forEach((feeling) => _feelingsSelected[feeling] = false);
+          _feelingsInitiallySelected
+              .forEach((feeling) => _feelingsSelected[feeling] = true);
+        } else {
+          _behaviorTypesChoices = [];
+          _feelingTypesChoices = [];
+        }
+        _inputBehaviors = [];
+        _inputFeelings = [];
       }
     }
     _isInit = false;
@@ -142,13 +192,22 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
     }
     _form.currentState.save();
 
+    if (_behaviorTypesChoices.isNotEmpty) {
+      _behaviorsSelected
+          .forEach((key, value) => {if (value) _inputBehaviors.add(key)});
+    }
+    if (_feelingTypesChoices.isNotEmpty) {
+      _feelingsSelected
+          .forEach((key, value) => {if (value) _inputFeelings.add(key)});
+    }
+
     if (_editedMealLog.id != null) {
       DateTime date = _editedMealLog.date;
       _editedMealLog = MealLog(
         id: _editedMealLog.id,
         userId: _editedMealLog.userId,
-        date: new DateTime(date.year, date.month, date.day,
-            _selectedTime.hour, _selectedTime.minute),
+        date: new DateTime(date.year, date.month, date.day, _selectedTime.hour,
+            _selectedTime.minute),
         skip: _editedMealLog.skip,
         feelingOverall: _overallFeeling,
         mealType: _selectedMealType,
@@ -163,6 +222,8 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
         dateTimeOfLog: _editedMealLog.date,
         isFavorite: _editedMealLog.isFavorite,
         dateTimeOfLastUpdate: DateTime.now(),
+        behaviorsList: _inputBehaviors,
+        feelingsList: _inputFeelings,
       );
       final userId = Provider.of<Auth>(context, listen: false).userId;
       Provider.of<MealLogs>(context, listen: false)
@@ -216,6 +277,10 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
                       _buildMealLocationInput(),
                       //meal portion size input
                       _buildMealPortionInput(),
+                      if (_behaviorTypesChoices.isNotEmpty)
+                        _buildBehaviorsInput(),
+                      if (_feelingTypesChoices.isNotEmpty)
+                        _buildFeelingsInput(),
                       //meal thoughts input
                       _buildMealThoughts(),
                     ],
@@ -226,17 +291,129 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
                       _buildSkipInput(),
                       //meal type input
                       _buildMealTypeInput(),
-                      //feeling overall input
-                      _buildOverallFeelingInput(),
-                      //meal thoughts input
-                      _buildMealThoughts(),
                       //meal skipping reason
                       _buildMealSkippingReason(),
+                      //feeling overall input
+                      _buildOverallFeelingInput(),
+                      if (_behaviorTypesChoices.isNotEmpty)
+                        _buildBehaviorsInput(),
+                      if (_feelingTypesChoices.isNotEmpty)
+                        _buildFeelingsInput(),
+                      //meal thoughts input
+                      _buildMealThoughts(),
                     ],
                   ),
           ),
         ),
         //drawer: AppDrawer(),
+      ),
+    );
+  }
+
+  Widget _buildBehaviorsInput() {
+    return Card(
+      shadowColor: Theme.of(context).primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              'Behaviors:',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            SizedBox(
+              height: 8.0,
+            ),
+            (_isLoading)
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Wrap(
+                    spacing: 8.0,
+                    children: _behaviorTypesChoices
+                        .map(
+                          (String behavior) => FilterChip(
+                            label: Text(
+                              getBehaviorTitleForMealLog(behavior),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            selected: _behaviorsSelected[behavior],
+                            onSelected: (bool selected) {
+                              setState(() {
+                                _behaviorsSelected[behavior] = selected;
+                              });
+                            },
+                            selectedColor: Theme.of(context).primaryColor,
+                            checkmarkColor: Colors.white,
+                            backgroundColor: Colors.black26,
+                            padding: EdgeInsets.all(8.0),
+                          ),
+                        )
+                        .toList(),
+                  ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFeelingsInput() {
+    return Card(
+      shadowColor: Theme.of(context).primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              'Feelings:',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            SizedBox(
+              height: 8.0,
+            ),
+            (_isLoading)
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Wrap(
+                    spacing: 8.0,
+                    children: _feelingTypesChoices
+                        .map(
+                          (String feeling) => FilterChip(
+                            label: Text(
+                              feeling,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            selected: _feelingsSelected[feeling],
+                            onSelected: (bool selected) {
+                              setState(() {
+                                _feelingsSelected[feeling] = selected;
+                              });
+                            },
+                            selectedColor: Theme.of(context).primaryColor,
+                            checkmarkColor: Colors.white,
+                            backgroundColor: Colors.black26,
+                            padding: EdgeInsets.all(8.0),
+                          ),
+                        )
+                        .toList(),
+                  ),
+          ],
+        ),
       ),
     );
   }
@@ -579,10 +756,10 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
               maxLines: 3,
               keyboardType: TextInputType.multiline,
               validator: (value) {
-                if (value.isEmpty) {
+                if (value.trim().isEmpty) {
                   return 'Please enter a description.';
                 }
-                if (value.length < 5) {
+                if (value.trim().length < 5) {
                   return 'Should be at least 5 characters long.';
                 }
                 return null;
@@ -598,13 +775,15 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
                   mealCompany: _editedMealLog.mealCompany,
                   mealLocation: _editedMealLog.mealLocation,
                   mealPhoto: _editedMealLog.mealPhoto,
-                  mealDescription: value,
+                  mealDescription: value.trim(),
                   mealPortion: _editedMealLog.mealPortion,
                   thoughts: _editedMealLog.thoughts,
                   skippingReason: _editedMealLog.skippingReason,
                   isBackLog: _editedMealLog.isBackLog,
                   dateTimeOfLog: _editedMealLog.date,
                   isFavorite: _editedMealLog.isFavorite,
+                  behaviorsList: _editedMealLog.behaviorsList,
+                  feelingsList: _editedMealLog.feelingsList,
                 );
               },
             )
@@ -681,7 +860,6 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
             ),
             TextFormField(
               initialValue: _initThoughts,
-              //decoration: InputDecoration(labelText: 'Description'),
               maxLines: 3,
               keyboardType: TextInputType.multiline,
               onSaved: (value) {
@@ -697,11 +875,13 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
                   mealPhoto: _editedMealLog.mealPhoto,
                   mealDescription: _editedMealLog.mealDescription,
                   mealPortion: _editedMealLog.mealPortion,
-                  thoughts: value,
+                  thoughts: value.trim(),
                   skippingReason: _editedMealLog.skippingReason,
                   isBackLog: _editedMealLog.isBackLog,
                   dateTimeOfLog: _editedMealLog.date,
                   isFavorite: _editedMealLog.isFavorite,
+                  behaviorsList: _editedMealLog.behaviorsList,
+                  feelingsList: _editedMealLog.feelingsList,
                 );
               },
             )
@@ -745,10 +925,12 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
                   mealDescription: _editedMealLog.mealDescription,
                   mealPortion: _editedMealLog.mealPortion,
                   thoughts: _editedMealLog.thoughts,
-                  skippingReason: value,
+                  skippingReason: value.trim(),
                   isBackLog: _editedMealLog.isBackLog,
                   dateTimeOfLog: _editedMealLog.date,
                   isFavorite: _editedMealLog.isFavorite,
+                  behaviorsList: _editedMealLog.behaviorsList,
+                  feelingsList: _editedMealLog.feelingsList,
                 );
               },
             )

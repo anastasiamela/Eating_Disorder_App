@@ -21,6 +21,9 @@ class MealLog with ChangeNotifier {
   DateTime dateTimeOfLastUpdate;
   Timestamp createdAt;
 
+  final List<String> behaviorsList;
+  final List<String> feelingsList;
+
   MealLog({
     @required this.id,
     @required this.userId,
@@ -39,6 +42,8 @@ class MealLog with ChangeNotifier {
     @required this.isBackLog,
     @required this.dateTimeOfLog,
     this.dateTimeOfLastUpdate,
+    @required this.behaviorsList,
+    @required this.feelingsList,
   });
 
   void _setFavValue(bool newValue) {
