@@ -14,9 +14,16 @@ class MealsNumber {
 }
 
 class LoggingGoalsOverview extends StatelessWidget {
+  List<dynamic> sort(List<dynamic> list) {
+    list.sort(
+      (a, b) => b.date.compareTo(a.date),
+    );
+    return list;
+  }
   @override
   Widget build(BuildContext context) {
-    final meals = Provider.of<MealLogs>(context, listen: false).meals;
+    var meals = Provider.of<MealLogs>(context, listen: false).meals;
+    meals = sort(meals);
     final loggingGoalsData = Provider.of<LoggingGoals>(context);
     loggingGoalsData.clear();
     meals.forEach((meal) {

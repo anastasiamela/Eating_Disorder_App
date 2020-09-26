@@ -7,6 +7,12 @@ import './meal_log.dart';
 class MealLogs with ChangeNotifier {
   List<MealLog> _meals = [];
 
+  List<MealLog> _mealsCurrentDay = [];
+
+  List<MealLog> get mealsCurrentDay {
+    return [..._mealsCurrentDay];
+  }
+
   MealLogs();
 
   List<MealLog> get meals {
@@ -98,8 +104,59 @@ class MealLogs with ChangeNotifier {
     }
   }
 
+  Future<void> fetchAndSetMealLogsCurrentDay(String userId) async {
+    var today = DateTime.now();
+    today = new DateTime(today.year, today.month, today.day);
+    var todayString = today.toIso8601String();
+    try {
+      final response = await FirebaseFirestore.instance
+          .collection('patients')
+          .doc(userId)
+          .collection('mealLogs')
+          .where('date', isGreaterThanOrEqualTo: todayString)
+          .get();
+      final extractedData = response.docs;
+
+      if (extractedData == null) {
+        return;
+      }
+      final List<MealLog> loadedMealLogs = [];
+      extractedData.forEach((mealLog) {
+        var mealData = mealLog.data();
+        loadedMealLogs.add(MealLog(
+          id: mealLog.id,
+          userId: mealData['userId'],
+          date: DateTime.parse(mealData['date']),
+          skip: mealData['skip'],
+          feelingOverall: mealData['feelingOverall'],
+          mealType: mealData['mealType'],
+          mealCompany: mealData['mealCompany'],
+          mealLocation: mealData['mealLocation'],
+          mealPhoto: mealData['mealPhoto'],
+          mealDescription: mealData['mealDescription'],
+          mealPortion: mealData['mealPortion'],
+          thoughts: mealData['thoughts'],
+          skippingReason: mealData['skippingReason'],
+          isBackLog: mealData['isBackLog'],
+          dateTimeOfLog: DateTime.parse(mealData['dateTimeOfLog']),
+          dateTimeOfLastUpdate:
+              DateTime.parse(mealData['dateTimeOfLastUpdate']),
+          isFavorite: mealData['isFavorite'],
+          behaviorsList: new List<String>.from(mealData['behaviorsList']),
+          feelingsList: new List<String>.from(mealData['feelingsList']),
+        ));
+      });
+      _mealsCurrentDay = loadedMealLogs;
+      notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
+  }
+
   Future<void> addMealLog(MealLog meal, String userId) async {
     final timestamp = DateTime.now();
+    var today = DateTime.now();
+    today = new DateTime(today.year, today.month, today.day);
     try {
       final response = await FirebaseFirestore.instance
           .collection('patients')
@@ -147,6 +204,9 @@ class MealLogs with ChangeNotifier {
         feelingsList: meal.feelingsList,
       );
       _meals.insert(0, newMealLog); // at the start of the list
+      if(newMealLog.date.isAfter(today)) {
+        _mealsCurrentDay.insert(0, newMealLog);
+      }
       notifyListeners();
     } catch (error) {
       print(error);
@@ -157,6 +217,12 @@ class MealLogs with ChangeNotifier {
   Future<void> updateMealLog(
       String id, MealLog newMealLog, String userId) async {
     final mealIndex = _meals.indexWhere((meal) => meal.id == id);
+    // var today = DateTime.now();
+    // today = new DateTime(today.year, today.month, today.day);
+    // int mealCurrentDayIndex = -1;
+    // if(newMealLog.date.isAfter(today)) {
+    //     mealCurrentDayIndex = _meals.indexWhere((meal) => meal.id == id);
+    //   }
     if (mealIndex >= 0) {
       final timestamp = DateTime.now();
       await FirebaseFirestore.instance
@@ -186,6 +252,9 @@ class MealLogs with ChangeNotifier {
         'feelingsList': FieldValue.arrayUnion(newMealLog.feelingsList)
       });
       _meals[mealIndex] = newMealLog;
+      // if (mealCurrentDayIndex >= 0) {
+      //   _meals[mealIndex] = newMealLog;
+      // }
       notifyListeners();
     } else {
       print('...');

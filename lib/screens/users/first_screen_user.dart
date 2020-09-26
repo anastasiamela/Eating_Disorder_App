@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../widgets/curved_list_item.dart';
 
+import '../../models/nutri_facts.dart';
+
 import '../../screens/users/logs_screens/general_logs_overview_screen.dart';
 import '../../screens/users/logs_screens/calendar_logs_screen.dart';
 import '../../screens/users/add_input/add_meal_log_screen.dart';
@@ -37,25 +39,55 @@ class FirstScreenUser extends StatelessWidget {
   }
 
   Widget _getContent(BuildContext ctx) {
+    final height = MediaQuery.of(ctx).size.height;
     return Positioned(
       left: 20.0,
       right: 20.0,
-      top: 30.0,
-      child: Column(
+      top: 20.0,
+      child: ListView(
+        shrinkWrap: true,
         children: [
           Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            child: Container(
-              height: 150,
-              decoration: BoxDecoration(
+              shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
-                color: Colors.teal[100],
               ),
-            ),
-          ),
-          SizedBox(height: 80),
+              child: Container(
+                height: height * 0.3,
+                width: MediaQuery.of(ctx).size.width - 20,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ListTile(
+                        title: Text(
+                          getTitleOfFact(0),
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+                        child: ListTile(
+                          title: Text(
+                            getDescriptionOfFact(0),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+              // Container(
+              //   height: 150,
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(15.0),
+              //     color: Colors.teal[100],
+              //   ),
+              // ),
+              ),
+          SizedBox(height: 20),
           Card(
             child: Column(
               children: [
@@ -198,8 +230,8 @@ class FirstScreenUser extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(ctx)
-                        .pushReplacementNamed(ConnectWithClinicianScreen.routeName);
+                    Navigator.of(ctx).pushReplacementNamed(
+                        ConnectWithClinicianScreen.routeName);
                   },
                   child: CurvedListItem(
                     title: 'Connect',
