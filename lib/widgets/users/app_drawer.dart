@@ -11,6 +11,7 @@ import '../../screens/users/settings_users/general_settings_users_screen.dart';
 import '../../screens/users/add_input/add_coping_skill_screen.dart';
 import '../../screens/users/coping_skills/my_coping_skills_screen.dart';
 import '../../screens/users/communtity_coping_skills/community_skills_overview_screen.dart';
+import '../../screens/users/reminders/reminders_screen.dart';
 
 import '../../providers/auth.dart';
 
@@ -58,7 +59,7 @@ class AppDrawer extends StatelessWidget {
             title: Text('Add coping skill'),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pushNamed(AddCopingSkillScreen.routeName);
+              Navigator.of(context).pushReplacementNamed(AddCopingSkillScreen.routeName);
             },
           ),
           Divider(),
@@ -67,7 +68,7 @@ class AppDrawer extends StatelessWidget {
             title: Text('My coping skills'),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pushNamed(MyCopingSkillsScreen.routeName);
+              Navigator.of(context).pushReplacementNamed(MyCopingSkillsScreen.routeName);
             },
           ),
           Divider(),
@@ -76,7 +77,16 @@ class AppDrawer extends StatelessWidget {
             title: Text('Community coping skills'),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pushNamed(CommunityCopingSkillsOverviewScreen.routeName);
+              Navigator.of(context).pushReplacementNamed(CommunityCopingSkillsOverviewScreen.routeName);
+            },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.add_comment),
+            title: Text('Reminders'),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(RemindersScreen.routeName);
             },
           ),
           // Divider(),

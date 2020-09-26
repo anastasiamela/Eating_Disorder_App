@@ -38,6 +38,7 @@ import './screens/clinicians/detail_screens/behavior_log_of_patient_detail_scree
 import './screens/clinicians/detail_screens/thought_log_of_patient_detail_screen.dart';
 import './screens/comments_of_logs_screen.dart';
 import './screens/users/communtity_coping_skills/community_skills_overview_screen.dart';
+import './screens/users/reminders/reminders_screen.dart';
 
 import './providers/meal_logs.dart';
 import './providers/logging_goals.dart';
@@ -52,6 +53,7 @@ import './providers/requests.dart';
 import './providers/coping_skills.dart';
 import './providers/community_coping_skills.dart';
 import './providers/connected_clinician.dart';
+import './providers/reminders.dart';
 
 void main() {
   runApp(MyApp());
@@ -106,6 +108,9 @@ class MyApp extends StatelessWidget {
               ),
               ChangeNotifierProvider(
                 create: (_) => ConnectedClinician(),
+              ),
+              ChangeNotifierProvider(
+                create: (_) => SettingsForReminders(),
               ),
             ],
             child: Consumer<Auth>(
@@ -176,6 +181,7 @@ class MyApp extends StatelessWidget {
                       CommentsOfLogsScreen(),
                   CommunityCopingSkillsOverviewScreen.routeName: (ctx) =>
                       CommunityCopingSkillsOverviewScreen(),
+                  RemindersScreen.routeName: (ctx) => RemindersScreen(),
                 },
               ),
             ),
