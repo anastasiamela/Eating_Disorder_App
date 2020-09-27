@@ -1,8 +1,9 @@
-import 'package:disorder_app/providers/clinicians/patients_of_clinicians.dart';
 import 'package:flutter/material.dart';
 
 import './one_patient_logs_screen.dart';
 import './calendar_one_patient_screen.dart';
+
+import '../../../providers/clinicians/patients_of_clinicians.dart';
 
 class OnePatientLogsTabsScreen extends StatefulWidget {
   static const routeName = '/one-patient-logs-tabs-screen';

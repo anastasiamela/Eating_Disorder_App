@@ -39,6 +39,7 @@ import './screens/clinicians/detail_screens/thought_log_of_patient_detail_screen
 import './screens/comments_of_logs_screen.dart';
 import './screens/users/communtity_coping_skills/community_skills_overview_screen.dart';
 import './screens/users/reminders/reminders_screen.dart';
+import './screens/clinicians/overview/one_patient_screen.dart';
 
 import './providers/meal_logs.dart';
 import './providers/logging_goals.dart';
@@ -182,6 +183,7 @@ class MyApp extends StatelessWidget {
                   CommunityCopingSkillsOverviewScreen.routeName: (ctx) =>
                       CommunityCopingSkillsOverviewScreen(),
                   RemindersScreen.routeName: (ctx) => RemindersScreen(),
+                  OnePatientScreen.routeName: (ctx) => OnePatientScreen(),
                 },
               ),
             ),

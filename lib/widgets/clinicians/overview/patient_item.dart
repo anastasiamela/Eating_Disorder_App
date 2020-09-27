@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/clinicians/patients_of_clinicians.dart';
 
-import '../../../screens/clinicians/overview/one_patient_logs_tabs_screen.dart';
+import '../../../screens/clinicians/overview/one_patient_screen.dart';
 
 class PatientItem extends StatelessWidget {
   @override
@@ -23,7 +23,7 @@ class PatientItem extends StatelessWidget {
         subtitle: Text(patient.patientEmail),
         trailing: Icon(Icons.navigate_next),
         onTap: () {
-          Navigator.of(context).pushNamed(OnePatientLogsTabsScreen.routeName, arguments: patient);
+          Navigator.of(context).pushNamed(OnePatientScreen.routeName, arguments: patient);
         },
       ),
     );
