@@ -6,6 +6,8 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../../../providers/reminders.dart';
 import '../../../providers/auth.dart';
 
+import '../../../api/reminders_api.dart';
+
 class RemindersScreen extends StatefulWidget {
   static const routeName = '/reminders';
 
@@ -17,6 +19,15 @@ class _RemindersScreenState extends State<RemindersScreen> {
   bool _enableSettings;
   Map<String, TimeOfDay> _selectedTime = {};
   Map<String, String> _finalSettingsToSave = {};
+  final Map<String, int> _codesForReminders = {
+    'breakfast': 0,
+    'morningSnack': 1,
+    'lunch': 2,
+    'afternoonSnack': 3,
+    'dinner': 4,
+    'eveningSnack': 5,
+    'mealPlan': 6,
+  };
 
   var _isInit = true;
   var _isLoading = false;
@@ -37,6 +48,14 @@ class _RemindersScreenState extends State<RemindersScreen> {
     }
     final format = DateFormat.jm();
     return TimeOfDay.fromDateTime(format.parse(input));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    notificationPlugin
+        .setListenerForLowerVersions(onNotificationInLowerVersions);
+    notificationPlugin.setOnNotificationClick(onNotificationClick);
   }
 
   @override
@@ -86,7 +105,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
       }
     } else {
       _setDefaultValues();
-      _enableSettings = true;
+      _enableSettings = false;
     }
   }
 
@@ -100,7 +119,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
     _selectedTime['mealPlan'] = TimeOfDay(hour: 21, minute: 30);
   }
 
-  void _save() {
+  void _save() async {
     final keys = _selectedTime.keys.toList();
     if (_enableSettings) {
       for (String key in keys) {
@@ -125,6 +144,19 @@ class _RemindersScreenState extends State<RemindersScreen> {
     final userId = Provider.of<Auth>(context, listen: false).userId;
     Provider.of<SettingsForReminders>(context, listen: false)
         .setSettingsForReminders(newSettings, userId);
+
+    await notificationPlugin.cancelAllNotification();
+    if (_enableSettings) {
+      for (var key in keys) {
+        if (_selectedTime[key] != null) {
+          await notificationPlugin.showDailyAtTime(
+              _selectedTime[key], _codesForReminders[key]);
+        }
+      }
+    }
+    var number = await notificationPlugin.getPendingNotificationCount();
+    print(number);
+
     Navigator.of(context).pop();
   }
 
@@ -189,9 +221,10 @@ class _RemindersScreenState extends State<RemindersScreen> {
         ),
       ),
       onTap: () {
-        setState(() {
-          _selectedTime[type] = null;
-        });
+        if (_enableSettings)
+          setState(() {
+            _selectedTime[type] = null;
+          });
       },
     );
   }
@@ -232,5 +265,18 @@ class _RemindersScreenState extends State<RemindersScreen> {
         inactiveFgColor: Colors.grey[900],
       ),
     );
+  }
+
+  onNotificationInLowerVersions(ReceivedNotification receivedNotification) {
+    print('Notification Received ${receivedNotification.id}');
+  }
+
+  onNotificationClick(String payload) {
+    print('Payload $payload');
+    // Navigator.push(context, MaterialPageRoute(builder: (coontext) {
+    //   return NotificationScreen(
+    //     payload: payload,
+    //   );
+    // }));
   }
 }
