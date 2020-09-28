@@ -55,7 +55,6 @@ class _OnePatientLogsScreenState extends State<OnePatientLogsScreen>
   }
 
   Future<void> _refreshScreen(BuildContext context) async {
-    print('aaaaaaaaaaa');
     setState(() {
       _isLoading = true;
     });

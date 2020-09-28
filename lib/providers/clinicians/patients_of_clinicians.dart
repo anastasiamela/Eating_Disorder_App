@@ -8,11 +8,13 @@ class PatientOfClinician with ChangeNotifier {
   final String patientName;
   final String patientPhoto;
   final String patientEmail;
+  final Timestamp connectionDate;
   PatientOfClinician({
     @required this.patientId,
     @required this.patientName,
     @required this.patientPhoto,
     @required this.patientEmail,
+    @required this.connectionDate,
   });
 }
 
@@ -56,6 +58,7 @@ class PatientsOfClinician with ChangeNotifier {
             patientName: patientData['patientName'],
             patientPhoto: patientData['patientPhoto'],
             patientEmail: patientData['patientEmail'],
+            connectionDate: patientData['createdAt'],
           ),
         );
       });
