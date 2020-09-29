@@ -42,6 +42,10 @@ import './screens/users/reminders/reminders_screen.dart';
 import './screens/clinicians/overview/one_patient_screen.dart';
 import './screens/clinicians/one_patient/one_patient_coping_skills_screen.dart';
 import './screens/clinicians/one_patient/one_patient_meal_plans.dart';
+import './screens/users/tips/tips_categories_screen.dart';
+import './screens/users/tips/tips_one_category_screen.dart';
+import './screens/users/tips/nutri_sources_categories_screen.dart';
+import './screens/users/tips/nutri_source_one_category_screen.dart';
 
 import './providers/meal_logs.dart';
 import './providers/logging_goals.dart';
@@ -190,6 +194,14 @@ class MyApp extends StatelessWidget {
                       OnePatientSkillsScreen(),
                   OnePatientMealPlansScreen.routeName: (ctx) =>
                       OnePatientMealPlansScreen(),
+                  TipsCategoriesScreen.routeName: (ctx) =>
+                      TipsCategoriesScreen(),
+                  TipsOneCategoryScreen.routeName: (ctx) =>
+                      TipsOneCategoryScreen(),
+                  NutriSourceOneCategoryScreen.routeName: (ctx) =>
+                      NutriSourceOneCategoryScreen(),
+                  NutriSourcesCategoriesScreen.routeName: (ctx) =>
+                      NutriSourcesCategoriesScreen(),
                 },
               ),
             ),

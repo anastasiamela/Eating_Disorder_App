@@ -56,9 +56,11 @@ List<String> _mealLocations = [
 ];
 
 List<String> _mealPortion = [
-  'inadequate',
-  'adequate',
-  'excessive',
+  'Extreme Hunger',
+  'Hunger',
+  'Satisfied',
+  'Full',
+  'Extreme Fullness',
 ];
 
 class EditMealLogScreen extends StatefulWidget {
@@ -796,7 +798,7 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'How much did you eat?',
+                'How hungry or full were you after the meal?',
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.w600,

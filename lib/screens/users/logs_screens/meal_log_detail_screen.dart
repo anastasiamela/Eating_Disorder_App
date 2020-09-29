@@ -124,7 +124,7 @@ class MealLogDetailScreen extends StatelessWidget {
                               Row(
                                 children: [
                                   Text(
-                                    'Portion Size:  ',
+                                    'Hunger/Fullness after the meal:  ',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontStyle: FontStyle.italic,

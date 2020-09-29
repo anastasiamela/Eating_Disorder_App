@@ -12,6 +12,7 @@ import '../../screens/users/add_input/add_coping_skill_screen.dart';
 import '../../screens/users/coping_skills/my_coping_skills_screen.dart';
 import '../../screens/users/communtity_coping_skills/community_skills_overview_screen.dart';
 import '../../screens/users/reminders/reminders_screen.dart';
+import '../../screens/users/tips/tips_categories_screen.dart';
 
 import '../../providers/auth.dart';
 
@@ -87,6 +88,15 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushNamed(RemindersScreen.routeName);
+            },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.add_comment),
+            title: Text('Tips'),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed(TipsCategoriesScreen.routeName);
             },
           ),
           // Divider(),
