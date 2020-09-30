@@ -640,42 +640,44 @@ class _AddMealPlanState extends State<AddMealPlan> {
                         width: 180.0,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: SingleChildScrollView(
-                            clipBehavior: Clip.none,
-                            scrollDirection: Axis.vertical,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  capitalizeFirstLetter(template.dayOfWeek),
-                                  style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                          child: ListView(
+                            children: [
+                              Text(
+                                capitalizeFirstLetter(template.dayOfWeek),
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
                                 ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                ...template.getMealItems
-                                    .map((item) => Row(
-                                          children: [
-                                            Icon(Icons.near_me),
-                                            Text(item),
-                                          ],
-                                        ))
-                                    .toList(),
-                              ],
-                            ),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              ...template.getMealItems
+                                  .map((item) => Row(
+                                        children: [
+                                          Icon(Icons.near_me),
+                                          Text(item),
+                                        ],
+                                      ))
+                                  .toList(),
+                            ],
                           ),
                         ),
                       ),
                     ),
                     onTap: () {
-                      setState(() {
-                        _mealItems = template.getMealItems;
-                        _selectedTemplate = template.id;
-                      });
+                      if (_selectedTemplate == template.id) {
+                        setState(() {
+                          _mealItems = [''];
+                          _selectedTemplate = '';
+                        });
+                      } else {
+                        setState(() {
+                          _mealItems = template.getMealItems;
+                          _selectedTemplate = template.id;
+                        });
+                      }
                     },
                   ),
                 ))
