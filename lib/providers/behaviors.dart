@@ -20,7 +20,8 @@ class Behavior with ChangeNotifier {
   final DateTime date;
   final bool isBackLog;
   final DateTime dateTimeOfLog;
-  
+  final bool usedCopingSkills;
+
   bool isFavorite;
   Timestamp createdAt;
 
@@ -42,6 +43,7 @@ class Behavior with ChangeNotifier {
     @required this.isBackLog,
     @required this.dateTimeOfLog,
     this.isFavorite = false,
+    @required this.usedCopingSkills,
   });
 
   int get behaviorsListLenght {
@@ -93,11 +95,15 @@ class Behaviors with ChangeNotifier {
   }
 
   List<Behavior> get backLogBehaviors {
-    return _behaviors.where((behavior) => behavior.isBackLog ?? () => null).toList();
+    return _behaviors
+        .where((behavior) => behavior.isBackLog ?? () => null)
+        .toList();
   }
 
   List<Behavior> get behaviorsWithThoughts {
-    return _behaviors.where((behavior) => behavior.thoughts != '' ?? () => null).toList();
+    return _behaviors
+        .where((behavior) => behavior.thoughts != '' ?? () => null)
+        .toList();
   }
 
   Behavior findById(String id) {
@@ -117,7 +123,7 @@ class Behaviors with ChangeNotifier {
         return;
       }
       final List<Behavior> loadedBehaviors = [];
-      extractedData.forEach((behavior) {
+      extractedData.forEach((behavior) async {
         var behaviorData = behavior.data();
         loadedBehaviors.add(
           Behavior(
@@ -138,6 +144,7 @@ class Behaviors with ChangeNotifier {
             isFavorite: behaviorData['isFavorite'],
             isBackLog: behaviorData['isBackLog'],
             dateTimeOfLog: DateTime.parse(behaviorData['dateTimeOfLog']),
+            usedCopingSkills: behaviorData['usedCopingSkills'],
           ),
         );
       });
@@ -148,7 +155,8 @@ class Behaviors with ChangeNotifier {
     }
   }
 
-  Future<void> addBehavior(Behavior behaviorInput, String userId) async {
+  Future<void> addBehavior(Behavior behaviorInput, String userId,
+      List<UsedCopingSkill> skills) async {
     final timestamp = DateTime.now();
     try {
       final response = await FirebaseFirestore.instance
@@ -173,6 +181,7 @@ class Behaviors with ChangeNotifier {
         'createdAt': Timestamp.fromDate(behaviorInput.date),
         'isBackLog': behaviorInput.isBackLog,
         'dateTimeOfLog': timestamp.toIso8601String(),
+        'usedCopingSkills': behaviorInput.usedCopingSkills,
       });
       final newBehavior = Behavior(
         id: response.id,
@@ -191,9 +200,12 @@ class Behaviors with ChangeNotifier {
         thoughts: behaviorInput.thoughts,
         isBackLog: behaviorInput.isBackLog,
         dateTimeOfLog: timestamp,
+        usedCopingSkills: behaviorInput.usedCopingSkills,
       );
       _behaviors.add(newBehavior);
-      //_feelings.insert(0, newFeeling); // at the start of the list
+      if (newBehavior.usedCopingSkills) {
+        await addUsedCopingSkills(skills, userId, response.id);
+      }
       notifyListeners();
     } catch (error) {
       print(error);
@@ -201,9 +213,31 @@ class Behaviors with ChangeNotifier {
     }
   }
 
+  Future<void> addUsedCopingSkills(
+      List<UsedCopingSkill> skills, String userId, String logId) async {
+    for (UsedCopingSkill skill in skills) {
+      try {
+        await FirebaseFirestore.instance
+            .collection('logs')
+            .doc(logId)
+            .collection('usedCopingSkills')
+            .add({
+          'userId': userId,
+          'name': skill.name,
+          'description': skill.description,
+          'createdAt': Timestamp.fromDate(DateTime.now()),
+        });
+      } catch (error) {
+        print(error);
+        throw error;
+      }
+    }
+  }
+
   Future<void> updateBehavior(
       String id, Behavior newBehavior, String userId) async {
-    final behaviorIndex = _behaviors.indexWhere((behavior) => behavior.id == id);
+    final behaviorIndex =
+        _behaviors.indexWhere((behavior) => behavior.id == id);
     if (behaviorIndex >= 0) {
       //final timestamp = DateTime.now();
       await FirebaseFirestore.instance
@@ -291,6 +325,7 @@ class Behaviors with ChangeNotifier {
             isFavorite: behaviorData['isFavorite'],
             isBackLog: behaviorData['isBackLog'],
             dateTimeOfLog: DateTime.parse(behaviorData['dateTimeOfLog']),
+            usedCopingSkills: behaviorData['usedCopingSkills'],
           ),
         );
       });
@@ -300,4 +335,14 @@ class Behaviors with ChangeNotifier {
       throw (error);
     }
   }
+}
+
+class UsedCopingSkill {
+  final String name;
+  final String description;
+
+  UsedCopingSkill({
+    @required this.name,
+    @required this.description,
+  });
 }

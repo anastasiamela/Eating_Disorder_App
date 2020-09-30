@@ -5,6 +5,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../../providers/behaviors.dart';
 import '../../../providers/auth.dart';
+import '../../../providers/coping_skills.dart';
 
 import '../../../models/behaviors_messages.dart';
 
@@ -78,6 +79,10 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
   int _drinksNumberInput;
   String _thoughtsInput;
 
+  List<CopingSkill> _copingSkillsTemplates;
+  List<String> _selectedTemplates; //contains the ids
+  bool _usedCopingSkills;
+
   bool _isBackLog;
   bool _hasSelectedDateBackLog;
   bool _hasSelectedTime;
@@ -85,10 +90,27 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
   DateTime _selectedDate;
 
   var _isInit = true;
+  var _isLoading = false;
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      final userId = Provider.of<Auth>(context, listen: false).userId;
+      Provider.of<CopingSkills>(context, listen: false)
+          .fetchAndSetCopingSkills(userId)
+          .then((_) {
+        _copingSkillsTemplates =
+            Provider.of<CopingSkills>(context, listen: false).skills;
+        print(_copingSkillsTemplates);
+        setState(() {
+          _isLoading = false;
+        });
+      });
+      _usedCopingSkills = false;
+      _selectedTemplates = [];
       _behaviorTypes
           .forEach((behavior) => _behaviorsSelected[behavior] = false);
       _inputBehaviors = [];
@@ -181,10 +203,19 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
       thoughts: _thoughtsInput,
       isBackLog: _isBackLog,
       dateTimeOfLog: date,
+      usedCopingSkills: _usedCopingSkills,
     );
 
+    List<UsedCopingSkill> skills = [];
+    for (String id in _selectedTemplates) {
+      CopingSkill skill =
+          Provider.of<CopingSkills>(context, listen: false).findById(id);
+      skills.add(
+          UsedCopingSkill(name: skill.name, description: skill.description));
+    }
+
     Provider.of<Behaviors>(context, listen: false)
-        .addBehavior(newBehaviorLog, userId);
+        .addBehavior(newBehaviorLog, userId, skills);
     Navigator.of(context).pop();
   }
 
@@ -244,6 +275,33 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
               ...(_behaviorTypes
                   .map((behaviorType) => _buildBehaviorTypeWidget(behaviorType))
                   .toList()),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Divider(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  Text(
+                    ' Coping Skills ',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  Expanded(
+                    child: Divider(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                ],
+              ),
+              _buildUsedCopingSkillIinput(),
               SizedBox(
                 height: 5,
               ),
@@ -343,6 +401,56 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
     );
   }
 
+  Widget _buildUsedCopingSkillIinput() {
+    return Card(
+      shadowColor: Theme.of(context).primaryColor,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  'Did you use coping skills?',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                ToggleSwitch(
+                  labels: ['Yes', 'No'],
+                  initialLabelIndex: (_usedCopingSkills) ? 0 : 1,
+                  onToggle: (index) {
+                    if (index == 0) {
+                      setState(() {
+                        _usedCopingSkills = !_usedCopingSkills;
+                        _selectedTemplates = [];
+                      });
+                    } else {
+                      setState(() {
+                        _usedCopingSkills = !_usedCopingSkills;
+                      });
+                    }
+                  },
+                  activeBgColor: Theme.of(context).primaryColor,
+                  activeFgColor: Colors.white,
+                  inactiveBgColor: Colors.teal[50],
+                  inactiveFgColor: Colors.grey[900],
+                )
+              ],
+            ),
+            if (_usedCopingSkills)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
+                child: _buildTemplatesOverview(),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildIsBacklogIinput() {
     return Card(
       shadowColor: Theme.of(context).primaryColor,
@@ -380,7 +488,7 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
               },
               activeBgColor: Theme.of(context).primaryColor,
               activeFgColor: Colors.white,
-              inactiveBgColor: Colors.purple[50],
+              inactiveBgColor: Colors.teal[50],
               inactiveFgColor: Colors.grey[900],
             )
           ],
@@ -878,5 +986,68 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
         ),
       ),
     );
+  }
+
+  Widget _buildTemplatesOverview() {
+    return (_copingSkillsTemplates == null || _copingSkillsTemplates.isEmpty)
+        ? Text('You have not added coping skills')
+        : SingleChildScrollView(
+            clipBehavior: Clip.none,
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: _copingSkillsTemplates
+                  .map((template) => ChangeNotifierProvider.value(
+                        value: template,
+                        child: GestureDetector(
+                          child: Card(
+                            shadowColor: Theme.of(context).primaryColor,
+                            child: Container(
+                              color: (_selectedTemplates.contains(template.id))
+                                  ? Colors.teal[50]
+                                  : Colors.transparent,
+                              height: 180.0,
+                              width: 200.0,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListView(
+                                  children: [
+                                    Text(
+                                      template.name,
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Divider(),
+                                    Text(
+                                      template.description,
+                                      style: TextStyle(
+                                        fontStyle: FontStyle.italic,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          onTap: () {
+                            if (_selectedTemplates.contains(template.id)) {
+                              setState(() {
+                                _selectedTemplates.remove(template.id);
+                              });
+                            } else {
+                              setState(() {
+                                _selectedTemplates.add(template.id);
+                              });
+                            }
+                          },
+                        ),
+                      ))
+                  .toList(),
+            ),
+          );
   }
 }
