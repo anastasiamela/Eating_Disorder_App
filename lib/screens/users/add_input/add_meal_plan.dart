@@ -42,7 +42,7 @@ class _AddMealPlanState extends State<AddMealPlan> {
         _isEdit = false;
       } else {
         _id = entry.id;
-        _mealItems = entry.mealItems;
+        _mealItems = entry.getMealItems;
         _isEdit = true;
       }
       _selectedToShowTemplates = false;
@@ -276,36 +276,311 @@ class _AddMealPlanState extends State<AddMealPlan> {
       },
       child: Card(
         shadowColor: Theme.of(context).primaryColor,
-        child: ListTile(
-          title: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              initialValue: _mealItems[index],
-              decoration: InputDecoration(
-                hintText: 'Add meal item',
-                hintStyle: TextStyle(fontStyle: FontStyle.italic),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            ListTile(
+              title: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  initialValue: _mealItems[index],
+                  decoration: InputDecoration(
+                    hintText: 'Add meal item',
+                    hintStyle: TextStyle(fontStyle: FontStyle.italic),
+                  ),
+                  validator: (value) {
+                    if (value.length < 3) {
+                      return 'Should be at least 3 characters long.';
+                    }
+                    if (value.length > 30) {
+                      return 'Should be less than 30 characters long.';
+                    }
+                    if (value.trim().isEmpty) {
+                      return 'Please enter something or remove the meal item.';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) => {_mealItems[index] = value},
+                ),
               ),
-              validator: (value) {
-                if (value.length < 3) {
-                  return 'Should be at least 3 characters long.';
-                }
-                if (value.length > 30) {
-                  return 'Should be less than 30 characters long.';
-                }
-                if (value.trim().isEmpty) {
-                  return 'Please enter something or remove the meal item.';
-                }
-                return null;
-              },
-              onChanged: (value) => {_mealItems[index] = value},
+              trailing: InkWell(
+                child: Icon(Icons.delete),
+                onTap: () => _delete(index),
+              ),
             ),
-          ),
-          trailing: InkWell(
-            child: Icon(Icons.delete),
-            onTap: () => _delete(index),
-          ),
+            FlatButton.icon(
+              splashColor: Theme.of(context).accentColor,
+              icon: Icon(
+                Icons.add,
+                color: Theme.of(context).primaryColor,
+              ),
+              label: Text(
+                'Select from exchange system.',
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+              onPressed: () {
+                _exchangeInputDialog(index);
+              },
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  Future<void> _exchangeInputDialog(int index) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        String _exchangeType = '';
+        return StatefulBuilder(
+          builder: (context, setStateNew) => SimpleDialog(
+            backgroundColor: Theme.of(context).primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            contentPadding: EdgeInsets.all(8),
+            titlePadding: EdgeInsets.all(8),
+            title: const Text(
+              'Select exchange type:',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w800,
+                  decoration: TextDecoration.underline),
+            ),
+            children: (_exchangeType.isEmpty)
+                ? <Widget>[
+                    Divider(),
+                    SimpleDialogOption(
+                      child: const Text(
+                        'Carbohydrates',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                      onPressed: () {
+                        setStateNew(() {
+                          _exchangeType = 'Carhohydrates';
+                        });
+                      },
+                    ),
+                    Divider(),
+                    SimpleDialogOption(
+                      child: const Text(
+                        'Protein',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                      onPressed: () {
+                        setStateNew(() {
+                          _exchangeType = 'Protein';
+                        });
+                      },
+                    ),
+                    Divider(),
+                    SimpleDialogOption(
+                      child: const Text(
+                        'Fruit',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                      onPressed: () {
+                        setStateNew(() {
+                          _exchangeType = 'Fruit';
+                        });
+                      },
+                    ),
+                    Divider(),
+                    SimpleDialogOption(
+                      child: const Text(
+                        'Protein',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                      onPressed: () {
+                        setStateNew(() {
+                          _exchangeType = 'Vegetables';
+                        });
+                      },
+                    ),
+                    Divider(),
+                    SimpleDialogOption(
+                      child: const Text(
+                        'Dairy',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                      onPressed: () {
+                        setStateNew(() {
+                          _exchangeType = 'Dairy';
+                        });
+                      },
+                    ),
+                    Divider(),
+                    SimpleDialogOption(
+                      child: const Text(
+                        'Fats',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                      onPressed: () {
+                        setStateNew(() {
+                          _exchangeType = 'Fats';
+                        });
+                      },
+                    ),
+                    Divider(),
+                    SimpleDialogOption(
+                      child: const Text(
+                        'Water',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                      onPressed: () {
+                        setStateNew(() {
+                          _exchangeType = 'Water';
+                        });
+                      },
+                    ),
+                    Divider(),
+                    SimpleDialogOption(
+                      child: const Text(
+                        'Juice',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                      onPressed: () {
+                        setStateNew(() {
+                          _exchangeType = 'Juice';
+                        });
+                      },
+                    ),
+                    Divider(),
+                  ]
+                : [
+                    Divider(),
+                    SimpleDialogOption(
+                      child: const Text(
+                        '1',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _mealItems[index] = '1 \* $_exchangeType';
+                        });
+                        _exchangeType = '';
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    Divider(),
+                    SimpleDialogOption(
+                      child: const Text(
+                        '2',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _mealItems[index] = '2 \* $_exchangeType';
+                        });
+                        _exchangeType = '';
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    Divider(),
+                    SimpleDialogOption(
+                      child: const Text(
+                        '3',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _mealItems[index] = '3 \* $_exchangeType';
+                        });
+                        _exchangeType = '';
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    Divider(),
+                    SimpleDialogOption(
+                      child: const Text(
+                        '4',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _mealItems[index] = '4 \* $_exchangeType';
+                        });
+                        _exchangeType = '';
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    Divider(),
+                    SimpleDialogOption(
+                      child: const Text(
+                        '5',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _mealItems[index] = '5 \* $_exchangeType';
+                        });
+                        _exchangeType = '';
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    Divider(),
+                  ],
+          ),
+        );
+      },
     );
   }
 
