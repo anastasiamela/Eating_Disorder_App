@@ -106,6 +106,12 @@ class Behaviors with ChangeNotifier {
         .toList();
   }
 
+  List<Behavior> get behaviorsWithCopingSkills {
+    return _behaviors
+        .where((behavior) => behavior.usedCopingSkills ?? () => null)
+        .toList();
+  }
+
   Behavior findById(String id) {
     return _behaviors.firstWhere((behavior) => behavior.id == id);
   }
@@ -218,7 +224,9 @@ class Behaviors with ChangeNotifier {
     for (UsedCopingSkill skill in skills) {
       try {
         await FirebaseFirestore.instance
-            .collection('logs')
+            .collection('patients')
+            .doc(userId)
+            .collection('behaviors')
             .doc(logId)
             .collection('usedCopingSkills')
             .add({
@@ -331,6 +339,38 @@ class Behaviors with ChangeNotifier {
       });
       _behaviors = loadedBehaviors;
       notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
+  }
+
+  Future<List<UsedCopingSkill>> fetchAndSetUsedCopingSkills(
+      String userId, String logId) async {
+    try {
+      final response = await FirebaseFirestore.instance
+          .collection('patients')
+          .doc(userId)
+          .collection('behaviors')
+          .doc(logId)
+          .collection('usedCopingSkills')
+          .orderBy("createdAt", descending: true)
+          .get();
+      final extractedData = response.docs;
+
+      if (extractedData == null) {
+        return [];
+      }
+      final List<UsedCopingSkill> loadedSkills = [];
+      extractedData.forEach((skill) {
+        var skillData = skill.data();
+        loadedSkills.add(
+          UsedCopingSkill(
+            name: skillData['name'],
+            description: skillData['description'],
+          ),
+        );
+      });
+      return loadedSkills;
     } catch (error) {
       throw (error);
     }

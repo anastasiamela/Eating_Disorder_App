@@ -22,7 +22,10 @@ class BehaviorLogItem extends StatelessWidget {
     String subtitleText = '';
     if (subtitleType == 'Thoughts') {
       subtitleText = 'Thoughts: ${behavior.thoughts}';
-    } else {
+    } else if (subtitleType == 'Coping Skills') {
+      subtitleText = 'Use of coping skill.';
+    } 
+    else {
       if (behaviorsNumber == 0) {
         subtitleText = 'Disordered behaviors: none';
       } else {

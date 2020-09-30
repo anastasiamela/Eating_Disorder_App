@@ -39,6 +39,7 @@ class _GeneralLogsOverviewScreenState extends State<GeneralLogsOverviewScreen>
     Tab(text: 'Thoughts'),
     Tab(text: 'Feelings'),
     Tab(text: 'Behaviors'),
+    Tab(text: 'Coping Skills'),
   ];
 
   var selectedIndex = 0;
@@ -207,6 +208,7 @@ class _GeneralLogsOverviewScreenState extends State<GeneralLogsOverviewScreen>
           GeneralList(selectedIndex, tabsList[selectedIndex].text),
           GeneralList(selectedIndex, tabsList[selectedIndex].text),
           LoggingGoalsOverview(),
+          GeneralList(selectedIndex, tabsList[selectedIndex].text),
           GeneralList(selectedIndex, tabsList[selectedIndex].text),
           GeneralList(selectedIndex, tabsList[selectedIndex].text),
           GeneralList(selectedIndex, tabsList[selectedIndex].text),

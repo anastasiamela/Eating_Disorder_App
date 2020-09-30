@@ -105,6 +105,10 @@ class GeneralList extends StatelessWidget {
       messageEmpty = 'There are no logs for behaviors.';
       buttonTitleAdd = 'Add behaviors';
       routeNextToAdd = AddBehaviorLogScreen.routeName;
+    } else if (selectedCategoryIndex == 9) {
+      behaviors = behaviorsData.behaviorsWithCopingSkills;
+      displayList = [...behaviors];
+      messageEmpty = 'There are no logs with coping skills.';
     }
 
     return (displayList == null || displayList.isEmpty)
@@ -122,11 +126,15 @@ class GeneralList extends StatelessWidget {
                     fontSize: 20.0,
                   ),
                 ),
-                if (selectedCategoryIndex >= 6 || selectedCategoryIndex == 2)
+                if ((selectedCategoryIndex >= 6 &&
+                        selectedCategoryIndex != 9) ||
+                    selectedCategoryIndex == 2)
                   const SizedBox(
                     height: 8,
                   ),
-                if (selectedCategoryIndex >= 6 || selectedCategoryIndex == 2)
+                if ((selectedCategoryIndex >= 6 &&
+                        selectedCategoryIndex != 9) ||
+                    selectedCategoryIndex == 2)
                   FlatButton(
                     textColor: Colors.yellow[700],
                     highlightColor: Theme.of(context).accentColor,
