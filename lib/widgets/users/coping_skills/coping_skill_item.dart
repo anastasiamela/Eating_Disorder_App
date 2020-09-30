@@ -21,47 +21,63 @@ class CopingSkillItem extends StatelessWidget {
           arguments: skill.id,
         );
       },
-      child: Card(
-        shadowColor: Theme.of(context).primaryColor,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+          shadowColor: Theme.of(context).primaryColor,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      skill.name,
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    if (skill.patientId == skill.createdBy)
-                      IconButton(
-                        splashColor: Colors.transparent,
-                        icon: Icon(
-                          Icons.edit,
-                          size: 28,
-                          color: (skill.patientId == skill.createdBy)
-                              ? Theme.of(context).primaryColor
-                              : Colors.transparent,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(
-                              AddCopingSkillScreen.routeName,
-                              arguments: skill);
-                        },
-                      ),
-                  ],
+              ListTile(
+                title: Text(
+                  skill.name,
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
+                trailing: (skill.patientId == skill.createdBy)
+                    ? Wrap(
+                        children: [
+                          IconButton(
+                            splashColor: Colors.transparent,
+                            icon: Icon(
+                              Icons.edit,
+                              size: 28,
+                              color: (skill.patientId == skill.createdBy)
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.transparent,
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pushNamed(
+                                  AddCopingSkillScreen.routeName,
+                                  arguments: skill);
+                            },
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          IconButton(
+                            splashColor: Colors.transparent,
+                            icon: Icon(
+                              Icons.delete,
+                              size: 28,
+                              color: (skill.patientId == skill.createdBy)
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.transparent,
+                            ),
+                            onPressed: () {
+                              Provider.of<CopingSkills>(context, listen: false)
+                                  .deleteCopingSkill(skill.id, skill.patientId);
+                            },
+                          ),
+                        ],
+                      )
+                    : null,
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                 child: Text(
                   skill.description,
                   style: TextStyle(

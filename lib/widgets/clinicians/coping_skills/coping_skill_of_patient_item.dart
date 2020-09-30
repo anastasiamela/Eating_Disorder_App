@@ -43,17 +43,38 @@ class CopingSkillOfPatientItem extends StatelessWidget {
                 subtitle: Text(patient.patientEmail),
                 trailing: (skill.patientId == skill.createdBy)
                     ? null
-                    : IconButton(
-                        icon: Icon(
-                          Icons.edit,
-                          size: 28,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(
-                              AddCopingSkillForPatientScreen.routeName,
-                              arguments: skill);
-                        },
+                    : Wrap(
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              Icons.edit,
+                              size: 28,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pushNamed(
+                                  AddCopingSkillForPatientScreen.routeName,
+                                  arguments: skill);
+                            },
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          IconButton(
+                            splashColor: Colors.transparent,
+                            icon: Icon(
+                              Icons.delete,
+                              size: 28,
+                              color: (skill.patientId != skill.createdBy)
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.transparent,
+                            ),
+                            onPressed: () {
+                              Provider.of<CopingSkills>(context, listen: false)
+                                  .deleteCopingSkill(skill.id, skill.patientId);
+                            },
+                          ),
+                        ],
                       ),
               ),
               Padding(

@@ -17,7 +17,7 @@ class MyCopingSkillDetailScreen extends StatelessWidget {
     ).findById(skillId);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Details of the feelings log'),
+        title: Text('Details of the coping skill'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
