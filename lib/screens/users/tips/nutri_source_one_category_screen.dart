@@ -16,15 +16,12 @@ class NutriSourceOneCategoryScreen extends StatelessWidget {
         child: ListView(
           children: [
             Card(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 150,
-                  width: double.infinity,
-                  child: Image.asset(
-                    source.photo,
-                    fit: BoxFit.cover,
-                  ),
+              child: Container(
+                height: 150,
+                width: double.infinity,
+                child: Image.asset(
+                  source.photo,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -71,13 +68,38 @@ class NutriSourceOneCategoryScreen extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                    child: Text(
-                      source.sources,
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: source.sources
+                          .map((item) => Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 3),
+                                child: Row(
+                                  //mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Icon(Icons.near_me),
+                                    Expanded(
+                                      child: Text(
+                                        item,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ))
+                          .toList(),
                     ),
                   ),
+                  // Padding(
+                  //   padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                  //   child: Text(
+                  //     source.sources,
+                  //     style: TextStyle(
+                  //       fontSize: 16,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
