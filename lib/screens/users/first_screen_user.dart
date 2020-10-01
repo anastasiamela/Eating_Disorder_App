@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 import '../../widgets/curved_list_item.dart';
 
-import '../../models/nutri_facts.dart';
+import '../../models/quotes.dart';
 
 import '../../screens/users/logs_screens/general_logs_overview_screen.dart';
 import '../../screens/users/logs_screens/calendar_logs_screen.dart';
@@ -39,6 +40,7 @@ class FirstScreenUser extends StatelessWidget {
   }
 
   Widget _getContent(BuildContext ctx) {
+    final random = Random();
     final height = MediaQuery.of(ctx).size.height;
     return Positioned(
       left: 20.0,
@@ -48,45 +50,48 @@ class FirstScreenUser extends StatelessWidget {
         shrinkWrap: true,
         children: [
           Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: Container(
+              height: height * 0.25,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12.0),
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.teal[100],
+                    Colors.teal[200],
+                    Colors.teal[50],
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  //stops: [0, 1],
+                ),
               ),
-              child: Container(
-                height: height * 0.3,
-                width: MediaQuery.of(ctx).size.width - 20,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      ListTile(
+              width: MediaQuery.of(ctx).size.width - 20,
+              child: Center(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    Center(
+                      child: ListTile(
                         title: Text(
-                          getTitleOfFact(0),
+                          quotes[random.nextInt(quotes.length - 1)].quote,
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,
                             fontStyle: FontStyle.italic,
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-                        child: ListTile(
-                          title: Text(
-                            getDescriptionOfFact(0),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              )
-              // Container(
-              //   height: 150,
-              //   decoration: BoxDecoration(
-              //     borderRadius: BorderRadius.circular(15.0),
-              //     color: Colors.teal[100],
-              //   ),
-              // ),
               ),
+            ),
+          ),
           SizedBox(height: 20),
           Card(
             child: Column(
