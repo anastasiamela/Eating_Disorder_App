@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/goals.dart';
 import '../../../providers/auth.dart';
+
+import '../../../api/reminders_api.dart';
 
 class AddGoalScreen extends StatefulWidget {
   static const routeName = '/add-goal';
@@ -18,10 +21,20 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
   bool _hasSelectedcompletionDate;
   bool _hasSelectedTime;
   TimeOfDay _selectedTime;
+  bool _remindersEnabled;
 
   var _isInit = true;
   var _isEdit = false;
   Goal entry;
+
+  @override
+  void initState() {
+    super.initState();
+    notificationPlugin
+        .setListenerForLowerVersions(onNotificationInLowerVersions);
+    notificationPlugin.setOnNotificationClick(onNotificationClick);
+  }
+
   @override
   void didChangeDependencies() {
     if (_isInit) {
@@ -33,14 +46,22 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
         _hasSelectedcompletionDate = false;
         _hasSelectedTime = false;
         _selectedTime = null;
+        _remindersEnabled = true;
         _isEdit = false;
       } else {
         _inputName = entry.name;
         _inputDescription = entry.description;
         _selectedComplitionDate = entry.completeDate;
         _hasSelectedcompletionDate = true;
-        _hasSelectedTime = false;
-        _selectedTime = null;
+        if (entry.reminderIndex > 0) {
+          _remindersEnabled = true;
+          _selectedTime = TimeOfDay.fromDateTime(_selectedComplitionDate);
+          _hasSelectedTime = true;
+        } else {
+          _remindersEnabled = false;
+          _selectedTime = null;
+          _hasSelectedTime = false;
+        }
         _isEdit = true;
       }
     }
@@ -48,15 +69,32 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
     super.didChangeDependencies();
   }
 
-  void _saveForm() {
+  void _saveForm() async {
     final isValid = _form.currentState.validate();
     if (!isValid) {
       return;
     }
     _form.currentState.save();
     final patientId = Provider.of<Auth>(context, listen: false).userId;
+    final remindersNumber =
+        Provider.of<Auth>(context, listen: false).remindersNumber;
     final date = DateTime.now();
-
+    DateTime dateTarget;
+    int indexOfReminderInput;
+    if (_remindersEnabled) {
+      indexOfReminderInput = remindersNumber + 1;
+      Provider.of<Auth>(context, listen: false).setRemindersNumber(indexOfReminderInput);
+      dateTarget = new DateTime(
+        _selectedComplitionDate.year,
+        _selectedComplitionDate.month,
+        _selectedComplitionDate.day,
+        _selectedTime.hour,
+        _selectedTime.minute,
+      );
+    } else {
+      indexOfReminderInput = -1;
+      dateTarget = _selectedComplitionDate;
+    }
     if (!_isEdit) {
       Goal input = Goal(
         id: '',
@@ -65,9 +103,10 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
         patientId: patientId,
         createdBy: patientId,
         creationDate: date,
-        scheduleToCompleteDate: _selectedComplitionDate,
+        scheduleToCompleteDate: dateTarget,
         completeDate: date,
         isCompleted: false,
+        reminderIndex: indexOfReminderInput,
       );
       Provider.of<Goals>(context, listen: false).addGoal(input);
     } else {
@@ -78,11 +117,19 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
         patientId: entry.patientId,
         createdBy: entry.createdBy,
         creationDate: entry.creationDate,
-        scheduleToCompleteDate: _selectedComplitionDate,
+        scheduleToCompleteDate: dateTarget,
         completeDate: entry.completeDate,
         isCompleted: entry.isCompleted,
+        reminderIndex: indexOfReminderInput,
       );
+      if (entry.reminderIndex > 0) {
+        await notificationPlugin.cancelNotification(entry.reminderIndex + 6);
+      }
       Provider.of<Goals>(context, listen: false).updateGoal(entry.id, input);
+    }
+    if (_remindersEnabled) {
+      await notificationPlugin.showDailyAtTime(
+          _selectedTime, indexOfReminderInput, 'Goal Completion', _inputName);
     }
     Navigator.of(context).pop();
   }
@@ -226,10 +273,10 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
               ),
               _buildCompletionDateInput(),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                 child: ListTile(
                   title: Text(
-                    'Reminders for your Goal',
+                    'Reminders',
                     style: TextStyle(
                         color: Theme.of(context).primaryColor,
                         fontSize: 20,
@@ -245,9 +292,26 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                       ),
                     ),
                   ),
+                  trailing: ToggleSwitch(
+                    labels: ['On', 'Off'],
+                    initialLabelIndex: (_remindersEnabled) ? 0 : 1,
+                    onToggle: (index) {
+                      setState(() {
+                        _remindersEnabled = !_remindersEnabled;
+                        if (!_remindersEnabled) {
+                          _hasSelectedTime = false;
+                        }
+                      });
+                    },
+                    activeBgColor: Theme.of(context).primaryColor,
+                    activeFgColor: Colors.white,
+                    inactiveBgColor:
+                        Theme.of(context).primaryColor.withOpacity(0.1),
+                    inactiveFgColor: Colors.grey[900],
+                  ),
                 ),
               ),
-              _buildReminderTimeInput(),
+              if (_remindersEnabled) _buildReminderTimeInput(),
             ],
           ),
         ),
@@ -317,7 +381,6 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                       readOnly: true,
                       validator: (value) {
                         if (_hasSelectedTime == false) {
-                          //if you have not selected day
                           return 'You have to select time!';
                         }
                         return null;
@@ -413,5 +476,18 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
         ),
       ),
     );
+  }
+
+  onNotificationInLowerVersions(ReceivedNotification receivedNotification) {
+    print('Notification Received ${receivedNotification.id}');
+  }
+
+  onNotificationClick(String payload) {
+    print('Payload $payload');
+    // Navigator.push(context, MaterialPageRoute(builder: (coontext) {
+    //   return NotificationScreen(
+    //     payload: payload,
+    //   );
+    // }));
   }
 }

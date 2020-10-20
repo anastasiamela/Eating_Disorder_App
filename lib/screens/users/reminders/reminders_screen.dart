@@ -130,7 +130,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
         _finalSettingsToSave[key] = '';
       }
     }
-    print(_finalSettingsToSave['breakfast']);
+    // print(_finalSettingsToSave['breakfast']);
     final newSettings = Reminders(
       breakfastReminder: _finalSettingsToSave['breakfast'],
       morningSnackReminder: _finalSettingsToSave['morningSnack'],
@@ -145,17 +145,20 @@ class _RemindersScreenState extends State<RemindersScreen> {
     Provider.of<SettingsForReminders>(context, listen: false)
         .setSettingsForReminders(newSettings, userId);
 
-    await notificationPlugin.cancelAllNotification();
+    //await notificationPlugin.cancelAllNotification();
+    for (int i = 0; i < 7; i++) {
+      await notificationPlugin.cancelNotification(i);
+    }
     if (_enableSettings) {
       for (var key in keys) {
         if (_selectedTime[key] != null) {
           await notificationPlugin.showDailyAtTime(
-              _selectedTime[key], _codesForReminders[key]);
+              _selectedTime[key], _codesForReminders[key], '', '');
         }
       }
     }
-    var number = await notificationPlugin.getPendingNotificationCount();
-    print(number);
+    // var number = await notificationPlugin.getPendingNotificationCount();
+    // print(number);
 
     Navigator.of(context).pop();
   }

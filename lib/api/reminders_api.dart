@@ -79,7 +79,7 @@ class NotificationPlugin {
     );
   }
 
-  Future<void> showDailyAtTime(TimeOfDay timeInput, int code) async {
+  Future<void> showDailyAtTime(TimeOfDay timeInput, int code, String titleMessage, String bodyMessage) async {
     var time = Time(timeInput.hour, timeInput.minute, 0);
     var androidChannelSpecifics = AndroidNotificationDetails(
       'CHANNEL_ID 4',
@@ -94,8 +94,8 @@ class NotificationPlugin {
         NotificationDetails(androidChannelSpecifics, iosChannelSpecifics);
     await flutterLocalNotificationsPlugin.showDailyAtTime(
       code,
-      'Test Title at ${time.hour}:${time.minute}.${time.second}',
-      'Test Body', //null
+      titleMessage,
+      bodyMessage, //null
       time,
       platformChannelSpecifics,
       payload: 'Test Payload',

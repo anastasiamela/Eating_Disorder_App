@@ -11,6 +11,7 @@ class Auth with ChangeNotifier {
   String _userName;
   String _userPhoto;
   String _userEmail;
+  int _remindersNumber; //for goals reminders
 
   User _user;
 
@@ -25,6 +26,8 @@ class Auth with ChangeNotifier {
   String get userEmail => _userEmail;
 
   String get userId => _userId;
+
+  int get remindersNumber => _remindersNumber;
 
   login(String email, String password) async {
     UserCredential authResult = await FirebaseAuth.instance
@@ -65,6 +68,7 @@ class Auth with ChangeNotifier {
           _userRole = 'patient';
           _userName = response.data()['displayName'];
           _userPhoto = response.data()['photo'];
+          _remindersNumber = response.data()['remindersNumber'];
           notifyListeners();
           return;
         } catch (error) {
@@ -100,7 +104,8 @@ class Auth with ChangeNotifier {
                 'role': role,
                 'displayName': displayName,
                 'photo': photoUrl,
-                'email': email
+                'email': email,
+                'remindersNumber': 6,
               });
               _userRole = role;
             } catch (error) {
@@ -147,6 +152,19 @@ class Auth with ChangeNotifier {
       _user = firebaseUser;
       _userId = firebaseUser.uid;
       notifyListeners();
+    }
+  }
+
+  Future<void> setRemindersNumber(int number) async {
+    try {
+      await FirebaseFirestore.instance.collection('patients').doc(userId).set({
+        'remindersNumber': number,
+      });
+      _remindersNumber = number;
+      notifyListeners();
+    } catch (error) {
+      print(error);
+      throw error;
     }
   }
 }

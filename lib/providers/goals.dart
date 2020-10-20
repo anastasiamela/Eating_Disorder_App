@@ -10,9 +10,10 @@ class Goal with ChangeNotifier {
   final String patientId;
   final String createdBy;
   final DateTime creationDate;
-  final DateTime scheduleToCompleteDate;
+  final DateTime scheduleToCompleteDate; //with the time of reminder if exists
   final DateTime completeDate;
   final bool isCompleted;
+  final int reminderIndex;
 
   Goal({
     @required this.id,
@@ -24,6 +25,7 @@ class Goal with ChangeNotifier {
     @required this.scheduleToCompleteDate,
     @required this.completeDate,
     @required this.isCompleted,
+    @required this.reminderIndex,
   });
 }
 
@@ -79,6 +81,7 @@ class Goals with ChangeNotifier {
                 DateTime.parse(goalData['scheduleToCompleteDate']),
             completeDate: DateTime.parse(goalData['completeDate']),
             isCompleted: goalData['isCompleted'],
+            reminderIndex: goalData['reminderIndex'],
           ),
         );
       });
@@ -106,6 +109,7 @@ class Goals with ChangeNotifier {
         'isCompleted': goalInput.isCompleted,
         'name': goalInput.name,
         'description': goalInput.description,
+        'reminderIndex': goalInput.reminderIndex,
         'createdAt': Timestamp.fromDate(timestamp),
       });
       final newGoal = Goal(
@@ -118,6 +122,7 @@ class Goals with ChangeNotifier {
         isCompleted: goalInput.isCompleted,
         name: goalInput.name,
         description: goalInput.description,
+        reminderIndex: goalInput.reminderIndex
       );
       _goals.add(newGoal);
       notifyListeners();
@@ -146,6 +151,7 @@ class Goals with ChangeNotifier {
         'isCompleted': newGoal.isCompleted,
         'name': newGoal.name,
         'description': newGoal.description,
+        'reminderIndex': newGoal.reminderIndex,
         'createdAt': Timestamp.fromDate(timestamp),
       });
       _goals[goalIndex] = newGoal;
@@ -201,6 +207,7 @@ class Goals with ChangeNotifier {
             isCompleted: goalData['isCompleted'],
             name: goalData['name'],
             description: goalData['description'],
+            reminderIndex: goalData['reminderIndex'],
           ),
         );
       });
