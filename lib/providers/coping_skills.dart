@@ -148,7 +148,7 @@ class CopingSkills with ChangeNotifier {
         'description': newSkill.description,
         'createdAt': Timestamp.fromDate(timestamp),
       });
-      skills[skillIndex] = newSkill;
+      _skills[skillIndex] = newSkill;
       //print(skills[skillIndex].name);
       notifyListeners();
     } else {

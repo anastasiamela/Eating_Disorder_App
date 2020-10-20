@@ -133,7 +133,7 @@ class _AddCopingSkillScreenState extends State<AddCopingSkillScreen> {
     final patientId = Provider.of<Auth>(context, listen: false).userId;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add coping skill'),
+        title: _isEdit ? Text('Edit coping skill') : Text('New coping skill'),
         actions: <Widget>[
           if (_isEdit)
             IconButton(
@@ -441,16 +441,17 @@ class _AddCopingSkillScreenState extends State<AddCopingSkillScreen> {
         title: TextFormField(
           initialValue: _inputDescription,
           keyboardType: TextInputType.multiline,
+          maxLines: null,
           decoration: InputDecoration(
               labelText: 'Description',
               labelStyle: TextStyle(fontStyle: FontStyle.italic)),
           validator: (value) {
-            if (value.isEmpty) {
+            if (value.trim().isEmpty) {
               return 'Please enter a description.';
             }
             return null;
           },
-          onChanged: (value) => _inputDescription = value,
+          onChanged: (value) => _inputDescription = value.trim(),
         ),
       ),
     );

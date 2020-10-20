@@ -8,11 +8,12 @@ import 'package:provider/provider.dart';
 import '../../screens/users/logs_screens/general_logs_overview_screen.dart';
 import '../../screens/users/meal_plans.dart/meal_plans_overview_screen.dart';
 import '../../screens/users/settings_users/general_settings_users_screen.dart';
-import '../../screens/users/add_input/add_coping_skill_screen.dart';
+//import '../../screens/users/add_input/add_coping_skill_screen.dart';
 import '../../screens/users/coping_skills/my_coping_skills_screen.dart';
 import '../../screens/users/communtity_coping_skills/community_skills_overview_screen.dart';
 import '../../screens/users/reminders/reminders_screen.dart';
 import '../../screens/users/tips/tips_categories_screen.dart';
+import '../../screens/users/add_input/add_goal_screen.dart';
 
 import '../../providers/auth.dart';
 
@@ -57,10 +58,10 @@ class AppDrawer extends StatelessWidget {
           Divider(),
           ListTile(
             leading: Icon(Icons.add),
-            title: Text('Add coping skill'),
+            title: Text('Add goal'),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pushReplacementNamed(AddCopingSkillScreen.routeName);
+              Navigator.of(context).pushNamed(AddGoalScreen.routeName);
             },
           ),
           Divider(),
