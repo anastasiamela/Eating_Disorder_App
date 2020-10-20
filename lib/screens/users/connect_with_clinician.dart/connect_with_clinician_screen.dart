@@ -52,7 +52,7 @@ class _ConnectWithClinicianScreenState
     final request = Provider.of<Requests>(context).requests;
     final clinicianExists =
         Provider.of<ConnectedClinician>(context).clinicianExists;
-        print(clinicianExists);
+        //print(clinicianExists);
     return Scaffold(
       appBar: AppBar(
         title: Text('Connect with your clinician'),

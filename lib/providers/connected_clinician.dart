@@ -40,6 +40,7 @@ class ConnectedClinician with ChangeNotifier {
       _clinicianEmail = response.data()['clinicianEmail'];
       _connectionDate =
          response.data()['createdAt'];
+         notifyListeners();
     } catch (error) {
       _clinicianExists = false;
       throw (error);
