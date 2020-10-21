@@ -22,6 +22,7 @@ class _MyGoalsScreenState extends State<MyGoalsScreen>
 
   List<Tab> tabsList = [
     Tab(text: 'Active'),
+    Tab(text: 'Delayed'),
     Tab(text: 'Completed'),
   ];
 
@@ -97,6 +98,11 @@ class _MyGoalsScreenState extends State<MyGoalsScreen>
           : TabBarView(
               controller: _tabController,
               children: [
+                RefreshIndicator(
+                  onRefresh: () => _refreshScreen(context, patientId),
+                  child:
+                      MyGoalsList(selectedIndex, tabsList[selectedIndex].text),
+                ),
                 RefreshIndicator(
                   onRefresh: () => _refreshScreen(context, patientId),
                   child:

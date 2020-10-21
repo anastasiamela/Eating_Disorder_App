@@ -33,12 +33,19 @@ class MyGoalsList extends StatelessWidget {
       goals = goalsData.activeGoals;
       goals = sortActive(goals);
     } else if (selectedCategoryIndex == 1) {
+      goals = goalsData.delayedGoals;
+      goals = sortActive(goals);
+    } else if (selectedCategoryIndex == 2) {
       goals = goalsData.completedGoals;
       goals = sortCompleted(goals);
-    }    
+    }
     return (goals.isEmpty)
         ? Center(
-            child: (selectedCategoryIndex == 0) ? Text('You have not active goals.') : Text('You have not completed goals.'),
+            child: (selectedCategoryIndex == 0)
+                ? Text('You have not active goals.')
+                : (selectedCategoryIndex == 1)
+                    ? Text('You have not delayed goals.')
+                    : Text('You have not completed goals.'),
           )
         : ListView.builder(
             itemCount: goals.length,

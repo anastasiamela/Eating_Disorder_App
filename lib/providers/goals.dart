@@ -67,9 +67,23 @@ class Goals with ChangeNotifier {
     return _goals.where((goal) => goal.isCompleted ?? () => null).toList();
   }
 
-  List<Goal> get copingSkillsByClinician {
+  List<Goal> get goalsByClinician {
     return _goals
         .where((goal) => goal.patientId != goal.createdBy ?? () => null)
+        .toList();
+  }
+
+  List<Goal> get delayedGoals {
+    DateTime today = DateTime.now();
+    today = new DateTime(
+        today.year,
+        today.month,
+        today.day,
+        23,
+        59,
+      );
+    return _goals
+        .where((goal) => (goal.scheduleToCompleteDate.isAfter(today) && !goal.isCompleted) ?? () => null)
         .toList();
   }
 
