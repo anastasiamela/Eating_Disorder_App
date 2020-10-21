@@ -83,7 +83,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
     int indexOfReminderInput;
     if (_remindersEnabled) {
       indexOfReminderInput = remindersNumber + 1;
-      Provider.of<Auth>(context, listen: false).setRemindersNumber(indexOfReminderInput);
+      await Provider.of<Auth>(context, listen: false).setRemindersNumber(indexOfReminderInput);
       dateTarget = new DateTime(
         _selectedComplitionDate.year,
         _selectedComplitionDate.month,
@@ -108,7 +108,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
         isCompleted: false,
         reminderIndex: indexOfReminderInput,
       );
-      Provider.of<Goals>(context, listen: false).addGoal(input);
+      await Provider.of<Goals>(context, listen: false).addGoal(input);
     } else {
       Goal input = Goal(
         id: entry.id,
@@ -123,9 +123,9 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
         reminderIndex: indexOfReminderInput,
       );
       if (entry.reminderIndex > 0) {
-        await notificationPlugin.cancelNotification(entry.reminderIndex + 6);
+        await notificationPlugin.cancelNotification(entry.reminderIndex);
       }
-      Provider.of<Goals>(context, listen: false).updateGoal(entry.id, input);
+      await Provider.of<Goals>(context, listen: false).updateGoal(entry.id, input);
     }
     if (_remindersEnabled) {
       await notificationPlugin.showDailyAtTime(

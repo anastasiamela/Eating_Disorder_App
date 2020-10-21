@@ -188,66 +188,94 @@ class MealLogs with ChangeNotifier {
         'behaviorsList': FieldValue.arrayUnion(meal.behaviorsList),
         'feelingsList': FieldValue.arrayUnion(meal.feelingsList)
       });
-      final ref = FirebaseStorage.instance
-          .ref()
-          .child('meal_log_image')
-          .child(response.id + '.jpg');
-      await ref.putFile(imageFile).onComplete;
+      if (imageFile != null) {
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('meal_log_image')
+            .child(response.id + '.jpg');
+        await ref.putFile(imageFile).onComplete;
 
-      final String url = await ref.getDownloadURL();
-      print(url);
+        final String url = await ref.getDownloadURL();
+        print(url);
 
-      await FirebaseFirestore.instance
-          .collection('patients')
-          .doc(userId)
-          .collection('mealLogs')
-          .doc(response.id)
-          .set({
-        'userId': userId,
-        'date': meal.date.toIso8601String(),
-        'skip': meal.skip,
-        'feelingOverall': meal.feelingOverall,
-        'mealType': meal.mealType,
-        'mealCompany': meal.mealCompany,
-        'mealLocation': meal.mealLocation,
-        'mealPhoto': url,
-        'mealDescription': meal.mealDescription,
-        'mealPortion': meal.mealPortion,
-        'thoughts': meal.thoughts,
-        'skippingReason': meal.skippingReason,
-        'isBackLog': meal.isBackLog,
-        'dateTimeOfLog': meal.dateTimeOfLog.toIso8601String(),
-        'dateTimeOfLastUpdate': timestamp.toIso8601String(),
-        'isFavorite': false,
-        'createdAt': Timestamp.fromDate(timestamp),
-        'behaviorsList': FieldValue.arrayUnion(meal.behaviorsList),
-        'feelingsList': FieldValue.arrayUnion(meal.feelingsList)
-      });
-      final newMealLog = MealLog(
-        id: response.id,
-        userId: userId,
-        date: meal.date,
-        skip: meal.skip,
-        feelingOverall: meal.feelingOverall,
-        mealType: meal.mealType,
-        mealCompany: meal.mealCompany,
-        mealLocation: meal.mealLocation,
-        mealPhoto: url,
-        mealDescription: meal.mealDescription,
-        mealPortion: meal.mealPortion,
-        thoughts: meal.thoughts,
-        skippingReason: meal.skippingReason,
-        isBackLog: meal.isBackLog,
-        dateTimeOfLog: meal.dateTimeOfLog,
-        dateTimeOfLastUpdate: timestamp,
-        behaviorsList: meal.behaviorsList,
-        feelingsList: meal.feelingsList,
-      );
-      _meals.insert(0, newMealLog); // at the start of the list
-      if (newMealLog.date.isAfter(today)) {
-        _mealsCurrentDay.insert(0, newMealLog);
+        await FirebaseFirestore.instance
+            .collection('patients')
+            .doc(userId)
+            .collection('mealLogs')
+            .doc(response.id)
+            .set({
+          'userId': userId,
+          'date': meal.date.toIso8601String(),
+          'skip': meal.skip,
+          'feelingOverall': meal.feelingOverall,
+          'mealType': meal.mealType,
+          'mealCompany': meal.mealCompany,
+          'mealLocation': meal.mealLocation,
+          'mealPhoto': url,
+          'mealDescription': meal.mealDescription,
+          'mealPortion': meal.mealPortion,
+          'thoughts': meal.thoughts,
+          'skippingReason': meal.skippingReason,
+          'isBackLog': meal.isBackLog,
+          'dateTimeOfLog': meal.dateTimeOfLog.toIso8601String(),
+          'dateTimeOfLastUpdate': timestamp.toIso8601String(),
+          'isFavorite': false,
+          'createdAt': Timestamp.fromDate(timestamp),
+          'behaviorsList': FieldValue.arrayUnion(meal.behaviorsList),
+          'feelingsList': FieldValue.arrayUnion(meal.feelingsList)
+        });
+        final newMealLog = MealLog(
+          id: response.id,
+          userId: userId,
+          date: meal.date,
+          skip: meal.skip,
+          feelingOverall: meal.feelingOverall,
+          mealType: meal.mealType,
+          mealCompany: meal.mealCompany,
+          mealLocation: meal.mealLocation,
+          mealPhoto: url,
+          mealDescription: meal.mealDescription,
+          mealPortion: meal.mealPortion,
+          thoughts: meal.thoughts,
+          skippingReason: meal.skippingReason,
+          isBackLog: meal.isBackLog,
+          dateTimeOfLog: meal.dateTimeOfLog,
+          dateTimeOfLastUpdate: timestamp,
+          behaviorsList: meal.behaviorsList,
+          feelingsList: meal.feelingsList,
+        );
+        _meals.insert(0, newMealLog); // at the start of the list
+        if (newMealLog.date.isAfter(today)) {
+          _mealsCurrentDay.insert(0, newMealLog);
+        }
+        notifyListeners();
+      } else {
+        final newMealLog = MealLog(
+          id: response.id,
+          userId: userId,
+          date: meal.date,
+          skip: meal.skip,
+          feelingOverall: meal.feelingOverall,
+          mealType: meal.mealType,
+          mealCompany: meal.mealCompany,
+          mealLocation: meal.mealLocation,
+          mealPhoto: meal.mealPhoto,
+          mealDescription: meal.mealDescription,
+          mealPortion: meal.mealPortion,
+          thoughts: meal.thoughts,
+          skippingReason: meal.skippingReason,
+          isBackLog: meal.isBackLog,
+          dateTimeOfLog: meal.dateTimeOfLog,
+          dateTimeOfLastUpdate: timestamp,
+          behaviorsList: meal.behaviorsList,
+          feelingsList: meal.feelingsList,
+        );
+        _meals.insert(0, newMealLog); // at the start of the list
+        if (newMealLog.date.isAfter(today)) {
+          _mealsCurrentDay.insert(0, newMealLog);
+        }
+        notifyListeners();
       }
-      notifyListeners();
     } catch (error) {
       print(error);
       throw error;

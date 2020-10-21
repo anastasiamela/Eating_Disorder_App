@@ -55,13 +55,17 @@ class _MealLogImagePickerState extends State<MealLogImagePicker> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            IconButton(
-              icon: Icon(
-                Icons.camera_alt,
-                size: 30.0,
-                color: Theme.of(context).primaryColor,
-              ),
-              onPressed: _pickImage,
+            Row(
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.camera_alt,
+                    size: 30.0,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  onPressed: _pickImage,
+                ),
+              ],
             )
           ],
         ),

@@ -137,6 +137,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
 
   var _isInit = true;
   var _isLoading = false;
+  var _isSaving = false;
 
   @override
   void initState() {
@@ -189,22 +190,12 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
     });
   }
 
-  void _saveForm() {
+  void _saveForm(BuildContext context) async {
     final isValid = _form.currentState.validate();
     if (!isValid) {
       return;
     }
     _form.currentState.save();
-
-    if (_imageFile == null) {
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Please pick an image.'),
-          backgroundColor: Theme.of(context).errorColor,
-        ),
-      );
-      return;
-    }
 
     DateTime date = DateTime.now();
     DateTime dateTimeOfMealFinal;
@@ -269,7 +260,10 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
       feelingsList: _inputFeelings,
     );
     final userId = Provider.of<Auth>(context, listen: false).userId;
-    Provider.of<MealLogs>(context, listen: false)
+    setState(() {
+      _isSaving = true;
+    });
+    await Provider.of<MealLogs>(context, listen: false)
         .addMealLog(_editedMealLog, userId, _imageFile);
     Navigator.of(context).pop();
   }
@@ -292,78 +286,82 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
                 Icons.save,
                 color: Colors.white,
               ),
-              onPressed: _saveForm,
+              onPressed: () => _saveForm(context),
             ),
           ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: Form(
-            //autovalidate: true,
-            key: _form,
-            child: (!_skip)
-                ? ListView(
-                    children: <Widget>[
-                      //skip input
-                      _buildSkipInput(),
-                      //meal type input
-                      _buildMealTypeInput(),
-                      //meal description input
-                      _buildMealDescriptionInput(),
-                      //meal is backlog input
-                      _buildMealIsBacklogIinput(),
-                      (!_isBackLog)
-                          ?
-                          //meal ago time input
-                          _buildMealAgoTimeInput()
-                          //meal date and time input for a backlog meal
-                          : _buildDateBackLogInput(),
-                      (!_isBackLog)
-                          ? SizedBox(height: 0)
-                          //meal date and time input for a backlog meal
-                          : _buildTimeBackLogInput(),
-                      //feeling overall input
-                      _buildOverallFeelingInput(),
-                      //meal company input
-                      _buildMealCompanyInput(),
-                      //meal location input
-                      _buildMealLocationInput(),
-                      //meal portion size input
-                      _buildMealPortionInput(),
-                      if (_behaviorTypesChoices.isNotEmpty)
-                        _buildBehaviorsInput(),
-                      if (_feelingTypesChoices.isNotEmpty)
-                        _buildFeelingsInput(),
-                      //meal thoughts input
-                      _buildMealThoughts(),
-                    ],
-                  )
-                : ListView(
-                    children: <Widget>[
-                      //skip input
-                      _buildSkipInput(),
-                      //meal is backlog input
-                      _buildMealIsBacklogIinput(),
-                      (!_isBackLog)
-                          ? SizedBox(height: 0)
-                          //meal date input for a backlog meal
-                          : _buildDateBackLogInput(),
-                      //meal type input
-                      _buildMealTypeInput(),
-                      //meal skipping reason
-                      _buildMealSkippingReason(),
-                      //feeling overall input
-                      _buildOverallFeelingInput(),
-                      if (_behaviorTypesChoices.isNotEmpty)
-                        _buildBehaviorsInput(),
-                      if (_feelingTypesChoices.isNotEmpty)
-                        _buildFeelingsInput(),
-                      //meal thoughts input
-                      _buildMealThoughts(),
-                    ],
-                  ),
-          ),
-        ),
+        body: _isSaving
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Form(
+                  //autovalidate: true,
+                  key: _form,
+                  child: (!_skip)
+                      ? ListView(
+                          children: <Widget>[
+                            //skip input
+                            _buildSkipInput(),
+                            //meal type input
+                            _buildMealTypeInput(),
+                            //meal description input
+                            _buildMealDescriptionInput(),
+                            //meal is backlog input
+                            _buildMealIsBacklogIinput(),
+                            (!_isBackLog)
+                                ?
+                                //meal ago time input
+                                _buildMealAgoTimeInput()
+                                //meal date and time input for a backlog meal
+                                : _buildDateBackLogInput(),
+                            (!_isBackLog)
+                                ? SizedBox(height: 0)
+                                //meal date and time input for a backlog meal
+                                : _buildTimeBackLogInput(),
+                            //feeling overall input
+                            _buildOverallFeelingInput(),
+                            //meal company input
+                            _buildMealCompanyInput(),
+                            //meal location input
+                            _buildMealLocationInput(),
+                            //meal portion size input
+                            _buildMealPortionInput(),
+                            if (_behaviorTypesChoices.isNotEmpty)
+                              _buildBehaviorsInput(),
+                            if (_feelingTypesChoices.isNotEmpty)
+                              _buildFeelingsInput(),
+                            //meal thoughts input
+                            _buildMealThoughts(),
+                          ],
+                        )
+                      : ListView(
+                          children: <Widget>[
+                            //skip input
+                            _buildSkipInput(),
+                            //meal is backlog input
+                            _buildMealIsBacklogIinput(),
+                            (!_isBackLog)
+                                ? SizedBox(height: 0)
+                                //meal date input for a backlog meal
+                                : _buildDateBackLogInput(),
+                            //meal type input
+                            _buildMealTypeInput(),
+                            //meal skipping reason
+                            _buildMealSkippingReason(),
+                            //feeling overall input
+                            _buildOverallFeelingInput(),
+                            if (_behaviorTypesChoices.isNotEmpty)
+                              _buildBehaviorsInput(),
+                            if (_feelingTypesChoices.isNotEmpty)
+                              _buildFeelingsInput(),
+                            //meal thoughts input
+                            _buildMealThoughts(),
+                          ],
+                        ),
+                ),
+              ),
         //drawer: AppDrawer(),
       ),
     );
