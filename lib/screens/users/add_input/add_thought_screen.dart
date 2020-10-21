@@ -135,16 +135,20 @@ class _AddThoughtScreenState extends State<AddThoughtScreen> {
               ),
               TextFormField(
                 keyboardType: TextInputType.multiline,
+                maxLines: null,
                 decoration: InputDecoration(
                     hintText: 'Your thoughts',
                     hintStyle: TextStyle(fontStyle: FontStyle.italic)),
                 validator: (value) {
-                  if (value.length < 5) {
+                  if (value.trim().isEmpty) {
+                    return 'This field should not be empty.';
+                  }
+                  if (value.trim().length < 5) {
                     return 'Should be at least 5 characters long.';
                   }
                   return null;
                 },
-                onSaved: (value) => _inputThought = value,
+                onSaved: (value) => _inputThought = value.trim(),
               ),
             ],
           ),

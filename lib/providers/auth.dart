@@ -157,7 +157,7 @@ class Auth with ChangeNotifier {
 
   Future<void> setRemindersNumber(int number) async {
     try {
-      await FirebaseFirestore.instance.collection('patients').doc(userId).set({
+      await FirebaseFirestore.instance.collection('patients').doc(userId).update({
         'remindersNumber': number,
       });
       _remindersNumber = number;
