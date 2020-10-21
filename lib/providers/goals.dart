@@ -217,7 +217,7 @@ class Goals with ChangeNotifier {
     }
   }
 
-  Future<void> fetchAndSetCopingSkillsOfPatients(List<String> patients) async {
+  Future<void> fetchAndSetGoalsOfPatients(List<String> patients) async {
     try {
       final response = await FirebaseFirestore.instance
           .collectionGroup('goals')

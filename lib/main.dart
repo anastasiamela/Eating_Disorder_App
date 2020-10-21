@@ -51,6 +51,7 @@ import './screens/users/goals/my_goals_screen.dart';
 import './screens/users/goals/my_goal_detail_screen.dart';
 import './screens/clinicians/one_patient/one_patient_goals_screen.dart';
 import './screens/clinicians/goals/goal_detail_screen.dart';
+import './screens/clinicians/goals/goals_of_patients_screen.dart';
 
 import './providers/meal_logs.dart';
 import './providers/logging_goals.dart';
@@ -217,6 +218,7 @@ class MyApp extends StatelessWidget {
                   OnePatientGoalsScreen.routeName: (ctx) =>
                       OnePatientGoalsScreen(),
                   GoalDetailScreen.routeName: (ctx) => GoalDetailScreen(),
+                  GoalsOfPatientsScreen.routeName: (ctx) => GoalsOfPatientsScreen()
                 },
               ),
             ),

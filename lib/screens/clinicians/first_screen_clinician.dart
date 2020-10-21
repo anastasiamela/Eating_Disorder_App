@@ -5,6 +5,7 @@ import '../../widgets/curved_list_item.dart';
 import './overview/log_activity_of_patients_screen.dart';
 import './overview/my_patients_tabs_screen.dart';
 import './coping_skills/coping_skills_of_patients_screen.dart';
+import './goals/goals_of_patients_screen.dart';
 
 class FirstScreenClinician extends StatelessWidget {
   @override
@@ -56,7 +57,8 @@ class FirstScreenClinician extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(ctx).pushReplacementNamed(LogActivityOfPatientsScreen.routeName);
+                    Navigator.of(ctx).pushReplacementNamed(
+                        LogActivityOfPatientsScreen.routeName);
                   },
                   child: CurvedListItem(
                     title: 'Patients\' Activity',
@@ -68,7 +70,8 @@ class FirstScreenClinician extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     // Navigator.of(ctx).pushReplacementNamed(MyPatientsScreen.routeName);
-                    Navigator.of(ctx).pushReplacementNamed(MyPatientsTabsScreen.routeName);
+                    Navigator.of(ctx)
+                        .pushReplacementNamed(MyPatientsTabsScreen.routeName);
                   },
                   child: CurvedListItem(
                     title: 'My patients',
@@ -88,7 +91,8 @@ class FirstScreenClinician extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(ctx).pushNamed(CopingSkillsOfPatientsScreen.routeName);
+                    Navigator.of(ctx)
+                        .pushNamed(CopingSkillsOfPatientsScreen.routeName);
                   },
                   child: CurvedListItem(
                     title: 'Coping Skills',
@@ -97,11 +101,17 @@ class FirstScreenClinician extends StatelessWidget {
                     icon: Icons.note_add,
                   ),
                 ),
-                CurvedListItem(
-                  title: 'Goals',
-                  color: Colors.teal[500],
-                  nextColor: Colors.teal[200],
-                  icon: Icons.trip_origin,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(ctx)
+                        .pushNamed(GoalsOfPatientsScreen.routeName);
+                  },
+                  child: CurvedListItem(
+                    title: 'Goals',
+                    color: Colors.teal[500],
+                    nextColor: Colors.teal[200],
+                    icon: Icons.trip_origin,
+                  ),
                 ),
               ],
             ),
