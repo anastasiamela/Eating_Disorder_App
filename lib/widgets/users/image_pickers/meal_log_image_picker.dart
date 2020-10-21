@@ -19,7 +19,7 @@ class _MealLogImagePickerState extends State<MealLogImagePicker> {
   void _pickImage() async {
     final pickedImageFile = await picker.getImage(
       source: ImageSource.camera,
-      imageQuality: 50,
+      imageQuality: 100,
       maxWidth: 150,
     );
     setState(() {
@@ -36,18 +36,47 @@ class _MealLogImagePickerState extends State<MealLogImagePicker> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        CircleAvatar(
-          radius: 40,
-          backgroundColor: Colors.grey,
-          backgroundImage:
-              _pickedImage != null ? FileImage(_pickedImage) : null,
+        if (_pickedImage != null)
+          Container(
+            height: 150,
+            width: double.infinity,
+            child: Image.file(
+              _pickedImage,
+              fit: BoxFit.cover,
+            ),
+          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              'What did you eat?',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.camera_alt,
+                size: 30.0,
+                color: Theme.of(context).primaryColor,
+              ),
+              onPressed: _pickImage,
+            )
+          ],
         ),
-        FlatButton.icon(
-          textColor: Theme.of(context).primaryColor,
-          onPressed: _pickImage,
-          icon: Icon(Icons.image),
-          label: Text('Add Image'),
-        ),
+        // CircleAvatar(
+        //   radius: 40,
+        //   backgroundColor: Colors.grey,
+        //   backgroundImage:
+        //       _pickedImage != null ? FileImage(_pickedImage) : null,
+        // ),
+        // FlatButton.icon(
+        //   textColor: Theme.of(context).primaryColor,
+        //   onPressed: _pickImage,
+        //   icon: Icon(Icons.image),
+        //   label: Text('Add Image'),
+        // ),
       ],
     );
   }

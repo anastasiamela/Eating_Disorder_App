@@ -981,26 +981,26 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             MealLogImagePicker(_pickedImage),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  'What did you eat?',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Icon(
-                  Icons.camera_alt,
-                  size: 30.0,
-                ),
-              ],
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: <Widget>[
+            //     Text(
+            //       'What did you eat?',
+            //       style: TextStyle(
+            //         fontSize: 18.0,
+            //         fontWeight: FontWeight.w600,
+            //       ),
+            //     ),
+            //     Icon(
+            //       Icons.camera_alt,
+            //       size: 30.0,
+            //     ),
+            //   ],
+            // ),
             TextFormField(
               initialValue: _initDescription,
               //decoration: InputDecoration(labelText: 'Description'),
-              maxLines: 3,
+              maxLines: null,
               keyboardType: TextInputType.multiline,
               validator: (value) {
                 if (value.trim().isEmpty) {
