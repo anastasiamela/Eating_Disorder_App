@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
+import 'dart:io';
+
 import '../../../providers/meal_log.dart';
 import '../../../providers/meal_logs.dart';
 import '../../../providers/auth.dart';
 import '../../../providers/settings_for_logs.dart';
+
+import '../../../widgets/users/image_pickers/meal_log_image_picker.dart';
 
 import '../../../models/behaviors_messages.dart';
 
@@ -106,6 +110,12 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
   List<String> _inputBehaviors;
   Map<String, bool> _behaviorsSelected = new Map();
 
+  File _imageFile;
+
+  void _pickedImage(File image) {
+    _imageFile = image;
+  }
+
   var _editedMealLog = MealLog(
       id: null,
       userId: '',
@@ -186,6 +196,16 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
     }
     _form.currentState.save();
 
+    if (_imageFile == null) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please pick an image.'),
+          backgroundColor: Theme.of(context).errorColor,
+        ),
+      );
+      return;
+    }
+
     DateTime date = DateTime.now();
     DateTime dateTimeOfMealFinal;
     //find the datetime of the meal
@@ -250,7 +270,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
     );
     final userId = Provider.of<Auth>(context, listen: false).userId;
     Provider.of<MealLogs>(context, listen: false)
-        .addMealLog(_editedMealLog, userId);
+        .addMealLog(_editedMealLog, userId, _imageFile);
     Navigator.of(context).pop();
   }
 
@@ -960,6 +980,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            MealLogImagePicker(_pickedImage),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[

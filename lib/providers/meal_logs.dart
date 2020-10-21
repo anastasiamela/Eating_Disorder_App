@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
+import 'dart:io';
 
 import '../models/http_exception.dart';
 import './meal_log.dart';
@@ -44,7 +47,9 @@ class MealLogs with ChangeNotifier {
 
   List<MealLog> get mealsWithFeelings {
     return _meals
-        .where((meal) => (meal.feelingOverall != '' || meal.feelingsList.isNotEmpty) ?? () => null)
+        .where((meal) =>
+            (meal.feelingOverall != '' || meal.feelingsList.isNotEmpty) ??
+            () => null)
         .toList();
   }
 
@@ -153,7 +158,7 @@ class MealLogs with ChangeNotifier {
     }
   }
 
-  Future<void> addMealLog(MealLog meal, String userId) async {
+  Future<void> addMealLog(MealLog meal, String userId, File imageFile) async {
     final timestamp = DateTime.now();
     var today = DateTime.now();
     today = new DateTime(today.year, today.month, today.day);
@@ -183,6 +188,41 @@ class MealLogs with ChangeNotifier {
         'behaviorsList': FieldValue.arrayUnion(meal.behaviorsList),
         'feelingsList': FieldValue.arrayUnion(meal.feelingsList)
       });
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('meal_log_image')
+          .child(response.id + '.jpg');
+      await ref.putFile(imageFile).onComplete;
+
+      final String url = await ref.getDownloadURL();
+      print(url);
+
+      await FirebaseFirestore.instance
+          .collection('patients')
+          .doc(userId)
+          .collection('mealLogs')
+          .doc(response.id)
+          .set({
+        'userId': userId,
+        'date': meal.date.toIso8601String(),
+        'skip': meal.skip,
+        'feelingOverall': meal.feelingOverall,
+        'mealType': meal.mealType,
+        'mealCompany': meal.mealCompany,
+        'mealLocation': meal.mealLocation,
+        'mealPhoto': url,
+        'mealDescription': meal.mealDescription,
+        'mealPortion': meal.mealPortion,
+        'thoughts': meal.thoughts,
+        'skippingReason': meal.skippingReason,
+        'isBackLog': meal.isBackLog,
+        'dateTimeOfLog': meal.dateTimeOfLog.toIso8601String(),
+        'dateTimeOfLastUpdate': timestamp.toIso8601String(),
+        'isFavorite': false,
+        'createdAt': Timestamp.fromDate(timestamp),
+        'behaviorsList': FieldValue.arrayUnion(meal.behaviorsList),
+        'feelingsList': FieldValue.arrayUnion(meal.feelingsList)
+      });
       final newMealLog = MealLog(
         id: response.id,
         userId: userId,
@@ -192,7 +232,7 @@ class MealLogs with ChangeNotifier {
         mealType: meal.mealType,
         mealCompany: meal.mealCompany,
         mealLocation: meal.mealLocation,
-        mealPhoto: meal.mealPhoto,
+        mealPhoto: url,
         mealDescription: meal.mealDescription,
         mealPortion: meal.mealPortion,
         thoughts: meal.thoughts,
@@ -204,7 +244,7 @@ class MealLogs with ChangeNotifier {
         feelingsList: meal.feelingsList,
       );
       _meals.insert(0, newMealLog); // at the start of the list
-      if(newMealLog.date.isAfter(today)) {
+      if (newMealLog.date.isAfter(today)) {
         _mealsCurrentDay.insert(0, newMealLog);
       }
       notifyListeners();
