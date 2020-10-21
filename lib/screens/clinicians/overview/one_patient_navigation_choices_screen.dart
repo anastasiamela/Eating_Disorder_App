@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import './one_patient_logs_tabs_screen.dart';
 import '../one_patient/one_patient_coping_skills_screen.dart';
 import '../one_patient/one_patient_meal_plans.dart';
+import '../one_patient/one_patient_goals_screen.dart';
 
 import '../../../providers/clinicians/patients_of_clinicians.dart';
 
@@ -40,6 +41,16 @@ class OnePatientNavigationChoicesScreen extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pushNamed(
                   OnePatientMealPlansScreen.routeName,
+                  arguments: patient);
+            },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.playlist_add_check),
+            title: Text('Goals'),
+            onTap: () {
+              Navigator.of(context).pushNamed(
+                  OnePatientGoalsScreen.routeName,
                   arguments: patient);
             },
           ),

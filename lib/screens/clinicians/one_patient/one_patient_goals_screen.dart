@@ -1,30 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../providers/coping_skills.dart';
+import '../../../providers/goals.dart';
 import '../../../providers/auth.dart';
 import '../../../providers/clinicians/patients_of_clinicians.dart';
 
-import '../../../widgets/clinicians/coping_skills/coping_skills_list.dart';
+import '../../../widgets/clinicians/goals/goals_list.dart';
 
-import '../coping_skills/add_coping_skill_for_patient_screen.dart';
-
-class OnePatientSkillsScreen extends StatefulWidget {
-  static const routeName = '/one-patient-coping-skills';
+class OnePatientGoalsScreen extends StatefulWidget {
+  static const routeName = '/one-patient-goals';
 
   @override
-  _OnePatientSkillsScreenState createState() =>
-      _OnePatientSkillsScreenState();
+  _OnePatientGoalsScreenState createState() => _OnePatientGoalsScreenState();
 }
 
-class _OnePatientSkillsScreenState extends State<OnePatientSkillsScreen>
+class _OnePatientGoalsScreenState extends State<OnePatientGoalsScreen>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
 
   List<Tab> tabsList = [
-    Tab(text: 'All'),
-    Tab(text: 'By You'),
-    Tab(text: 'By Patient'),
+    Tab(text: 'Active'),
+    Tab(text: 'Delayed'),
+    Tab(text: 'Completed'),
   ];
 
   var selectedIndex = 0;
@@ -70,8 +67,8 @@ class _OnePatientSkillsScreenState extends State<OnePatientSkillsScreen>
   }
 
   Future<void> _refreshScreen(BuildContext context, String clinicianId) async {
-    await Provider.of<CopingSkills>(context, listen: false)
-        .fetchAndSetCopingSkills(patient.patientId);
+    await Provider.of<Goals>(context, listen: false)
+        .fetchAndSetGoals(patient.patientId);
   }
 
   @override
@@ -79,16 +76,7 @@ class _OnePatientSkillsScreenState extends State<OnePatientSkillsScreen>
     final clinicianId = Provider.of<Auth>(context, listen: false).userId;
     return Scaffold(
       appBar: AppBar(
-        title: Text('${patient.patientName}\'s Coping Skills'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.of(context)
-                  .pushNamed(AddCopingSkillForPatientScreen.routeName);
-            },
-          ),
-        ],
+        title: Text('${patient.patientName}\'s Goals'),
         bottom: TabBar(
           tabs: tabsList,
           controller: _tabController,
@@ -104,18 +92,15 @@ class _OnePatientSkillsScreenState extends State<OnePatientSkillsScreen>
               children: [
                 RefreshIndicator(
                   onRefresh: () => _refreshScreen(context, clinicianId),
-                  child: CopingSkillsList(
-                      selectedIndex, tabsList[selectedIndex].text),
+                  child: GoalsList(selectedIndex, tabsList[selectedIndex].text),
                 ),
                 RefreshIndicator(
                   onRefresh: () => _refreshScreen(context, clinicianId),
-                  child: CopingSkillsList(
-                      selectedIndex, tabsList[selectedIndex].text),
+                  child: GoalsList(selectedIndex, tabsList[selectedIndex].text),
                 ),
                 RefreshIndicator(
                   onRefresh: () => _refreshScreen(context, clinicianId),
-                  child: CopingSkillsList(
-                      selectedIndex, tabsList[selectedIndex].text),
+                  child: GoalsList(selectedIndex, tabsList[selectedIndex].text),
                 ),
               ],
             ),

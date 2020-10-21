@@ -49,6 +49,8 @@ import './screens/users/tips/nutri_source_one_category_screen.dart';
 import './screens/users/add_input/add_goal_screen.dart';
 import './screens/users/goals/my_goals_screen.dart';
 import './screens/users/goals/my_goal_detail_screen.dart';
+import './screens/clinicians/one_patient/one_patient_goals_screen.dart';
+import './screens/clinicians/goals/goal_detail_screen.dart';
 
 import './providers/meal_logs.dart';
 import './providers/logging_goals.dart';
@@ -212,6 +214,9 @@ class MyApp extends StatelessWidget {
                   AddGoalScreen.routeName: (ctx) => AddGoalScreen(),
                   MyGoalsScreen.routeName: (ctx) => MyGoalsScreen(),
                   MyGoalDetailScreen.routeName: (ctx) => MyGoalDetailScreen(),
+                  OnePatientGoalsScreen.routeName: (ctx) =>
+                      OnePatientGoalsScreen(),
+                  GoalDetailScreen.routeName: (ctx) => GoalDetailScreen(),
                 },
               ),
             ),
