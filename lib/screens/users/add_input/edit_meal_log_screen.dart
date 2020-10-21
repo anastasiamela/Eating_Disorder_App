@@ -730,20 +730,32 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            if (_editedMealLog.mealPhoto.isNotEmpty)
+              Container(
+                height: 150,
+                width: double.infinity,
+                child: Image.network(
+                  _editedMealLog.mealPhoto,
+                  fit: BoxFit.cover,
+                ),
+              ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(
-                  'What did you eat?',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w600,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+                  child: Text(
+                    'What did you eat?',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-                Icon(
-                  Icons.camera_alt,
-                  size: 30.0,
-                ),
+                // Icon(
+                //   Icons.camera_alt,
+                //   size: 30.0,
+                // ),
               ],
             ),
             TextFormField(
