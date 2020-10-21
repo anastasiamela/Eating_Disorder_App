@@ -32,16 +32,6 @@ class _RemindersScreenState extends State<RemindersScreen> {
     'mealPlan': TimeOfDay(hour: 21, minute: 30),
   };
 
-  Map<String, bool> _isExpanded = {
-    'breakfast': false,
-    'morningSnack': false,
-    'lunch': false,
-    'afternoonSnack': false,
-    'dinner': false,
-    'eveningSnack': false,
-    'mealPlan': false,
-  };
-
   final Map<String, int> _codesForReminders = {
     'breakfast': 0,
     'morningSnack': 1,
@@ -174,15 +164,6 @@ class _RemindersScreenState extends State<RemindersScreen> {
   }
 
   void _save() async {
-    setState(() {
-      _isExpanded['breakfast'] = true;
-      _isExpanded['morningSnack'] = true;
-      _isExpanded['lunch'] = true;
-      _isExpanded['afternoonSnack'] = true;
-      _isExpanded['dinner'] = true;
-      _isExpanded['eveningSnack'] = true;
-      _isExpanded['mealPlan'] = true;
-    });
     final isValid = _form.currentState.validate();
     if (!isValid) {
       return;
@@ -286,21 +267,6 @@ class _RemindersScreenState extends State<RemindersScreen> {
     return Column(
       children: [
         ListTile(
-          leading: _isExpanded[type]
-              ? IconButton(
-                  icon: Icon(Icons.arrow_drop_down),
-                  onPressed: () {
-                    setState(() {
-                      _isExpanded[type] = !_isExpanded[type];
-                    });
-                  })
-              : IconButton(
-                  icon: Icon(Icons.navigate_next),
-                  onPressed: () {
-                    setState(() {
-                      _isExpanded[type] = !_isExpanded[type];
-                    });
-                  }),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -347,35 +313,34 @@ class _RemindersScreenState extends State<RemindersScreen> {
             ),
           ),
         ),
-        if (_isExpanded[type])
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 0, 10, 8),
-            child: TextFormField(
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              initialValue: _selectedMessages[type],
-              readOnly: !_enableSettings || !_enableOneSetting[type],
-              decoration: InputDecoration(
-                  labelText: 'Alert Message',
-                  labelStyle: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    color: Theme.of(context).primaryColor,
-                  )),
-              validator: (value) {
-                if (value.trim().isEmpty) {
-                  return 'You have to type an alert message.';
-                }
-                if (value.trim().length >= 50) {
-                  return 'Should be less than 50 characters long.';
-                }
-                if (value.trim().length < 5) {
-                  return 'Should be at least characters long.';
-                }
-                return null;
-              },
-              onChanged: (value) => _selectedMessages[type] = value.trim(),
-            ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(10, 0, 10, 8),
+          child: TextFormField(
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            initialValue: _selectedMessages[type],
+            readOnly: !_enableSettings || !_enableOneSetting[type],
+            decoration: InputDecoration(
+                labelText: 'Alert Message',
+                labelStyle: TextStyle(
+                  fontStyle: FontStyle.italic,
+                  color: Theme.of(context).primaryColor,
+                )),
+            validator: (value) {
+              if (value.trim().isEmpty) {
+                return 'You have to type an alert message.';
+              }
+              if (value.trim().length >= 50) {
+                return 'Should be less than 50 characters long.';
+              }
+              if (value.trim().length < 5) {
+                return 'Should be at least characters long.';
+              }
+              return null;
+            },
+            onChanged: (value) => _selectedMessages[type] = value.trim(),
           ),
+        ),
       ],
     );
   }
