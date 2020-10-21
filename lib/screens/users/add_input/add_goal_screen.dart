@@ -445,12 +445,15 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
               labelText: 'Name',
               labelStyle: TextStyle(fontStyle: FontStyle.italic)),
           validator: (value) {
-            if (value.isEmpty) {
+            if (value.trim().isEmpty) {
               return 'Please enter a name.';
+            }
+            if (value.trim().length > 40) {
+              return 'The name should be less than 40 characters long.';
             }
             return null;
           },
-          onSaved: (value) => _inputName = value,
+          onSaved: (value) => _inputName = value.trim(),
         ),
       ),
     );

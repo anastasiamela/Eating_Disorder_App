@@ -14,6 +14,7 @@ import '../../screens/users/communtity_coping_skills/community_skills_overview_s
 import '../../screens/users/reminders/reminders_screen.dart';
 import '../../screens/users/tips/tips_categories_screen.dart';
 import '../../screens/users/add_input/add_goal_screen.dart';
+import '../../screens/users/goals/my_goals_screen.dart';
 
 import '../../providers/auth.dart';
 
@@ -62,6 +63,15 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).pushNamed(AddGoalScreen.routeName);
+            },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.account_box),
+            title: Text('My goals'),
+            onTap: () {
+              Navigator.of(context)
+                  .pushReplacementNamed(MyGoalsScreen.routeName);
             },
           ),
           Divider(),

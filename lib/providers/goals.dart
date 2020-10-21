@@ -12,7 +12,7 @@ class Goal with ChangeNotifier {
   final DateTime creationDate;
   final DateTime scheduleToCompleteDate; //with the time of reminder if exists
   final DateTime completeDate;
-  final bool isCompleted;
+  bool isCompleted;
   final int reminderIndex;
 
   Goal({
@@ -27,6 +27,21 @@ class Goal with ChangeNotifier {
     @required this.isCompleted,
     @required this.reminderIndex,
   });
+
+  Future<void> setCompleted(String userId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('patients')
+          .doc(userId)
+          .collection('goals')
+          .doc(id)
+          .update({'isCompleted': true});
+      isCompleted = true;
+      notifyListeners();
+    } catch (error) {
+      throw (error);
+    }
+  }
 }
 
 class Goals with ChangeNotifier {
@@ -42,6 +57,14 @@ class Goals with ChangeNotifier {
     return _goals
         .where((goal) => goal.patientId == goal.createdBy ?? () => null)
         .toList();
+  }
+
+  List<Goal> get activeGoals {
+    return _goals.where((goal) => !goal.isCompleted ?? () => null).toList();
+  }
+
+  List<Goal> get completedGoals {
+    return _goals.where((goal) => goal.isCompleted ?? () => null).toList();
   }
 
   List<Goal> get copingSkillsByClinician {
@@ -113,17 +136,16 @@ class Goals with ChangeNotifier {
         'createdAt': Timestamp.fromDate(timestamp),
       });
       final newGoal = Goal(
-        id: response.id,
-        patientId: goalInput.patientId,
-        createdBy: goalInput.createdBy,
-        creationDate: goalInput.creationDate,
-        scheduleToCompleteDate: goalInput.scheduleToCompleteDate,
-        completeDate: goalInput.completeDate,
-        isCompleted: goalInput.isCompleted,
-        name: goalInput.name,
-        description: goalInput.description,
-        reminderIndex: goalInput.reminderIndex
-      );
+          id: response.id,
+          patientId: goalInput.patientId,
+          createdBy: goalInput.createdBy,
+          creationDate: goalInput.creationDate,
+          scheduleToCompleteDate: goalInput.scheduleToCompleteDate,
+          completeDate: goalInput.completeDate,
+          isCompleted: goalInput.isCompleted,
+          name: goalInput.name,
+          description: goalInput.description,
+          reminderIndex: goalInput.reminderIndex);
       _goals.add(newGoal);
       notifyListeners();
     } catch (error) {
