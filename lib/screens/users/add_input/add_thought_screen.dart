@@ -338,7 +338,7 @@ class _AddThoughtScreenState extends State<AddThoughtScreen> {
     DateTime today = DateTime.now();
     DateTime date = await showDatePicker(
       context: context,
-      firstDate: today.subtract(Duration(days: 7)),
+      firstDate: today.subtract(Duration(days: 8)),
       lastDate: today.subtract(Duration(days: 1)),
       initialDate: today.subtract(Duration(days: 1)),
     );
