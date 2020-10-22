@@ -83,7 +83,8 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
     int indexOfReminderInput;
     if (_remindersEnabled) {
       indexOfReminderInput = remindersNumber + 1;
-      await Provider.of<Auth>(context, listen: false).setRemindersNumber(indexOfReminderInput);
+      await Provider.of<Auth>(context, listen: false)
+          .setRemindersNumber(indexOfReminderInput);
       dateTarget = new DateTime(
         _selectedComplitionDate.year,
         _selectedComplitionDate.month,
@@ -125,7 +126,8 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
       if (entry.reminderIndex > 0) {
         await notificationPlugin.cancelNotification(entry.reminderIndex);
       }
-      await Provider.of<Goals>(context, listen: false).updateGoal(entry.id, input);
+      await Provider.of<Goals>(context, listen: false)
+          .updateGoal(entry.id, input);
     }
     if (_remindersEnabled) {
       await notificationPlugin.showDailyAtTime(
@@ -139,7 +141,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
     final patientId = Provider.of<Auth>(context, listen: false).userId;
     return Scaffold(
       appBar: AppBar(
-        title: _isEdit ? Text('Edit goal') : Text('New goal'),
+        title: _isEdit ? Text('Edit goal') : Text('New Goal'),
         actions: <Widget>[
           if (_isEdit)
             IconButton(
@@ -312,6 +314,15 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                 ),
               ),
               if (_remindersEnabled) _buildReminderTimeInput(),
+              RaisedButton(
+                child: Text('Submit'),
+                color: Theme.of(context).primaryColor,
+                textColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                onPressed: _saveForm,
+              )
             ],
           ),
         ),
