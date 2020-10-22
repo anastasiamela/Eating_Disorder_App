@@ -332,6 +332,15 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
                 height: 5,
               ),
               _buildThoughtsInput(),
+              RaisedButton(
+                child: Text('Submit'),
+                color: Theme.of(context).primaryColor,
+                textColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                onPressed: _saveForm,
+              )
             ],
           ),
         ),

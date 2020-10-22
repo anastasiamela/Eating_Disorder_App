@@ -278,6 +278,15 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
                         _buildFeelingsInput(),
                       //meal thoughts input
                       _buildMealThoughts(),
+                      RaisedButton(
+                        child: Text('Submit'),
+                        color: Theme.of(context).primaryColor,
+                        textColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        onPressed: _saveForm,
+                      )
                     ],
                   )
                 : ListView(
@@ -296,6 +305,15 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
                         _buildFeelingsInput(),
                       //meal thoughts input
                       _buildMealThoughts(),
+                      RaisedButton(
+                        child: Text('Submit'),
+                        color: Theme.of(context).primaryColor,
+                        textColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        onPressed: _saveForm,
+                      )
                     ],
                   ),
           ),

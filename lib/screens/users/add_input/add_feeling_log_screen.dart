@@ -65,7 +65,7 @@ class _AddFeelingLogScreenState extends State<AddFeelingLogScreen> {
   DateTime _selectedDate;
 
   var _isInit = true;
-  
+
   @override
   void didChangeDependencies() {
     if (_isInit) {
@@ -133,21 +133,30 @@ class _AddFeelingLogScreenState extends State<AddFeelingLogScreen> {
         ],
       ),
       body: Padding(
-              padding: EdgeInsets.all(8),
-              child: Form(
-                key: _form,
-                child: ListView(
-                  children: [
-                    _buildIsBacklogIinput(),
-                    if (_isBackLog) _buildDateBackLogInput(),
-                    _buildTimeInput(),
-                    _buildOverallFeelingSlider(),
-                    _buildMoodsInput(),
-                    _buildThoughtsInput(),
-                  ],
+        padding: EdgeInsets.all(8),
+        child: Form(
+          key: _form,
+          child: ListView(
+            children: [
+              _buildIsBacklogIinput(),
+              if (_isBackLog) _buildDateBackLogInput(),
+              _buildTimeInput(),
+              _buildOverallFeelingSlider(),
+              _buildMoodsInput(),
+              _buildThoughtsInput(),
+              RaisedButton(
+                child: Text('Submit'),
+                color: Theme.of(context).primaryColor,
+                textColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
                 ),
-              ),
-            ),
+                onPressed: _saveForm,
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 
