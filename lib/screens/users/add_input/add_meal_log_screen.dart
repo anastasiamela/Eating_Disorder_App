@@ -32,8 +32,7 @@ List<String> _mealTypes = [
   'evening snack',
   'light snack',
   'drink',
-  'grazing',
-  'planned binge',
+  'binge',
 ];
 
 List<String> _mealCompany = [
@@ -947,7 +946,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
     DateTime today = DateTime.now();
     DateTime date = await showDatePicker(
       context: context,
-      firstDate: today.subtract(Duration(days: 6)),
+      firstDate: today.subtract(Duration(days: 8)),
       lastDate: today.subtract(Duration(days: 1)),
       initialDate: today.subtract(Duration(days: 1)),
     );

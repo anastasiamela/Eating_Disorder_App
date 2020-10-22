@@ -28,8 +28,7 @@ List<String> _mealTypes = [
   'evening snack',
   'light snack',
   'drink',
-  'grazing',
-  'planned binge',
+  'binge',
 ];
 
 List<String> _mealCompany = [
