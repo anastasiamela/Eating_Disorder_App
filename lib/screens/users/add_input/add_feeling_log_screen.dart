@@ -262,16 +262,17 @@ class _AddFeelingLogScreenState extends State<AddFeelingLogScreen> {
               ),
               TextFormField(
                 keyboardType: TextInputType.multiline,
+                maxLines: null,
                 decoration: InputDecoration(
                     hintText: 'Your thoughts',
                     hintStyle: TextStyle(fontStyle: FontStyle.italic)),
                 validator: (value) {
-                  if (value.length < 5) {
+                  if (value.trim().length < 5) {
                     return 'Should be at least 5 characters long.';
                   }
                   return null;
                 },
-                onSaved: (value) => _thoughtsInput = value,
+                onSaved: (value) => _thoughtsInput = value.trim(),
               ),
             ],
           ),
@@ -461,7 +462,7 @@ class _AddFeelingLogScreenState extends State<AddFeelingLogScreen> {
     DateTime today = DateTime.now();
     DateTime date = await showDatePicker(
       context: context,
-      firstDate: today.subtract(Duration(days: 7)),
+      firstDate: today.subtract(Duration(days: 8)),
       lastDate: today.subtract(Duration(days: 1)),
       initialDate: today.subtract(Duration(days: 1)),
     );
