@@ -1170,7 +1170,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
                   mealDescription: _editedMealLog.mealDescription,
                   mealPortion: _editedMealLog.mealPortion,
                   thoughts: _editedMealLog.thoughts,
-                  skippingReason: value,
+                  skippingReason: value.trim(),
                   isBackLog: _editedMealLog.isBackLog,
                   dateTimeOfLog: _editedMealLog.date,
                   isFavorite: _editedMealLog.isFavorite,
