@@ -1105,7 +1105,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
             TextFormField(
               initialValue: _initThoughts,
               //decoration: InputDecoration(labelText: 'Description'),
-              maxLines: 3,
+              maxLines: null,
               keyboardType: TextInputType.multiline,
               onSaved: (value) {
                 _editedMealLog = MealLog(
@@ -1154,7 +1154,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
             TextFormField(
               initialValue: _initSkippingReason,
               //decoration: InputDecoration(labelText: 'Description'),
-              maxLines: 3,
+              maxLines: null,
               keyboardType: TextInputType.multiline,
               onSaved: (value) {
                 _editedMealLog = MealLog(
