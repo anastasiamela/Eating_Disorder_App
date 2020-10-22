@@ -11,7 +11,7 @@ class Goal with ChangeNotifier {
   final String createdBy;
   final DateTime creationDate;
   final DateTime scheduleToCompleteDate; //with the time of reminder if exists
-  final DateTime completeDate;
+  DateTime completeDate;
   bool isCompleted;
   final int reminderIndex;
 
@@ -29,14 +29,19 @@ class Goal with ChangeNotifier {
   });
 
   Future<void> setCompleted(String userId) async {
+    final date = DateTime.now();
     try {
       await FirebaseFirestore.instance
           .collection('patients')
           .doc(userId)
           .collection('goals')
           .doc(id)
-          .update({'isCompleted': true});
+          .update({
+        'isCompleted': true,
+        'completeDate': date.toIso8601String(),
+      });
       isCompleted = true;
+      completeDate = date;
       notifyListeners();
     } catch (error) {
       throw (error);
@@ -76,14 +81,16 @@ class Goals with ChangeNotifier {
   List<Goal> get delayedGoals {
     DateTime today = DateTime.now();
     today = new DateTime(
-        today.year,
-        today.month,
-        today.day,
-        23,
-        59,
-      );
+      today.year,
+      today.month,
+      today.day,
+      23,
+      59,
+    );
     return _goals
-        .where((goal) => (goal.scheduleToCompleteDate.isAfter(today) && !goal.isCompleted) ?? () => null)
+        .where((goal) =>
+            (goal.scheduleToCompleteDate.isAfter(today) && !goal.isCompleted) ??
+            () => null)
         .toList();
   }
 
