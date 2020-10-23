@@ -226,7 +226,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings for log questions'),
+        title: Text('Reminders\' Settings'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.check),
