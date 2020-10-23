@@ -60,40 +60,53 @@ class _SettingsLoggingGoalsState extends State<SettingsLoggingGoals> {
           ),
         ],
       ),
-      body: Column(
-        //crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Target meal logs per day!',
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 8.0),
-          Text(
-            'Weekdays',
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).primaryColor,
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(8, 15, 8, 10),
+        child: ListView(
+          //crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              'Target meal logs per day!',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
+              ),
             ),
-          ),
-          _buildInputRow(
-              'Main Meals', 'main', 'weekday', _selectedMainWeekdayList),
-          _buildInputRow(
-              'Snacks', 'snack', 'weekday', _selectedSnacksWeekdayList),
-          SizedBox(height: 5.0),
-          Text(
-            'Weekend',
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).primaryColor,
+            Divider(),
+            SizedBox(height: 8.0),
+            Text(
+              'Weekdays',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 20,
+                color: Theme.of(context).primaryColor,
+              ),
             ),
-          ),
-          _buildInputRow(
-              'Main Meals', 'main', 'weekend', _selectedMainWeekendList),
-          _buildInputRow(
-              'Snacks', 'snack', 'weekend', _selectedSnacksWeekendList),
-        ],
+            SizedBox(height: 8.0),
+            _buildInputRow(
+                'Main Meals', 'main', 'weekday', _selectedMainWeekdayList),
+            _buildInputRow(
+                'Snacks', 'snack', 'weekday', _selectedSnacksWeekdayList),
+            SizedBox(height: 8.0),
+            Divider(),
+            Text(
+              'Weekend',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 20,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+            SizedBox(height: 8.0),
+            _buildInputRow(
+                'Main Meals', 'main', 'weekend', _selectedMainWeekendList),
+            _buildInputRow(
+                'Snacks', 'snack', 'weekend', _selectedSnacksWeekendList),
+          ],
+        ),
       ),
     );
   }
@@ -115,6 +128,10 @@ class _SettingsLoggingGoalsState extends State<SettingsLoggingGoals> {
               ),
             ),
             ToggleButtons(
+              textStyle: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+              ),
               children: (typeOfMeal == 'main')
                   ? <Widget>[
                       Text('1'),
