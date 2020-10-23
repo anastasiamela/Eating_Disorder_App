@@ -133,6 +133,7 @@ class MyApp extends StatelessWidget {
             child: Consumer<Auth>(
               builder: (ctx, auth, _) => MaterialApp(
                 title: 'My diet app',
+                debugShowCheckedModeBanner: false,
                 theme: ThemeData(
                   primaryColor: Colors.teal[400],
                   primarySwatch: Colors.teal,

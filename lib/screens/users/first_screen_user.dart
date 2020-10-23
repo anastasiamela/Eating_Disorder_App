@@ -6,13 +6,14 @@ import '../../widgets/curved_list_item.dart';
 import '../../models/quotes.dart';
 
 import '../../screens/users/logs_screens/general_logs_overview_screen.dart';
-import '../../screens/users/logs_screens/calendar_logs_screen.dart';
 import '../../screens/users/add_input/add_meal_log_screen.dart';
 import '../../screens/users/add_input/add_thought_screen.dart';
 import '../../screens/users/add_input/add_behavior_log_screen.dart';
 import '../../screens/users/add_input/add_feeling_log_screen.dart';
 import '../../screens/users/settings_users/general_settings_users_screen.dart';
 import '../../screens/users/connect_with_clinician.dart/connect_with_clinician_screen.dart';
+import '../../screens/users/meal_plans.dart/meal_plans_overview_screen.dart';
+import '../../screens/users/logs_screens/calendar_logs_screen.dart';
 
 class FirstScreenUser extends StatelessWidget {
   @override
@@ -98,38 +99,14 @@ class FirstScreenUser extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(ctx).pushReplacementNamed(
+                    Navigator.of(ctx).pushNamed(
                         GeneralLogsOverviewScreen.routeName);
                   },
                   child: CurvedListItem(
                     title: 'My Feed',
                     color: Colors.teal[100],
                     nextColor: Colors.teal[200],
-                    icon: Icons.account_box,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(ctx)
-                        .pushReplacementNamed(CalendarLogsScreen.routeName);
-                  },
-                  child: CurvedListItem(
-                    title: 'Calendar',
-                    color: Colors.teal[200],
-                    nextColor: Colors.teal[300],
-                    icon: Icons.calendar_today,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(ctx).pushReplacementNamed(
-                        GeneralSettingsUsersScreen.routeName);
-                  },
-                  child: CurvedListItem(
-                    title: 'Settings',
-                    color: Colors.teal[300],
-                    nextColor: Colors.teal[400],
-                    icon: Icons.settings,
+                    icon: Icons.assignment_ind,
                   ),
                 ),
                 GestureDetector(
@@ -227,10 +204,46 @@ class FirstScreenUser extends StatelessWidget {
                     );
                   },
                   child: CurvedListItem(
-                    title: 'Check in',
+                    title: 'Check In',
+                    color: Colors.teal[200],
+                    nextColor: Colors.teal[300],
+                    icon: Icons.note_add,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(ctx).pushNamed(
+                        MealPlansOverviewScreen.routeName);
+                  },
+                  child: CurvedListItem(
+                    title: 'Meal Plans',
+                    color: Colors.teal[300],
+                    nextColor: Colors.teal[400],
+                    icon: Icons.assignment,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(ctx).pushNamed(
+                        CalendarLogsScreen.routeName);
+                  },
+                  child: CurvedListItem(
+                    title: 'Calendar',
                     color: Colors.teal[400],
                     nextColor: Colors.teal[500],
-                    icon: Icons.note_add,
+                    icon: Icons.calendar_today,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(ctx).pushNamed(
+                        GeneralSettingsUsersScreen.routeName);
+                  },
+                  child: CurvedListItem(
+                    title: 'Settings',
+                    color: Colors.teal[500],
+                    nextColor: Colors.teal[600],
+                    icon: Icons.settings,
                   ),
                 ),
                 GestureDetector(
@@ -240,7 +253,7 @@ class FirstScreenUser extends StatelessWidget {
                   },
                   child: CurvedListItem(
                     title: 'Connect',
-                    color: Colors.teal[500],
+                    color: Colors.teal[600],
                     nextColor: Colors.teal[200],
                     icon: Icons.people,
                   ),

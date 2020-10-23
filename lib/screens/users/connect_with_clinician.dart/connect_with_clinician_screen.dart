@@ -55,7 +55,7 @@ class _ConnectWithClinicianScreenState
         //print(clinicianExists);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Connect with your clinician'),
+        title: Text('Clinician Connection'),
       ),
       drawer: AppDrawer(),
       body: (_isLoading)

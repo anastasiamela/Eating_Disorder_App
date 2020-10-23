@@ -11,7 +11,7 @@ class TipsCategoriesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Let\'s Get Educated'),
+        title: Text('Learn'),
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(8, 30, 8, 30),
