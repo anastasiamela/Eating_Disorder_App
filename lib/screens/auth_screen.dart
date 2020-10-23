@@ -208,13 +208,13 @@ class _AuthCardState extends State<AuthCard> {
                   decoration: InputDecoration(labelText: 'E-Mail'),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
-                    if (value.isEmpty || !value.contains('@')) {
+                    if (value.trim().isEmpty || !value.contains('@')) {
                       return 'Invalid email!';
                     }
                     return null;
                   },
                   onSaved: (value) {
-                    _authData['email'] = value;
+                    _authData['email'] = value.trim();
                   },
                 ),
                 TextFormField(
@@ -222,13 +222,13 @@ class _AuthCardState extends State<AuthCard> {
                   obscureText: true,
                   controller: _passwordController,
                   validator: (value) {
-                    if (value.isEmpty || value.length < 5) {
+                    if (value.trim().isEmpty || value.trim().length < 5) {
                       return 'Password is too short!';
                     }
                     return null;
                   },
                   onSaved: (value) {
-                    _authData['password'] = value;
+                    _authData['password'] = value.trim();
                   },
                 ),
                 if (_authMode == AuthMode.Signup)
@@ -238,7 +238,7 @@ class _AuthCardState extends State<AuthCard> {
                     obscureText: true,
                     validator: _authMode == AuthMode.Signup
                         ? (value) {
-                            if (value != _passwordController.text) {
+                            if (value.trim() != _passwordController.text) {
                               return 'Passwords do not match!';
                             }
                             return null;
@@ -250,16 +250,19 @@ class _AuthCardState extends State<AuthCard> {
                     decoration: InputDecoration(labelText: 'Display Name'),
                     keyboardType: TextInputType.name,
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value.trim().isEmpty) {
                         return 'Please enter a name';
                       }
-                      if (value.length < 3) {
+                      if (value.trim().length < 3) {
                         return 'Your name should be at least 3 characters long.';
+                      }
+                      if (value.trim().length > 15) {
+                        return 'Your name should be less than 15 characters long.';
                       }
                       return null;
                     },
                     onSaved: (value) {
-                      _displayName = value;
+                      _displayName = value.trim();
                     },
                   ),
                 if (_authMode == AuthMode.Signup)
