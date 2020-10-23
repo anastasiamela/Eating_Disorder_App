@@ -26,7 +26,7 @@ class GeneralSettingsUsersScreen extends StatelessWidget {
           Divider(),
           ListTile(
             leading: Icon(Icons.wifi_tethering),
-            title: Text('Logging Goals'),
+            title: Text('Number of meals'),
             onTap: () {
               Navigator.of(context).pushNamed(SettingsLoggingGoals.routeName);
             },

@@ -44,7 +44,7 @@ class _SettingsLoggingGoalsState extends State<SettingsLoggingGoals> {
     final userId = Provider.of<Auth>(context).userId;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Logging Goals Settings'),
+        title: Text('Number of Meals'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.check),
