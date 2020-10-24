@@ -133,11 +133,43 @@ class _MyGoalDetailScreenState extends State<MyGoalDetailScreen> {
                 ),
               ),
             ),
+            if (!goal.isCompleted && goal.reminderIndex > 0)
+              Card(
+                child: ListTile(
+                  title: Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.timer,
+                          size: 26,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        Text(
+                          'Reminder: ',
+                          style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                        Text(
+                          printTime(TimeOfDay.fromDateTime(
+                              goal.scheduleToCompleteDate)),
+                          style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 12, 8, 8),
               child: Center(
                 child: Text(
-                  'Created at: ${DateFormat.yMEd().add_jm().format(goal.creationDate)}',
+                  'Created at: ${DateFormat('MMM d, y').add_jm().format(goal.creationDate)}',
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -166,6 +198,18 @@ class _MyGoalDetailScreenState extends State<MyGoalDetailScreen> {
         ),
       ),
     );
+  }
+
+  String printTime(TimeOfDay time) {
+    String _addLeadingZeroIfNeeded(int value) {
+      if (value < 10) return '0$value';
+      return value.toString();
+    }
+
+    final String hourLabel = _addLeadingZeroIfNeeded(time.hour);
+    final String minuteLabel = _addLeadingZeroIfNeeded(time.minute);
+
+    return '$hourLabel:$minuteLabel';
   }
 
   onNotificationInLowerVersions(ReceivedNotification receivedNotification) {
