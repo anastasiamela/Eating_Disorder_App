@@ -66,7 +66,7 @@ class _BehaviorLogDetailScreenState extends State<BehaviorLogDetailScreen> {
                       children: [
                         SizedBox(height: 10),
                         Text(
-                          DateFormat.yMEd().add_jm().format(behavior.date),
+                          DateFormat('EEEE, MMM d, y').add_jm().format(behavior.date),
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -74,7 +74,7 @@ class _BehaviorLogDetailScreenState extends State<BehaviorLogDetailScreen> {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          'Logged at: ${DateFormat.yMEd().add_jm().format(behavior.dateTimeOfLog)}',
+                          'Logged at: ${DateFormat('MMM d, y').add_jm().format(behavior.dateTimeOfLog)}',
                           style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
