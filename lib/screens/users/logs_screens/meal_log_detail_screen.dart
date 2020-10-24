@@ -67,7 +67,7 @@ class MealLogDetailScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 8),
                           Text(
-                            'Logged at: ${DateFormat('EEEE, MMM d, y').add_jm().format(loadedmeal.dateTimeOfLog)}',
+                            'Logged at: ${DateFormat('MMM d, y').add_jm().format(loadedmeal.dateTimeOfLog)}',
                             style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,

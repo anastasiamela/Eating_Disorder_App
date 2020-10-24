@@ -28,7 +28,7 @@ class ThoughtLogDetailScreen extends StatelessWidget {
                 children: [
                   SizedBox(height: 10),
                   Text(
-                    DateFormat.yMEd().add_jm().format(thought.date),
+                    DateFormat('EEEE, MMM d, y').add_jm().format(thought.date),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -36,7 +36,7 @@ class ThoughtLogDetailScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Logged at: ${DateFormat.yMEd().add_jm().format(thought.dateTimeOfLog)}',
+                    'Logged at: ${DateFormat('MMM d, y').add_jm().format(thought.dateTimeOfLog)}',
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
