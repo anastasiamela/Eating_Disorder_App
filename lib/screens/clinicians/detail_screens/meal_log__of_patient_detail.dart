@@ -56,52 +56,48 @@ class MealLogOfPatientDetailScreen extends StatelessWidget {
                         subtitle: Text(patient.patientEmail),
                       ),
                     ),
-                    Card(
-                      shadowColor: Theme.of(context).primaryColor,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          if (loadedmeal.mealPhoto.isNotEmpty)
                             Container(
                               height: 150,
                               width: double.infinity,
                               child: Image.network(
-                                (loadedmeal.mealPhoto == '')
-                                    ? emptyImage
-                                    : loadedmeal.mealPhoto,
+                                loadedmeal.mealPhoto,
                                 fit: BoxFit.cover,
                               ),
                             ),
-                            SizedBox(height: 10),
-                            Text(
-                              DateFormat.yMEd()
-                                  .add_jm()
-                                  .format(loadedmeal.date),
-                              style: TextStyle(
+                          SizedBox(height: 10),
+                          Text(
+                            DateFormat('EEEE, MMM d, y')
+                                .add_jm()
+                                .format(loadedmeal.date),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            'Logged at: ${DateFormat('EEEE, MMM d, y').add_jm().format(loadedmeal.dateTimeOfLog)}',
+                            style: TextStyle(
                                 fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
+                                fontWeight: FontWeight.w500,
+                                fontStyle: FontStyle.italic,
+                                color: Colors.black45),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            loadedmeal.mealType,
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
                             ),
-                            SizedBox(height: 8),
-                            Text(
-                              'Logged at: ${DateFormat.yMEd().add_jm().format(loadedmeal.dateTimeOfLog)}',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  fontStyle: FontStyle.italic,
-                                  color: Colors.black45),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              loadedmeal.mealType,
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                     Card(
