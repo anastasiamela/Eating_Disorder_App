@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 //import '../models/http_exception.dart';
 
@@ -79,7 +81,7 @@ class Auth with ChangeNotifier {
   }
 
   signup(String email, String password, String role, String displayName,
-      String photoUrl) async {
+      File imageFile) async {
     try {
       UserCredential authResult = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password)
@@ -87,45 +89,55 @@ class Auth with ChangeNotifier {
 
       if (authResult != null) {
         User firebaseUser = authResult.user;
+
         if (firebaseUser != null) {
-          print("Sign up: $firebaseUser");
+          //print("Sign up: $firebaseUser");
           User currentUser = FirebaseAuth.instance.currentUser;
           _user = currentUser;
           _userId = currentUser.uid;
-          _userPhoto = photoUrl;
           _userName = displayName;
           _userEmail = email;
+
+          StorageReference ref;
           if (role == 'patient') {
-            try {
-              await FirebaseFirestore.instance
-                  .collection('patients')
-                  .doc(_userId)
-                  .set({
-                'role': role,
-                'displayName': displayName,
-                'photo': photoUrl,
-                'email': email,
-                'remindersNumber': 6,
-              });
-              _userRole = role;
-            } catch (error) {
-              print(error);
-            }
+            ref = FirebaseStorage.instance
+                .ref()
+                .child('profile_images_patients')
+                .child(_userId + '.jpg');
+            await ref.putFile(imageFile).onComplete;
           } else {
-            try {
-              await FirebaseFirestore.instance
-                  .collection('clinicians')
-                  .doc(_userId)
-                  .set({
-                'role': role,
-                'displayName': displayName,
-                'photo': photoUrl,
-                'email': email
-              });
-              _userRole = role;
-            } catch (error) {
-              print(error);
-            }
+            ref = FirebaseStorage.instance
+                .ref()
+                .child('profile_images_clinicians')
+                .child(_userId + '.jpg');
+            await ref.putFile(imageFile).onComplete;
+          }
+          final String url = await ref.getDownloadURL();
+          _userPhoto = url;
+
+          if (role == 'patient') {
+            await FirebaseFirestore.instance
+                .collection('patients')
+                .doc(_userId)
+                .set({
+              'role': role,
+              'displayName': displayName,
+              'photo': url,
+              'email': email,
+              'remindersNumber': 6,
+            }).catchError((error) => print(error.code));
+            _userRole = role;
+          } else {
+            await FirebaseFirestore.instance
+                .collection('clinicians')
+                .doc(_userId)
+                .set({
+              'role': role,
+              'displayName': displayName,
+              'photo': url,
+              'email': email
+            }).catchError((error) => print(error.code));
+            _userRole = role;
           }
           notifyListeners();
         }
@@ -157,7 +169,10 @@ class Auth with ChangeNotifier {
 
   Future<void> setRemindersNumber(int number) async {
     try {
-      await FirebaseFirestore.instance.collection('patients').doc(userId).update({
+      await FirebaseFirestore.instance
+          .collection('patients')
+          .doc(userId)
+          .update({
         'remindersNumber': number,
       });
       _remindersNumber = number;

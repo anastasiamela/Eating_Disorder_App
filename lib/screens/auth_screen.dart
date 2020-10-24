@@ -1,9 +1,14 @@
-//import 'dart:math';
+import 'dart:io';
 
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../providers/auth.dart';
+
+import '../widgets/users/image_pickers/profile_image_picker.dart';
+
 import '../models/http_exception.dart';
 
 enum AuthMode { Signup, Login }
@@ -72,38 +77,19 @@ class _AuthCardState extends State<AuthCard> {
   };
   String _roleType = 'patient';
   String _displayName = '';
-  String _photoUrl = '';
-  final _imageUrlController = TextEditingController();
-  final _imageUrlFocusNode = FocusNode();
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
+  File _imageFile;
+
+  void _pickedImage(File image) {
+    _imageFile = image;
+  }
+
   @override
   void initState() {
-    _imageUrlFocusNode.addListener(_updateImageUrl);
     Provider.of<Auth>(context, listen: false).initializeCurrentUser();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _imageUrlFocusNode.removeListener(_updateImageUrl);
-    _imageUrlController.dispose();
-    _imageUrlFocusNode.dispose();
-    super.dispose();
-  }
-
-  void _updateImageUrl() {
-    if (!_imageUrlFocusNode.hasFocus) {
-      if ((!_imageUrlController.text.startsWith('http') &&
-              !_imageUrlController.text.startsWith('https')) ||
-          (!_imageUrlController.text.endsWith('.png') &&
-              !_imageUrlController.text.endsWith('.jpg') &&
-              !_imageUrlController.text.endsWith('.jpeg'))) {
-        return;
-      }
-      setState(() {});
-    }
   }
 
   void _showErrorDialog(String message) {
@@ -124,6 +110,16 @@ class _AuthCardState extends State<AuthCard> {
     );
   }
 
+  Future<File> getImageFileFromAssets(String path, String name) async {
+    final byteData = await rootBundle.load(path);
+
+    final file = File('${(await getTemporaryDirectory()).path}/$name');
+    await file.writeAsBytes(byteData.buffer
+        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+
+    return file;
+  }
+
   Future<void> _submit() async {
     if (!_formKey.currentState.validate()) {
       // Invalid!
@@ -133,6 +129,10 @@ class _AuthCardState extends State<AuthCard> {
     setState(() {
       _isLoading = true;
     });
+
+    if (_imageFile == null) {
+      _imageFile = await getImageFileFromAssets('assets/images/no_profile_image.png', 'no_profile_image.png');
+    }
 
     try {
       if (_authMode == AuthMode.Login) {
@@ -145,7 +145,11 @@ class _AuthCardState extends State<AuthCard> {
         // Sign user up
         print('0');
         await Provider.of<Auth>(context, listen: false).signup(
-            _authData['email'], _authData['password'], _roleType, _displayName, _photoUrl);
+            _authData['email'],
+            _authData['password'],
+            _roleType,
+            _displayName,
+            _imageFile);
       }
     } on HttpException catch (error) {
       var errorMessage = 'Authentication failed';
@@ -194,7 +198,7 @@ class _AuthCardState extends State<AuthCard> {
       ),
       elevation: 8.0,
       child: Container(
-        height: _authMode == AuthMode.Signup ? 500 : 260,
+        height: _authMode == AuthMode.Signup ? 550 : 260,
         constraints:
             BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 320 : 260),
         width: deviceSize.width * 0.75,
@@ -204,6 +208,8 @@ class _AuthCardState extends State<AuthCard> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
+                if (_authMode == AuthMode.Signup)
+                  ProfileImagePicker(_pickedImage),
                 TextFormField(
                   decoration: InputDecoration(labelText: 'E-Mail'),
                   keyboardType: TextInputType.emailAddress,
@@ -263,32 +269,6 @@ class _AuthCardState extends State<AuthCard> {
                     },
                     onSaved: (value) {
                       _displayName = value.trim();
-                    },
-                  ),
-                if (_authMode == AuthMode.Signup)
-                  TextFormField(
-                    decoration: InputDecoration(labelText: 'Image URL'),
-                    keyboardType: TextInputType.url,
-                    textInputAction: TextInputAction.done,
-                    controller: _imageUrlController,
-                    focusNode: _imageUrlFocusNode,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please enter an image URL.';
-                      }
-                      if (!value.startsWith('http') &&
-                          !value.startsWith('https')) {
-                        return 'Please enter a valid URL.';
-                      }
-                      if (!value.endsWith('.png') &&
-                          !value.endsWith('.jpg') &&
-                          !value.endsWith('.jpeg')) {
-                        return 'Please enter a valid image URL.';
-                      }
-                      return null;
-                    },
-                    onSaved: (value) {
-                      _photoUrl = value;
                     },
                   ),
                 if (_authMode == AuthMode.Signup)
