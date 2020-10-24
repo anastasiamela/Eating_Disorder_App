@@ -16,11 +16,26 @@ class _MealLogImagePickerState extends State<MealLogImagePicker> {
   File _pickedImage;
   final picker = ImagePicker();
 
-  void _pickImage() async {
+  void _pickImageFromCamera() async {
     final pickedImageFile = await picker.getImage(
       source: ImageSource.camera,
       imageQuality: 100,
-      maxWidth: 150,
+    );
+    setState(() {
+      if (pickedImageFile != null) {
+        _pickedImage = File(pickedImageFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+    widget.imagePickFn(_pickedImage);
+  }
+
+  void _pickImageFromGallery() async {
+    final pickedImageFile = await picker.getImage(
+      source: ImageSource.gallery,
+      imageQuality: 100,
+      //maxWidth: 150,
     );
     setState(() {
       if (pickedImageFile != null) {
@@ -38,7 +53,7 @@ class _MealLogImagePickerState extends State<MealLogImagePicker> {
       children: <Widget>[
         if (_pickedImage != null)
           Container(
-            height: 150,
+            height: 200,
             width: double.infinity,
             child: Image.file(
               _pickedImage,
@@ -63,7 +78,15 @@ class _MealLogImagePickerState extends State<MealLogImagePicker> {
                     size: 30.0,
                     color: Theme.of(context).primaryColor,
                   ),
-                  onPressed: _pickImage,
+                  onPressed: _pickImageFromCamera,
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.image,
+                    size: 30.0,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  onPressed: _pickImageFromGallery,
                 ),
               ],
             )

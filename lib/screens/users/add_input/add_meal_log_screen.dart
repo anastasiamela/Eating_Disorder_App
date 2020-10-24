@@ -350,6 +350,8 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
                           children: <Widget>[
                             //skip input
                             _buildSkipInput(),
+                            //meal skipping reason
+                            _buildMealSkippingReason(),
                             //meal is backlog input
                             _buildMealIsBacklogIinput(),
                             (!_isBackLog)
@@ -358,8 +360,6 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
                                 : _buildDateBackLogInput(),
                             //meal type input
                             _buildMealTypeInput(),
-                            //meal skipping reason
-                            _buildMealSkippingReason(),
                             //feeling overall input
                             _buildOverallFeelingInput(),
                             if (_behaviorTypesChoices.isNotEmpty)

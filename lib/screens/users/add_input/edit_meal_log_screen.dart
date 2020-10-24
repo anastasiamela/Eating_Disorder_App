@@ -293,10 +293,10 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
                     children: <Widget>[
                       //skip input
                       _buildSkipInput(),
-                      //meal type input
-                      _buildMealTypeInput(),
                       //meal skipping reason
                       _buildMealSkippingReason(),
+                      //meal type input
+                      _buildMealTypeInput(),
                       //feeling overall input
                       _buildOverallFeelingInput(),
                       if (_behaviorTypesChoices.isNotEmpty)
