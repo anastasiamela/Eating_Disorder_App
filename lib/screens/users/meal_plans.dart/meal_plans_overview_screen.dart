@@ -220,6 +220,7 @@ class _MealPlansOverviewScreenState extends State<MealPlansOverviewScreen>
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ListTile(
             title: Row(
@@ -232,17 +233,20 @@ class _MealPlansOverviewScreenState extends State<MealPlansOverviewScreen>
                     fontSize: 18.0,
                   ),
                 ),
-                (plan == null)
-                    ? Text(
-                        'tap to update.',
-                        style: TextStyle(
-                          color:
-                              Theme.of(context).primaryColor.withOpacity(0.5),
-                          fontSize: 18.0,
-                          fontStyle: FontStyle.italic,
-                        ),
-                      )
-                    : MealPlanItemForOverview()
+                if (plan == null)
+                  Text(
+                    'tap to update.',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor.withOpacity(0.5),
+                      fontSize: 18.0,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                if (plan != null)
+                  Icon(
+                    Icons.edit,
+                    color: Theme.of(context).primaryColor.withOpacity(0.5),
+                  )
               ],
             ),
             onTap: () {
@@ -263,6 +267,7 @@ class _MealPlansOverviewScreenState extends State<MealPlansOverviewScreen>
               }
             },
           ),
+          if (plan != null) MealPlanItemForOverview(),
         ],
       ),
     );
