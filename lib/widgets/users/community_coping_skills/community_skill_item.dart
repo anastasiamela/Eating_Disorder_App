@@ -13,7 +13,7 @@ class CommunitySkillItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final userId = Provider.of<Auth>(context).userId;
     final skill = Provider.of<CommunityCopingSkill>(context);
-    final date = DateFormat.yMd().format(skill.date);
+    final date = DateFormat('MMM d, y').add_jm().format(skill.date);
     return Card(
       shadowColor: Theme.of(context).primaryColor,
       child: Padding(

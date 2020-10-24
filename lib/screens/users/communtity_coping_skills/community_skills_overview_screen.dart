@@ -110,6 +110,8 @@ class _CommunityCopingSkillsOverviewScreenState
                   content: Form(
                     key: _form,
                     child: TextFormField(
+                      maxLines: null,
+                      keyboardType: TextInputType.multiline,
                       decoration: InputDecoration(
                         labelText: 'Description',
                       ),
