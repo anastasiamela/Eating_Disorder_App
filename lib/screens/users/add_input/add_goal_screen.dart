@@ -51,7 +51,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
       } else {
         _inputName = entry.name;
         _inputDescription = entry.description;
-        _selectedComplitionDate = entry.completeDate;
+        _selectedComplitionDate = entry.scheduleToCompleteDate;
         _hasSelectedcompletionDate = true;
         if (entry.reminderIndex > 0) {
           _remindersEnabled = true;
@@ -252,7 +252,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                padding: const EdgeInsets.fromLTRB(0, 2, 0, 0),
                 child: ListTile(
                   title: Text(
                     'Schedule your Goal',
@@ -359,7 +359,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
     DateTime today = DateTime.now();
     DateTime date = await showDatePicker(
       context: context,
-      firstDate: today,
+      firstDate: today.subtract(Duration(days: 2)),
       lastDate: today.add(Duration(days: 365)),
       initialDate: today,
     );

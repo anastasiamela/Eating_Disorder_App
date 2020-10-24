@@ -47,6 +47,18 @@ class Goal with ChangeNotifier {
       throw (error);
     }
   }
+
+  bool get isDelayed {
+    DateTime today = DateTime.now();
+    today = new DateTime(
+      today.year,
+      today.month,
+      today.day,
+      23,
+      59,
+    );
+    return scheduleToCompleteDate.isBefore(today) && !isCompleted;
+  }
 }
 
 class Goals with ChangeNotifier {
@@ -89,7 +101,8 @@ class Goals with ChangeNotifier {
     );
     return _goals
         .where((goal) =>
-            (goal.scheduleToCompleteDate.isAfter(today) && !goal.isCompleted) ??
+            (goal.scheduleToCompleteDate.isBefore(today) &&
+                !goal.isCompleted) ??
             () => null)
         .toList();
   }

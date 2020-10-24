@@ -47,12 +47,14 @@ class GoalOfPatientItem extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  goal.name,
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
+                child: Expanded(
+                  child: Text(
+                    goal.name,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),
@@ -66,31 +68,58 @@ class GoalOfPatientItem extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                child: ListTile(
-                  leading: Icon(
-                    Icons.calendar_today,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  title: Row(
-                    children: [
-                      !goal.isCompleted
-                          ? Text(
-                              'Target Date: ',
-                              style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            )
-                          : Text(
-                              'Completed on: ',
-                              style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                                color: Theme.of(context).primaryColor,
-                              ),
+                padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.calendar_today,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    !goal.isCompleted
+                        ? Text(
+                            'Target Date: ',
+                            style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              color: Theme.of(context).primaryColor,
                             ),
+                          )
+                        : Text(
+                            'Completed on: ',
+                            style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                    Text(
+                      date,
+                      style: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (!goal.isCompleted && goal.reminderIndex > 0)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.timer,
+                        size: 26,
+                        color: Theme.of(context).primaryColor,
+                      ),
                       Text(
-                        date,
+                        'Reminder: ',
+                        style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      Text(
+                        printTime(TimeOfDay.fromDateTime(
+                            goal.scheduleToCompleteDate)),
                         style: TextStyle(
                           fontStyle: FontStyle.italic,
                           color: Theme.of(context).primaryColor,
@@ -99,11 +128,22 @@ class GoalOfPatientItem extends StatelessWidget {
                     ],
                   ),
                 ),
-              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  String printTime(TimeOfDay time) {
+    String _addLeadingZeroIfNeeded(int value) {
+      if (value < 10) return '0$value';
+      return value.toString();
+    }
+
+    final String hourLabel = _addLeadingZeroIfNeeded(time.hour);
+    final String minuteLabel = _addLeadingZeroIfNeeded(time.minute);
+
+    return '$hourLabel:$minuteLabel';
   }
 }
