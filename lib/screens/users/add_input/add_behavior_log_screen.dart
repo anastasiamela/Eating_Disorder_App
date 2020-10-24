@@ -361,22 +361,16 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
               getBehaviorMessageExplaining(behaviorType),
             ),
             trailing: _behaviorsSelected[behaviorType]
-                ? CircleAvatar(
-                    radius: 30.0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Icon(
-                        //   Icons.check,
-                        //   size: 24,
-                        //   color: Theme.of(context).primaryColor,
-                        // ),
-                        Text('Yes'),
-                      ],
-                    ),
-                    backgroundColor: Colors.teal[50],
+                ? Icon(
+                    Icons.check_box,
+                    size: 24,
+                    color: Theme.of(context).primaryColor,
                   )
-                : null,
+                : Icon(
+                    Icons.check_box_outline_blank,
+                    size: 24,
+                    color: Theme.of(context).primaryColor,
+                  ),
             onTap: () {
               setState(() {
                 _behaviorsSelected[behaviorType] =
@@ -420,11 +414,13 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text(
-                  'Did you use coping skills?',
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w600,
+                Expanded(
+                  child: Text(
+                    'Did you use coping skills?',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
                 ToggleSwitch(
@@ -471,7 +467,7 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
             Text(
               'Is this log for today?',
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -519,7 +515,7 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
                 'For when is the log?',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  fontSize: 18.0,
+                  fontSize: 16.0,
                 ),
               ),
               contentPadding: EdgeInsets.all(0.0),
@@ -530,7 +526,7 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
                     'Select Day',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 18.0,
+                      fontSize: 16.0,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -578,7 +574,7 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
                   'What time?',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 18.0,
+                    fontSize: 16.0,
                   ),
                 ),
                 contentPadding: EdgeInsets.all(0.0),
@@ -589,7 +585,7 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
                       'Select Time',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 18.0,
+                        fontSize: 16.0,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -834,7 +830,7 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
               'How strong is your urge to restrict now?',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                fontSize: 18.0,
+                fontSize: 16.0,
               ),
             ),
             subtitle: Text(_restrictGradeInput),
@@ -869,7 +865,7 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
               'How strong is your urge to binge now?',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                fontSize: 18.0,
+                fontSize: 16.0,
               ),
             ),
             subtitle: Text(_bingeGradeInput),
@@ -904,7 +900,7 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
               'How strong is your urge to purge now?',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                fontSize: 18.0,
+                fontSize: 16.0,
               ),
             ),
             subtitle: Text(_purgeGradeInput),
@@ -939,7 +935,7 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
               'How strong is your urge to exercise now?',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                fontSize: 18.0,
+                fontSize: 16.0,
               ),
             ),
             subtitle: Text(_exerciseGradeInput),
@@ -978,7 +974,7 @@ class _AddBehaviorLogScreenState extends State<AddBehaviorLogScreen> {
                   'Do you have any thoughts?',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 18.0,
+                    fontSize: 16.0,
                   ),
                 ),
                 contentPadding: EdgeInsets.all(0.0),
