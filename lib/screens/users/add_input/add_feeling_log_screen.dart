@@ -225,7 +225,7 @@ class _AddFeelingLogScreenState extends State<AddFeelingLogScreen> {
                 'How are you feeling overall?',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  fontSize: 18.0,
+                  fontSize: 16.0,
                 ),
               ),
               subtitle: Text(_overallFeelings[_currentSliderValue.round() - 1]),
@@ -264,7 +264,7 @@ class _AddFeelingLogScreenState extends State<AddFeelingLogScreen> {
                   'Do you have any thoughts?',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 18.0,
+                    fontSize: 16.0,
                   ),
                 ),
                 contentPadding: EdgeInsets.all(0.0),
@@ -301,7 +301,7 @@ class _AddFeelingLogScreenState extends State<AddFeelingLogScreen> {
             Text(
               'Is this log for today?',
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -349,7 +349,7 @@ class _AddFeelingLogScreenState extends State<AddFeelingLogScreen> {
                 'For when is the log?',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  fontSize: 18.0,
+                  fontSize: 16.0,
                 ),
               ),
               contentPadding: EdgeInsets.all(0.0),
@@ -360,7 +360,7 @@ class _AddFeelingLogScreenState extends State<AddFeelingLogScreen> {
                     'Select Day',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 18.0,
+                      fontSize: 16.0,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -408,7 +408,7 @@ class _AddFeelingLogScreenState extends State<AddFeelingLogScreen> {
                   'What time?',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 18.0,
+                    fontSize: 16.0,
                   ),
                 ),
                 contentPadding: EdgeInsets.all(0.0),
@@ -419,7 +419,7 @@ class _AddFeelingLogScreenState extends State<AddFeelingLogScreen> {
                       'Select Time',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 18.0,
+                        fontSize: 16.0,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
