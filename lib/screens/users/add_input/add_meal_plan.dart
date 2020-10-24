@@ -115,7 +115,8 @@ class _AddMealPlanState extends State<AddMealPlan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('$day $type'),
+        title: Text(
+            'Meal Plan'),
         actions: <Widget>[
           if (_isEdit)
             IconButton(
@@ -174,6 +175,17 @@ class _AddMealPlanState extends State<AddMealPlan> {
             clipBehavior: Clip.none,
             child: Column(
               children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 8),
+                  child: Text(
+                    '${capitalizeFirstLetter(day)} ${capitalizeFirstLetter(type)}',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
                 ..._getMealItems(),
                 ListTile(
                   title: Padding(
@@ -642,22 +654,24 @@ class _AddMealPlanState extends State<AddMealPlan> {
                           padding: const EdgeInsets.all(8.0),
                           child: ListView(
                             children: [
-                              Text(
-                                capitalizeFirstLetter(template.dayOfWeek),
-                                style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
+                              // Text(
+                              //   capitalizeFirstLetter(template.dayOfWeek),
+                              //   style: TextStyle(
+                              //     color: Theme.of(context).primaryColor,
+                              //     fontSize: 16,
+                              //     fontWeight: FontWeight.w600,
+                              //   ),
+                              // ),
+                              // SizedBox(
+                              //   height: 8,
+                              // ),
                               ...template.getMealItems
                                   .map((item) => Row(
                                         children: [
                                           Icon(Icons.near_me),
-                                          Text(item),
+                                          Expanded(
+                                            child: Text(item),
+                                          ),
                                         ],
                                       ))
                                   .toList(),

@@ -10,7 +10,7 @@ class MealPlanItemForOverview extends StatelessWidget {
     //final authData = Provider.of<Auth>(context, listen: false);
     final mealItems = mealPlan.mealItems;
     return Container(
-      width: 180,
+      //width: 180,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: mealItems
