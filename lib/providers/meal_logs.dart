@@ -341,13 +341,15 @@ class MealLogs with ChangeNotifier {
           .collection('mealLogs')
           .doc(id)
           .delete();
-      await FirebaseStorage.instance
-          .getReferenceFromUrl(existingMeal.mealPhoto)
-          .then((res) {
-        res.delete().then((res) {
-          print("Deleted!");
+      if (existingMeal.mealPhoto.isNotEmpty) {
+        await FirebaseStorage.instance
+            .getReferenceFromUrl(existingMeal.mealPhoto)
+            .then((res) {
+          res.delete().then((res) {
+            print("Deleted!");
+          });
         });
-      });
+      }
       existingMeal = null;
     } catch (error) {
       _meals.insert(existingMealIndex, existingMeal);

@@ -94,7 +94,7 @@ class BehaviorLogItem extends StatelessWidget {
           leading: CircleAvatar(
             radius: 30.0,
             child: Icon(
-              Icons.face,
+              Icons.announcement,
               size: 40,
             ),
             backgroundColor: Colors.transparent,

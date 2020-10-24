@@ -7,7 +7,7 @@ import '../../../providers/auth.dart';
 import '../../../providers/meal_logs.dart';
 
 import '../../../screens/users/logs_screens/meal_log_detail_screen.dart';
-import '../../../screens/users/add_input/edit_meal_log_screen.dart';
+//import '../../../screens/users/add_input/edit_meal_log_screen.dart';
 
 class MealLogItem extends StatelessWidget {
   final String subtitleType;
@@ -22,8 +22,8 @@ class MealLogItem extends StatelessWidget {
     final authData = Provider.of<Auth>(context, listen: false);
     String subtitleText = '';
     String subtitleText2 = '';
-    final emptyImage =
-        'https://i1.pngguru.com/preview/658/470/455/krzp-dock-icons-v-1-2-empty-grey-empty-text-png-clipart.jpg';
+    // final emptyImage =
+    //     'https://i1.pngguru.com/preview/658/470/455/krzp-dock-icons-v-1-2-empty-grey-empty-text-png-clipart.jpg';
 
     if (subtitleType == 'Thoughts') {
       subtitleText = 'Thoughts: ${meal.thoughts}';
@@ -101,10 +101,14 @@ class MealLogItem extends StatelessWidget {
         child: ListTile(
           leading: CircleAvatar(
             radius: 30.0,
-            backgroundImage: NetworkImage(
-              (meal.mealPhoto == '') ? emptyImage : meal.mealPhoto,
-            ),
             backgroundColor: Colors.transparent,
+            backgroundImage: (meal.mealPhoto.isNotEmpty) ? NetworkImage(meal.mealPhoto) : null,
+            child: (meal.mealPhoto.isNotEmpty)
+                ? null
+                : Icon(
+                    Icons.restaurant,
+                    size: 40,
+                  ),
           ),
           title: (meal.skip)
               ? Text('SKIP  ${meal.mealType}')
@@ -122,32 +126,19 @@ class MealLogItem extends StatelessWidget {
                 ),
             ],
           ),
-          trailing: Wrap(
-            spacing: 12,
-            children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.edit),
-                onPressed: () {
-                  Navigator.of(context).pushNamed(EditMealLogScreen.routeName,
-                      arguments: meal.id);
-                },
-                color: Theme.of(context).primaryColor,
+          trailing: Consumer<MealLog>(
+            builder: (ctx, meal, _) => IconButton(
+              icon: Icon(
+                meal.isFavorite ? Icons.favorite : Icons.favorite_border,
+                size: 30.0,
               ),
-              Consumer<MealLog>(
-                builder: (ctx, meal, _) => IconButton(
-                  icon: Icon(
-                    meal.isFavorite ? Icons.favorite : Icons.favorite_border,
-                    size: 30.0,
-                  ),
-                  color: Theme.of(context).accentColor,
-                  onPressed: () {
-                    meal.toggleFavoriteStatus(
-                      authData.userId,
-                    );
-                  },
-                ),
-              ),
-            ],
+              color: Theme.of(context).accentColor,
+              onPressed: () {
+                meal.toggleFavoriteStatus(
+                  authData.userId,
+                );
+              },
+            ),
           ),
           onTap: () {
             Navigator.of(context).pushNamed(
