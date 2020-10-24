@@ -18,14 +18,14 @@ class GeneralSettingsUsersScreen extends StatelessWidget {
         children: [
           ListTile(
             leading: Icon(Icons.playlist_add_check),
-            title: Text('Log Questions'),
+            title: Text('Customize Meal Log Questions'),
             onTap: () {
               Navigator.of(context).pushNamed(SettingsForLogsScreen.routeName);
             },
           ),
           Divider(),
           ListTile(
-            leading: Icon(Icons.wifi_tethering),
+            leading: Icon(Icons.restaurant),
             title: Text('Number of meals'),
             onTap: () {
               Navigator.of(context).pushNamed(SettingsLoggingGoals.routeName);
@@ -33,7 +33,7 @@ class GeneralSettingsUsersScreen extends StatelessWidget {
           ),
           Divider(),
           ListTile(
-            leading: Icon(Icons.wifi_tethering),
+            leading: Icon(Icons.alarm),
             title: Text('Reminders'),
             onTap: () {
               Navigator.of(context).pushNamed(RemindersScreen.routeName);

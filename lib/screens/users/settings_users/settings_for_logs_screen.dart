@@ -124,7 +124,7 @@ class _SettingsForLogsScreenState extends State<SettingsForLogsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings for log questions'),
+        title: Text('Customize Meal Log Questions'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.check),

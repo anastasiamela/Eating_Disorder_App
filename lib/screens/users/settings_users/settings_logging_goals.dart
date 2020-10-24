@@ -117,20 +117,23 @@ class _SettingsLoggingGoalsState extends State<SettingsLoggingGoals> {
       shadowColor: Theme.of(context).primaryColor,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.w600,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+              child: Text(
+                '$title:',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
             ToggleButtons(
               textStyle: TextStyle(
                 fontWeight: FontWeight.w500,
-                fontSize: 18,
+                fontSize: 16,
               ),
               children: (typeOfMeal == 'main')
                   ? <Widget>[
