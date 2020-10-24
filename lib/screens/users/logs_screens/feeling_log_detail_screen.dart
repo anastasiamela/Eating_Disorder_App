@@ -30,7 +30,7 @@ class FeelingLogDetailScreen extends StatelessWidget {
                 children: [
                   SizedBox(height: 10),
                   Text(
-                    DateFormat.yMEd().add_jm().format(feeling.date),
+                    DateFormat('EEEE, MMM d, y').add_jm().format(feeling.date),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -38,7 +38,7 @@ class FeelingLogDetailScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Logged at: ${DateFormat.yMEd().add_jm().format(feeling.dateTimeOfLog)}',
+                    'Logged at: ${DateFormat('MMM d, y').add_jm().format(feeling.dateTimeOfLog)}',
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
