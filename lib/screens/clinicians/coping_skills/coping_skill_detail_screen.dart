@@ -28,7 +28,7 @@ class CopingSkillDetailScreen extends StatelessWidget {
           children: [
             Center(
               child: Text(
-                'Created at: ${DateFormat.yMEd().add_jm().format(skill.date)}',
+                'Created at: ${DateFormat('MMM d, y').add_jm().format(skill.date)}',
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,

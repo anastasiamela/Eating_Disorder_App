@@ -12,7 +12,7 @@ class CopingSkillOfPatientItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final skill = Provider.of<CopingSkill>(context);
-    final date = DateFormat.yMd().add_jm().format(skill.date);
+    final date = DateFormat('MMM d, y').format(skill.date);
     final autoConditionsLength = skill.autoShowConditionsFeelings.length +
         skill.autoShowConditionsBehaviors.length;
     PatientOfClinician patient = Provider.of<PatientsOfClinician>(context)
