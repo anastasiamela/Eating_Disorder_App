@@ -51,7 +51,7 @@ class _MealLogImagePickerState extends State<MealLogImagePicker> {
             Text(
               'What did you eat?',
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.w600,
               ),
             ),

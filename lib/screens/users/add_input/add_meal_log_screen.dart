@@ -399,7 +399,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
             Text(
               'Behaviors:',
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -453,7 +453,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
             Text(
               'Feelings:',
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -503,16 +503,14 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            ListTile(
-              title: Text(
-                'How are you felling overall?',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18.0,
-                ),
+            Text(
+              'How are you felling overall?',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 16.0,
               ),
-              contentPadding: EdgeInsets.all(0.0),
             ),
             Column(
               children: _overallFeelings
@@ -552,7 +550,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
             Text(
               'Did you skip this meal?',
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -588,7 +586,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
               Text(
                 'Which meal?',
                 style: TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 16.0,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -638,7 +636,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
             Text(
               'Who did you eat with?',
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -689,7 +687,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
               Text(
                 'Where did you eat?',
                 style: TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 16.0,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -743,7 +741,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
                 Text(
                   'How long ago did you eat?',
                   style: TextStyle(
-                    fontSize: 18.0,
+                    fontSize: 16.0,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -835,7 +833,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
                 'When was your meal?',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  fontSize: 18.0,
+                  fontSize: 16.0,
                 ),
               ),
               contentPadding: EdgeInsets.all(0.0),
@@ -846,7 +844,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
                     'Select Day',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 18.0,
+                      fontSize: 16.0,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -895,7 +893,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
                   'What time was your meal?',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 18.0,
+                    fontSize: 16.0,
                   ),
                 ),
                 contentPadding: EdgeInsets.all(0.0),
@@ -906,7 +904,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
                       'Select Time',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 18.0,
+                        fontSize: 16.0,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -1000,25 +998,8 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             MealLogImagePicker(_pickedImage),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: <Widget>[
-            //     Text(
-            //       'What did you eat?',
-            //       style: TextStyle(
-            //         fontSize: 18.0,
-            //         fontWeight: FontWeight.w600,
-            //       ),
-            //     ),
-            //     Icon(
-            //       Icons.camera_alt,
-            //       size: 30.0,
-            //     ),
-            //   ],
-            // ),
             TextFormField(
               initialValue: _initDescription,
-              //decoration: InputDecoration(labelText: 'Description'),
               maxLines: null,
               keyboardType: TextInputType.multiline,
               validator: (value) {
@@ -1030,7 +1011,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
                 }
                 return null;
               },
-              onSaved: (value) {
+              onChanged: (value) {
                 _editedMealLog = MealLog(
                   id: _editedMealLog.id,
                   userId: _editedMealLog.userId,
@@ -1070,7 +1051,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
               Text(
                 'How hungry or full were you after the meal?',
                 style: TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 16.0,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -1120,7 +1101,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
             Text(
               'Which are your thoughts?',
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -1129,7 +1110,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
               //decoration: InputDecoration(labelText: 'Description'),
               maxLines: null,
               keyboardType: TextInputType.multiline,
-              onSaved: (value) {
+              onChanged: (value) {
                 _editedMealLog = MealLog(
                   id: _editedMealLog.id,
                   userId: _editedMealLog.userId,
@@ -1169,7 +1150,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
             Text(
               'Why did you skip this meal?',
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -1178,6 +1159,15 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
               //decoration: InputDecoration(labelText: 'Description'),
               maxLines: null,
               keyboardType: TextInputType.multiline,
+              validator: (value) {
+                if (value.trim().isEmpty) {
+                  return 'Please enter a reason.';
+                }
+                if (value.trim().length < 4) {
+                  return 'Should be at least 4 characters long.';
+                }
+                return null;
+              },
               onSaved: (value) {
                 _editedMealLog = MealLog(
                   id: _editedMealLog.id,
@@ -1218,7 +1208,7 @@ class _AddMealLogScreenState extends State<AddMealLogScreen> {
             Text(
               'Is this meal for today?',
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.w600,
               ),
             ),

@@ -334,7 +334,7 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
             Text(
               'Behaviors:',
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -388,7 +388,7 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
             Text(
               'Feelings:',
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -438,16 +438,14 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            ListTile(
-              title: Text(
-                'How are you felling overall?',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18.0,
-                ),
+            Text(
+              'How are you felling overall?',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 16.0,
               ),
-              contentPadding: EdgeInsets.all(0.0),
             ),
             Column(
               children: _overallFeelings
@@ -487,13 +485,12 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
             Text(
               'Did you skip this meal?',
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.w600,
               ),
             ),
             ToggleSwitch(
               labels: (_skip) ? ['Yes'] : ['No'],
-              fontSize: 18.0,
               initialLabelIndex: 0,
               activeBgColor: Theme.of(context).primaryColor,
               activeFgColor: Colors.white,
@@ -515,7 +512,7 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
               Text(
                 'Which meal?',
                 style: TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 16.0,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -565,7 +562,7 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
               Text(
                 'Who did you eat with?',
                 style: TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 16.0,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -615,7 +612,7 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
               Text(
                 'Where did you eat?',
                 style: TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 16.0,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -668,14 +665,14 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
                 Text(
                   'When was your meal?',
                   style: TextStyle(
-                    fontSize: 18.0,
+                    fontSize: 16.0,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
                   '${_selectedMealDate.day}. ${_selectedMealDate.month}. ${_selectedMealDate.year}',
                   style: TextStyle(
-                    fontSize: 18.0,
+                    fontSize: 16.0,
                     fontWeight: FontWeight.w600,
                   ),
                 )
@@ -692,7 +689,7 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
                     'Select Time',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 18.0,
+                      fontSize: 16.0,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -764,7 +761,7 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
                   child: Text(
                     'What did you eat?',
                     style: TextStyle(
-                      fontSize: 18.0,
+                      fontSize: 16.0,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -829,7 +826,7 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
               Text(
                 'How hungry or full were you after the meal?',
                 style: TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 16.0,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -879,7 +876,7 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
             Text(
               'Which are your thoughts?',
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -927,7 +924,7 @@ class _EditMealLogScreenState extends State<EditMealLogScreen> {
             Text(
               'Why did you skip this meal?',
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.w600,
               ),
             ),
