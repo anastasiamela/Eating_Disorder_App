@@ -128,7 +128,7 @@ class _AddThoughtScreenState extends State<AddThoughtScreen> {
                   'Do you have any thoughts?',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 18.0,
+                    fontSize: 16.0,
                   ),
                 ),
                 contentPadding: EdgeInsets.all(0.0),
@@ -168,7 +168,7 @@ class _AddThoughtScreenState extends State<AddThoughtScreen> {
             Text(
               'Is this log for today?',
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -216,7 +216,7 @@ class _AddThoughtScreenState extends State<AddThoughtScreen> {
                 'For when is the log?',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  fontSize: 18.0,
+                  fontSize: 16.0,
                 ),
               ),
               contentPadding: EdgeInsets.all(0.0),
@@ -227,7 +227,7 @@ class _AddThoughtScreenState extends State<AddThoughtScreen> {
                     'Select Day',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 18.0,
+                      fontSize: 16.0,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -275,7 +275,7 @@ class _AddThoughtScreenState extends State<AddThoughtScreen> {
                   'What time?',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 18.0,
+                    fontSize: 16.0,
                   ),
                 ),
                 contentPadding: EdgeInsets.all(0.0),
@@ -286,7 +286,7 @@ class _AddThoughtScreenState extends State<AddThoughtScreen> {
                       'Select Time',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 18.0,
+                        fontSize: 16.0,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
