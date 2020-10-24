@@ -275,12 +275,12 @@ class _AddFeelingLogScreenState extends State<AddFeelingLogScreen> {
                 decoration: InputDecoration(
                     hintText: 'Your thoughts',
                     hintStyle: TextStyle(fontStyle: FontStyle.italic)),
-                validator: (value) {
-                  if (value.trim().length < 5) {
-                    return 'Should be at least 5 characters long.';
-                  }
-                  return null;
-                },
+                // validator: (value) {
+                //   if (value.trim().length < 5 && value.trim().isNotEmpty) {
+                //     return 'Should be at least 5 characters long.';
+                //   }
+                //   return null;
+                // },
                 onSaved: (value) => _thoughtsInput = value.trim(),
               ),
             ],

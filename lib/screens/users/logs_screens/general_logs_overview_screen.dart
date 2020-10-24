@@ -89,105 +89,95 @@ class _GeneralLogsOverviewScreenState extends State<GeneralLogsOverviewScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: (selectedIndex < 2)
-            ? Text('${tabsList[selectedIndex].text} logs')
-            : Text('${tabsList[selectedIndex].text}'),
+        title: Text('My Feed'),
         actions: <Widget>[
-          (selectedIndex != 4)
-              ? IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () {
-                    return showDialog(
-                      context: context,
-                      builder: (ctx) => SimpleDialog(
-                        backgroundColor: Colors.teal[400],
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              return showDialog(
+                context: context,
+                builder: (ctx) => SimpleDialog(
+                  backgroundColor: Colors.teal[400],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  contentPadding: EdgeInsets.all(8),
+                  titlePadding: EdgeInsets.all(8),
+                  title: const Text(
+                    'Select to add:',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.w800,
+                        decoration: TextDecoration.underline),
+                  ),
+                  children: <Widget>[
+                    SimpleDialogOption(
+                      child: const Text(
+                        'Meal log',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 25.0,
                         ),
-                        contentPadding: EdgeInsets.all(8),
-                        titlePadding: EdgeInsets.all(8),
-                        title: const Text(
-                          'Select to add:',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 30.0,
-                              fontWeight: FontWeight.w800,
-                              decoration: TextDecoration.underline),
-                        ),
-                        children: <Widget>[
-                          SimpleDialogOption(
-                            child: const Text(
-                              'Meal log',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 25.0,
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              Navigator.of(context)
-                                  .pushNamed(AddMealLogScreen.routeName);
-                            },
-                          ),
-                          SimpleDialogOption(
-                            child: const Text(
-                              'Thoughts',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 25.0,
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              Navigator.of(context)
-                                  .pushNamed(AddThoughtScreen.routeName);
-                            },
-                          ),
-                          SimpleDialogOption(
-                            child: const Text(
-                              'Feelings',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 25.0,
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              Navigator.of(context)
-                                  .pushNamed(AddFeelingLogScreen.routeName);
-                            },
-                          ),
-                          SimpleDialogOption(
-                            child: const Text(
-                              'Behaviors',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 25.0,
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              Navigator.of(context)
-                                  .pushNamed(AddBehaviorLogScreen.routeName);
-                            },
-                          ),
-                        ],
                       ),
-                    );
-                  },
-                )
-              : IconButton(
-                  icon: const Icon(Icons.settings),
-                  onPressed: () {
-                    Navigator.of(context)
-                        .pushNamed(SettingsLoggingGoals.routeName);
-                  },
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context)
+                            .pushNamed(AddMealLogScreen.routeName);
+                      },
+                    ),
+                    SimpleDialogOption(
+                      child: const Text(
+                        'Thoughts',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 25.0,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context)
+                            .pushNamed(AddThoughtScreen.routeName);
+                      },
+                    ),
+                    SimpleDialogOption(
+                      child: const Text(
+                        'Feelings',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 25.0,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context)
+                            .pushNamed(AddFeelingLogScreen.routeName);
+                      },
+                    ),
+                    SimpleDialogOption(
+                      child: const Text(
+                        'Behaviors',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 25.0,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context)
+                            .pushNamed(AddBehaviorLogScreen.routeName);
+                      },
+                    ),
+                  ],
                 ),
+              );
+            },
+          )
         ],
         bottom: TabBar(
           tabs: tabsList,
