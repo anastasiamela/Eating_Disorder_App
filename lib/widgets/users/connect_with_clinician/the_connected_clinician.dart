@@ -24,6 +24,9 @@ class TheConnectedClinician extends StatelessWidget {
           ListTile(
             title: Text(
               'You are already connected with your clinician.',
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+              ),
               textAlign: TextAlign.center,
             ),
           ),
@@ -65,7 +68,7 @@ class TheConnectedClinician extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      DateFormat.yMEd().add_jm().format(connectionDateTime),
+                      DateFormat('EEEE, MMM d, y').format(connectionDateTime),
                       style: TextStyle(
                         color: Colors.black45,
                         fontSize: 14,

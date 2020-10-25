@@ -10,36 +10,66 @@ class HasSentRequest extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: ListView(
         children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 12, 0, 10),
+            child: Text(
+              'You have sent a request to clinician',
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
           Card(
             shadowColor: Theme.of(context).primaryColor,
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                    title: Text('Clinician\'s ID'),
-                    subtitle: Text(request.clinicianId),
+                ListTile(
+                  title: Text(
+                    'Clinician\'s ID:',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
+                  subtitle: Text(request.clinicianId),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                    title: Text('Message'),
-                    subtitle: Text(request.messageFromPatient),
+                ListTile(
+                  title: Text(
+                    'Message:',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
+                  subtitle: Text(request.messageFromPatient),
                 ),
               ],
             ),
           ),
-          FlatButton(
-            onPressed: () {
-              Provider.of<Requests>(context, listen: false)
-                  .deleteRequestFromPatient(request.patientId);
-            },
-            child: Text(
-              'Delete Request',
-              style: TextStyle(
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: FlatButton.icon(
+              onPressed: () {
+                Provider.of<Requests>(context, listen: false)
+                    .deleteRequestFromPatient(request.patientId);
+              },
+              icon: Icon(
+                Icons.delete,
                 color: Colors.red[700],
+                size: 26,
+              ),
+              label: Text(
+                'Delete Request',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.red[700],
+                ),
               ),
             ),
           ),
