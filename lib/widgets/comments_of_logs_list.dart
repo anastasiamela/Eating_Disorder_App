@@ -100,7 +100,7 @@ class CommentsOfLogsList extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                DateFormat.yMEd()
+                                DateFormat('MMM d, y')
                                     .add_jm()
                                     .format(comments[i].date),
                                 style: TextStyle(
