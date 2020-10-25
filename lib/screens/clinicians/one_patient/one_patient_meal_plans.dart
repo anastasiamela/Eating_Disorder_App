@@ -201,6 +201,7 @@ class _OnePatientMealPlansScreenState extends State<OnePatientMealPlansScreen>
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ListTile(
             title: Row(
@@ -213,20 +214,19 @@ class _OnePatientMealPlansScreenState extends State<OnePatientMealPlansScreen>
                     fontSize: 18.0,
                   ),
                 ),
-                (plan == null)
-                    ? Text(
-                        'nothing',
-                        style: TextStyle(
-                          color:
-                              Theme.of(context).primaryColor.withOpacity(0.5),
-                          fontSize: 18.0,
-                          fontStyle: FontStyle.italic,
-                        ),
-                      )
-                    : MealPlanItem()
+                if (plan == null)
+                  Text(
+                    'nothing',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor.withOpacity(0.5),
+                      fontSize: 18.0,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  )
               ],
             ),
           ),
+          if (plan != null) MealPlanItem(),
         ],
       ),
     );
