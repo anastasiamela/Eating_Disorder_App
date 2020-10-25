@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 
 import './screens/users/logs_screens/general_logs_overview_screen.dart';
 import './screens/users/logs_screens/meal_log_detail_screen.dart';
@@ -70,7 +71,10 @@ import './providers/reminders.dart';
 import './providers/goals.dart';
 
 void main() {
-  runApp(MyApp());
+  //runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((value) => runApp(MyApp()));
 }
 
 class MyApp extends StatelessWidget {
