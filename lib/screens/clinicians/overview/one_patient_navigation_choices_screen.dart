@@ -28,15 +28,6 @@ class OnePatientNavigationChoicesScreen extends StatelessWidget {
           Divider(),
           ListTile(
             leading: Icon(Icons.playlist_add_check),
-            title: Text('Coping Skills'),
-            onTap: () {
-              Navigator.of(context).pushNamed(OnePatientSkillsScreen.routeName,
-                  arguments: patient);
-            },
-          ),
-          Divider(),
-          ListTile(
-            leading: Icon(Icons.playlist_add_check),
             title: Text('Meal Plans'),
             onTap: () {
               Navigator.of(context).pushNamed(
@@ -47,10 +38,18 @@ class OnePatientNavigationChoicesScreen extends StatelessWidget {
           Divider(),
           ListTile(
             leading: Icon(Icons.playlist_add_check),
+            title: Text('Coping Skills'),
+            onTap: () {
+              Navigator.of(context).pushNamed(OnePatientSkillsScreen.routeName,
+                  arguments: patient);
+            },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.playlist_add_check),
             title: Text('Goals'),
             onTap: () {
-              Navigator.of(context).pushNamed(
-                  OnePatientGoalsScreen.routeName,
+              Navigator.of(context).pushNamed(OnePatientGoalsScreen.routeName,
                   arguments: patient);
             },
           ),
