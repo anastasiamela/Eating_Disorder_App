@@ -15,7 +15,7 @@ class FirstScreen extends StatelessWidget {
     final role = Provider.of<Auth>(context).userRole;
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
+        title: Text('Home'),
       ),
       drawer: (role == 'patient') ? AppDrawer() : AppDrawerClinicians(),
       body: (role == 'patient') ? FirstScreenUser() : FirstScreenClinician(),

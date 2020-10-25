@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../widgets/curved_list_item.dart';
+import '../../widgets/clinicians/curved_list_item_for_clinician.dart';
 
 import './overview/log_activity_of_patients_screen.dart';
 import './overview/my_patients_tabs_screen.dart';
@@ -39,54 +39,43 @@ class FirstScreenClinician extends StatelessWidget {
       top: 30.0,
       child: Column(
         children: [
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            child: Container(
-              height: 150,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.0),
-                color: Colors.teal[100],
-              ),
-            ),
-          ),
+          // Card(
+          //   shape: RoundedRectangleBorder(
+          //     borderRadius: BorderRadius.circular(15.0),
+          //   ),
+          //   child: Container(
+          //     height: 150,
+          //     decoration: BoxDecoration(
+          //       borderRadius: BorderRadius.circular(15.0),
+          //       color: Colors.teal[100],
+          //     ),
+          //   ),
+          // ),
           SizedBox(height: 80),
           Card(
             child: Column(
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(ctx).pushReplacementNamed(
-                        LogActivityOfPatientsScreen.routeName);
+                    Navigator.of(ctx)
+                        .pushNamed(LogActivityOfPatientsScreen.routeName);
                   },
-                  child: CurvedListItem(
+                  child: CurvedListItemForClinician(
                     title: 'Patients\' Activity',
                     color: Colors.teal[100],
                     nextColor: Colors.teal[200],
-                    icon: Icons.note,
+                    icon: Icons.assignment_ind,
                   ),
                 ),
                 GestureDetector(
                   onTap: () {
-                    // Navigator.of(ctx).pushReplacementNamed(MyPatientsScreen.routeName);
-                    Navigator.of(ctx)
-                        .pushReplacementNamed(MyPatientsTabsScreen.routeName);
+                    Navigator.of(ctx).pushNamed(MyPatientsTabsScreen.routeName);
                   },
-                  child: CurvedListItem(
-                    title: 'My patients',
+                  child: CurvedListItemForClinician(
+                    title: 'My Patients',
                     color: Colors.teal[200],
                     nextColor: Colors.teal[300],
                     icon: Icons.people,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: CurvedListItem(
-                    title: 'Settings',
-                    color: Colors.teal[300],
-                    nextColor: Colors.teal[400],
-                    icon: Icons.settings,
                   ),
                 ),
                 GestureDetector(
@@ -94,11 +83,11 @@ class FirstScreenClinician extends StatelessWidget {
                     Navigator.of(ctx)
                         .pushNamed(CopingSkillsOfPatientsScreen.routeName);
                   },
-                  child: CurvedListItem(
+                  child: CurvedListItemForClinician(
                     title: 'Coping Skills',
-                    color: Colors.teal[400],
-                    nextColor: Colors.teal[500],
-                    icon: Icons.note_add,
+                    color: Colors.teal[300],
+                    nextColor: Colors.teal[400],
+                    icon: Icons.bubble_chart,
                   ),
                 ),
                 GestureDetector(
@@ -106,11 +95,11 @@ class FirstScreenClinician extends StatelessWidget {
                     Navigator.of(ctx)
                         .pushNamed(GoalsOfPatientsScreen.routeName);
                   },
-                  child: CurvedListItem(
+                  child: CurvedListItemForClinician(
                     title: 'Goals',
-                    color: Colors.teal[500],
+                    color: Colors.teal[400],
                     nextColor: Colors.teal[200],
-                    icon: Icons.trip_origin,
+                    icon: Icons.golf_course,
                   ),
                 ),
               ],
