@@ -117,9 +117,7 @@ class _LogActivityOfPatientsScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: (selectedIndex == 0)
-            ? Text('${tabsList[selectedIndex].text} logs')
-            : Text('${tabsList[selectedIndex].text}'),
+        title: Text('Patients\' Activity'),
         actions: [
           IconButton(
             icon: Icon(Icons.refresh),
