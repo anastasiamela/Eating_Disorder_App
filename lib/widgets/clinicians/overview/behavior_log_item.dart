@@ -58,6 +58,14 @@ class BehaviorLogItem extends StatelessWidget {
                     subtitle: Text(patient.patientEmail),
                   ),
                 ListTile(
+                  trailing: CircleAvatar(
+                    radius: 30.0,
+                    child: Icon(
+                      Icons.announcement,
+                      size: 40,
+                    ),
+                    backgroundColor: Colors.transparent,
+                  ),
                   title: Text('$time  Behaviors'),
                   subtitle: Text(subtitleText),
                 ),

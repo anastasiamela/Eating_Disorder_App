@@ -55,6 +55,14 @@ class FeelingLogItem extends StatelessWidget {
                     subtitle: Text(patient.patientEmail),
                   ),
                 ListTile(
+                  trailing: CircleAvatar(
+                    radius: 30.0,
+                    child: Icon(
+                      Icons.face,
+                      size: 40,
+                    ), //feedback, lightbulb_outline
+                    backgroundColor: Colors.transparent,
+                  ),
                   title: Text('$time  Feelings'),
                   subtitle: (subtitleType == 'Thoughts')
                       ? Text(subtitleText)

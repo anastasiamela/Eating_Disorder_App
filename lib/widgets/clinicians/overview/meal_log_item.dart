@@ -64,6 +64,19 @@ class MealLogItem extends StatelessWidget {
                     subtitle: Text(patient.patientEmail),
                   ),
                 ListTile(
+                  trailing: CircleAvatar(
+                    radius: 30.0,
+                    backgroundColor: Colors.transparent,
+                    backgroundImage: (meal.mealPhoto.isNotEmpty)
+                        ? NetworkImage(meal.mealPhoto)
+                        : null,
+                    child: (meal.mealPhoto.isNotEmpty)
+                        ? null
+                        : Icon(
+                            Icons.restaurant,
+                            size: 40,
+                          ),
+                  ),
                   title: (meal.skip)
                       ? Text('SKIP  ${meal.mealType}')
                       : Text('$time  ${meal.mealType}'),

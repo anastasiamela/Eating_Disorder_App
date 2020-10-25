@@ -42,6 +42,14 @@ class ThoughtItem extends StatelessWidget {
                     subtitle: Text(patient.patientEmail),
                   ),
                 ListTile(
+                  trailing: CircleAvatar(
+                    radius: 30.0,
+                    child: Icon(
+                      Icons.forum,
+                      size: 40,
+                    ), //feedback, lightbulb_outline
+                    backgroundColor: Colors.transparent,
+                  ),
                   title: Text('$time  Thoughts'),
                   subtitle: Text(thought.thought),
                 ),
