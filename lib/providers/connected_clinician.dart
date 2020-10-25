@@ -9,7 +9,7 @@ class ConnectedClinician with ChangeNotifier {
   String _clinicianPhoto;
   String _clinicianEmail;
   Timestamp _connectionDate;
-  bool _clinicianExists;
+  bool _clinicianExists = false;
 
   String get clinicianName => _clinicianName;
 

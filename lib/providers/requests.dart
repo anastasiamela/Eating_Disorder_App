@@ -81,6 +81,7 @@ class Requests with ChangeNotifier {
       final extractedData = response.data();
 
       if (extractedData == null) {
+        print('null');
         return;
       }
       final Request loadedRequest = Request(
@@ -93,6 +94,8 @@ class Requests with ChangeNotifier {
         date: DateTime.parse(extractedData['date']),
       );
       _requests = [loadedRequest];
+      print('2');
+      print(loadedRequest.patientId);
       notifyListeners();
     } catch (error) {
       throw (error);

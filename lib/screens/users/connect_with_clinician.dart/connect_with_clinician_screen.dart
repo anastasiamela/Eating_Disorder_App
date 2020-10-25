@@ -28,6 +28,8 @@ class _ConnectWithClinicianScreenState
         _isLoading = true;
       });
       final patientId = Provider.of<Auth>(context, listen: false).userId;
+      print('1');
+      print(patientId);
       _fetchRequests(patientId);
       _fetchConnectedClinician(patientId);
       setState(() {
@@ -40,6 +42,7 @@ class _ConnectWithClinicianScreenState
 
   void _fetchRequests(String patientId) async {
     await Provider.of<Requests>(context).fetchAndSetMyRequest(patientId);
+    print('3');
   }
 
   void _fetchConnectedClinician(String patientId) async {
@@ -52,7 +55,7 @@ class _ConnectWithClinicianScreenState
     final request = Provider.of<Requests>(context).requests;
     final clinicianExists =
         Provider.of<ConnectedClinician>(context).clinicianExists;
-        //print(clinicianExists);
+    print(clinicianExists);
     return Scaffold(
       appBar: AppBar(
         title: Text('Clinician Connection'),
@@ -64,7 +67,7 @@ class _ConnectWithClinicianScreenState
             )
           : (clinicianExists)
               ? TheConnectedClinician()
-              : (request.isEmpty)
+              : (request == null || request.isEmpty)
                   ? NoConnectionOrRequest()
                   : ChangeNotifierProvider.value(
                       value: request[0],
