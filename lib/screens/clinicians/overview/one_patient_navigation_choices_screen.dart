@@ -17,7 +17,7 @@ class OnePatientNavigationChoicesScreen extends StatelessWidget {
       child: ListView(
         children: [
           ListTile(
-            leading: Icon(Icons.playlist_add_check),
+            leading: Icon(Icons.assignment_ind),
             title: Text('Logs Feed'),
             onTap: () {
               Navigator.of(context).pushNamed(
@@ -27,7 +27,7 @@ class OnePatientNavigationChoicesScreen extends StatelessWidget {
           ),
           Divider(),
           ListTile(
-            leading: Icon(Icons.playlist_add_check),
+            leading: Icon(Icons.assignment),
             title: Text('Meal Plans'),
             onTap: () {
               Navigator.of(context).pushNamed(
@@ -37,7 +37,7 @@ class OnePatientNavigationChoicesScreen extends StatelessWidget {
           ),
           Divider(),
           ListTile(
-            leading: Icon(Icons.playlist_add_check),
+            leading: Icon(Icons.bubble_chart),
             title: Text('Coping Skills'),
             onTap: () {
               Navigator.of(context).pushNamed(OnePatientSkillsScreen.routeName,
@@ -46,7 +46,7 @@ class OnePatientNavigationChoicesScreen extends StatelessWidget {
           ),
           Divider(),
           ListTile(
-            leading: Icon(Icons.playlist_add_check),
+            leading: Icon(Icons.golf_course),
             title: Text('Goals'),
             onTap: () {
               Navigator.of(context).pushNamed(OnePatientGoalsScreen.routeName,
