@@ -1,16 +1,4 @@
 # disorder_app
 
-A new Flutter project.
+This Android app aims to support people with eating disorders. From the patient's point of view, the key features are meal, feeling and behaviour logging resulting in a comprehensive self-monitoring system. Also a patient can set goals, create and share coping skills, plan meals, receive tips about foods and their nutritional values and receive meal/goal specific reminders for their completion. From the doctor's point of view, he/she can track the logs from his/hers patients, comment on them and create coping skills for his/hers connected patients.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
